@@ -12,17 +12,17 @@ import { MatIconModule } from '@angular/material/icon';
     RouterLinkActive,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
-  changeDetection: ChangeDetectionStrategy.Eager
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   readonly title = signal('playground');
 
   readonly navLinks = [
-    { path: '/overview', label: 'Vue d\'ensemble', icon: 'dashboard' },
+    { path: '/overview', label: "Vue d'ensemble", icon: 'dashboard' },
     { path: '/signals', label: 'Signals & Zoneless', icon: 'bolt' },
     { path: '/material', label: 'Material 3', icon: 'palette' },
     { path: '/defer', label: 'Defer (@defer)', icon: 'hourglass_empty' },

@@ -1,0 +1,138 @@
+<div class="material-container">
+  <div class="page-header">
+    <h1>Angular Material 3 Showcase</h1>
+    <p class="subtitle">
+      Démonstration des composants Material Design 3 stylisés avec la palette Azure & Blue
+      configurée dans le projet.
+    </p>
+  </div>
+
+  <div class="sections-column">
+    <!-- Buttons Section -->
+    <mat-card appearance="outlined" class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">smart_button</mat-icon>
+        <mat-card-title>Boutons & Actions M3</mat-card-title>
+        <mat-card-subtitle>Différentes variantes et niveaux d'emphase</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="components-row">
+          <button mat-flat-button color="primary">Filled (Primary)</button>
+          <button mat-flat-button color="accent">Filled (Accent)</button>
+          <button mat-stroked-button>Outlined</button>
+          <button mat-button>Text Button</button>
+          <button mat-flat-button disabled>Disabled</button>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="components-row">
+          <button mat-fab color="primary" aria-label="Action principale FAB">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-mini-fab color="accent" aria-label="Action secondaire mini FAB">
+            <mat-icon>favorite</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="incrementBadge()"
+            aria-label="Notifications"
+            [matBadge]="badgeCount()"
+            matBadgeColor="warn"
+          >
+            <mat-icon>notifications</mat-icon>
+          </button>
+          <span class="hint-text">Cliquez sur la cloche pour incrémenter le badge !</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Form Controls Section -->
+    <mat-card appearance="outlined" class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">tune</mat-icon>
+        <mat-card-title>Formulaires & Contrôles Interactifs</mat-card-title>
+        <mat-card-subtitle>Champs de saisie, sélecteurs et commutateurs</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom d'utilisateur</mat-label>
+            <input matInput placeholder="Ex: Benjamin" value="Playground User" />
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Palette sélectionnée</mat-label>
+            <mat-select
+              [ngModel]="selectedThemeColor()"
+              (ngModelChange)="selectedThemeColor.set($event)"
+            >
+              <mat-option value="azure">Azure (Primary)</mat-option>
+              <mat-option value="blue">Blue (Tertiary)</mat-option>
+              <mat-option value="custom">Custom Theme</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="toggles-row">
+          <div class="toggle-item">
+            <mat-slide-toggle
+              [ngModel]="toggleActive()"
+              (ngModelChange)="toggleActive.set($event)"
+              color="primary"
+            >
+              Mode interactif actif : <strong>{{ toggleActive() ? 'OUI' : 'NON' }}</strong>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="slider-item">
+            <span class="slider-label"
+              >Slider réactif : <strong>{{ sliderValue() }}%</strong></span
+            >
+            <mat-slider min="0" max="100" step="1">
+              <input
+                matSliderThumb
+                [ngModel]="sliderValue()"
+                (ngModelChange)="sliderValue.set($event)"
+              />
+            </mat-slider>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Chips & Cards Section -->
+    <mat-card appearance="outlined" class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">label</mat-icon>
+        <mat-card-title>Chips & Badges</mat-card-title>
+        <mat-card-subtitle>Étiquettes interactives Material 3</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-chip-set aria-label="Technologies du projet">
+          <mat-chip highlighted color="primary">
+            <mat-icon matChipAvatar>code</mat-icon>
+            Angular 22
+          </mat-chip>
+          <mat-chip highlighted color="accent">
+            <mat-icon matChipAvatar>palette</mat-icon>
+            Material 3
+          </mat-chip>
+          <mat-chip>
+            <mat-icon matChipAvatar>bolt</mat-icon>
+            Zoneless
+          </mat-chip>
+          <mat-chip>
+            <mat-icon matChipAvatar>memory</mat-icon>
+            Signals
+          </mat-chip>
+          <mat-chip>
+            <mat-icon matChipAvatar>terminal</mat-icon>
+            TypeScript 6
+          </mat-chip>
+        </mat-chip-set>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

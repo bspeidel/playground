@@ -104,6 +104,24 @@ npm run test:watch
 npm run test:coverage
 ```
 
+### Linting & Code Quality
+
+Ensure code quality, type correctness, and consistent formatting:
+
+```bash
+# Run ESLint with @angular-eslint
+npm run lint
+
+# TypeScript static type check
+npm run typecheck
+
+# Format source files with Prettier
+npm run format
+
+# Check formatting compliance
+npm run format:check
+```
+
 ---
 
 ## 🧩 Code Scaffolding

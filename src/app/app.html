@@ -13,12 +13,7 @@
 
     <nav class="nav-links">
       @for (link of navLinks; track link.path) {
-        <a
-          mat-button
-          [routerLink]="link.path"
-          routerLinkActive="active-link"
-          class="nav-button"
-        >
+        <a mat-button [routerLink]="link.path" routerLinkActive="active-link" class="nav-button">
           <mat-icon>{{ link.icon }}</mat-icon>
           <span>{{ link.label }}</span>
         </a>

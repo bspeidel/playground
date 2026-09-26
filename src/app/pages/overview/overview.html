@@ -1,0 +1,81 @@
+<div class="overview-container">
+  <header class="hero-section">
+    <div class="hero-badge">
+      <mat-icon>terminal</mat-icon>
+      <span>Angular 22 & Material 3 Playground</span>
+    </div>
+    <h1>Bienvenue sur votre Playground</h1>
+    <p class="hero-subtitle">
+      Un espace interactif pour explorer les dernières capacités d'Angular 22 : réactivité sans
+      Zone.js, Material Design 3, Signals et Deferrable Views.
+    </p>
+    <div class="hero-actions">
+      <a mat-flat-button color="primary" routerLink="/signals">
+        <mat-icon>play_arrow</mat-icon>
+        Découvrir les Signals
+      </a>
+      <a mat-stroked-button routerLink="/material">
+        <mat-icon>palette</mat-icon>
+        Composants Material
+      </a>
+    </div>
+  </header>
+
+  <section class="grid-section">
+    <h2>Espaces d'expérimentation</h2>
+    <div class="cards-grid">
+      @for (feature of features; track feature.title) {
+        <mat-card class="feature-card" appearance="outlined">
+          <mat-card-header>
+            <div mat-card-avatar class="card-icon-container">
+              <mat-icon>{{ feature.icon }}</mat-icon>
+            </div>
+            <mat-card-title>{{ feature.title }}</mat-card-title>
+            <mat-card-subtitle>
+              <span class="chip-tag">{{ feature.tag }}</span>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ feature.description }}</p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <a mat-button color="primary" [routerLink]="feature.link">
+              Ouvrir la démo
+              <mat-icon>arrow_forward</mat-icon>
+            </a>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <section class="system-status">
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>info</mat-icon>
+        <mat-card-title>Environnement d'exécution</mat-card-title>
+        <mat-card-subtitle>Configuration courante du projet</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="label">Angular Core & CLI</span>
+            <span class="value">v22.2.0</span>
+          </div>
+          <div class="status-item">
+            <span class="label">Angular Material</span>
+            <span class="value">v22.2.0 (Material 3)</span>
+          </div>
+          <div class="status-item">
+            <span class="label">Change Detection</span>
+            <span class="value highlight">Zoneless (sans zone.js)</span>
+          </div>
+          <div class="status-item">
+            <span class="label">TypeScript</span>
+            <span class="value">~6.0.3</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

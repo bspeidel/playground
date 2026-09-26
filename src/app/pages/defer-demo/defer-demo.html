@@ -1,0 +1,95 @@
+<div class="defer-container">
+  <div class="page-header">
+    <h1>Deferrable Views (<code>&#64;defer</code>)</h1>
+    <p class="subtitle">
+      Optimisation de performance native d'Angular pour charger des composants de façon différée et
+      granulaire.
+    </p>
+  </div>
+
+  <div class="defer-grid">
+    <!-- Demo 1: on interaction -->
+    <mat-card appearance="outlined" class="defer-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">touch_app</mat-icon>
+        <mat-card-title>Déclencheur : <code>on interaction</code></mat-card-title>
+        <mat-card-subtitle>Chargement différé au clic sur le bouton déclencheur</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="demo-box">
+          @defer (on interaction(triggerBtn)) {
+            <app-heavy-content></app-heavy-content>
+          } @placeholder {
+            <div class="placeholder-box">
+              <p>Le contenu est en attente d'interaction.</p>
+              <button #triggerBtn mat-flat-button color="primary">
+                <mat-icon>download</mat-icon>
+                Cliquer pour charger le composant
+              </button>
+            </div>
+          } @loading (minimum 500ms) {
+            <div class="loading-box">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              <span>Chargement du chunk JavaScript en cours...</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Demo 2: on hover -->
+    <mat-card appearance="outlined" class="defer-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">mouse</mat-icon>
+        <mat-card-title>Déclencheur : <code>on hover</code></mat-card-title>
+        <mat-card-subtitle>Chargement déclenché dès le survol de la zone</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="demo-box">
+          @defer (on hover(hoverTarget)) {
+            <app-heavy-content></app-heavy-content>
+          } @placeholder {
+            <div #hoverTarget class="placeholder-box hoverable">
+              <mat-icon>pan_tool</mat-icon>
+              <p>Survolez cette zone avec votre curseur pour déclencher le chargement immédiat !</p>
+            </div>
+          } @loading (minimum 500ms) {
+            <div class="loading-box">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              <span>Chargement déclenché par survol...</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Demo 3: on timer -->
+    <mat-card appearance="outlined" class="defer-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">schedule</mat-icon>
+        <mat-card-title>Déclencheur : <code>on timer(2s)</code></mat-card-title>
+        <mat-card-subtitle>Chargement différé automatique après 2 secondes</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="demo-box">
+          @defer (on timer(2s)) {
+            <app-heavy-content></app-heavy-content>
+          } @placeholder {
+            <div class="placeholder-box">
+              <mat-icon>hourglass_bottom</mat-icon>
+              <p>Compte à rebours de 2 secondes avant le chargement automatique...</p>
+            </div>
+          } @loading (minimum 500ms) {
+            <div class="loading-box">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              <span>Chargement automatique après délai...</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
