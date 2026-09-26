@@ -1,59 +1,128 @@
 # Playground
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.4.
+A modern Angular sandbox application built with **Angular 22**, **Angular Material 3**, and **Zoneless Change Detection**.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Features & Tech Stack
+
+- **Angular 22 (`^22.2.0`)**: Modern standalone architecture powered by `@angular/build` (Vite/esbuild application builder).
+- **Zoneless Change Detection**: Configured using `provideZonelessChangeDetection()` and `ChangeDetectionStrategy.Eager` for high-performance reactivity without Zone.js.
+- **Angular Material 3 (`^22.2.0`)**: Styled with Material Design 3 using `@angular/material` theming mixins, Azure/Blue palettes, and system CSS tokens.
+- **Signals**: Reactive state management with Angular Signals (`signal()`).
+- **TypeScript 6 (`~6.0.3`)**: Strong typing and modern ECMAScript compilation.
+- **Jest & jest-preset-angular**: Fast, modern headless unit test execution with Zoneless testing support (`setupZonelessTestEnv`).
+
+---
+
+## 📁 Project Structure
+
+```text
+src/
+├── app/
+│   ├── pages/
+│   │   ├── overview/        # Welcome & environment status
+│   │   ├── signals-demo/    # Signals, computed, async zoneless demo & reactive cart
+│   │   ├── material-demo/   # Material Design 3 interactive showcase
+│   │   └── defer-demo/      # Deferrable views (@defer) interactive demo
+│   ├── app.config.ts        # Application configuration (zoneless, router, error listeners)
+│   ├── app.routes.ts        # Application route definitions (lazy-loaded pages)
+│   ├── app.ts               # App shell component (navigation & layout)
+│   ├── app.html             # Shell template (toolbar, router-outlet, footer)
+│   ├── app.scss             # Layout styles
+│   └── app.spec.ts          # Unit tests for the root component
+├── public/                  # Static assets (favicons, icons, etc.)
+├── styles.scss              # Global styles & Angular Material 3 theme configuration
+├── main.ts                  # Application bootstrap entry point
+└── index.html               # Main HTML document
+```
+
+---
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+Ensure you have **Node.js** (LTS recommended) and **npm** installed on your system.
+
+### Installation
+
+Clone the repository and install dependencies:
 
 ```bash
+npm install
+```
+
+---
+
+## 💻 Available Scripts
+
+### Development Server
+
+Run the development server locally:
+
+```bash
+npm start
+# or
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`. The application will automatically reload if you change any source files.
 
-## Code scaffolding
+### Build
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Compile the application for production:
 
 ```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
+npm run build
+# or
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Build artifacts will be stored in the `dist/playground` directory, optimized for performance and speed.
 
-## Running unit tests
+### Development Watch Mode
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Build and watch for file changes during development:
 
 ```bash
-ng e2e
+npm run watch
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Running Unit Tests
 
-## Additional Resources
+Execute unit tests via [Jest](https://jestjs.io/) and `jest-preset-angular`:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+# Run tests
+npm test
+
+# Run tests in interactive watch mode
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+```
+
+---
+
+## 🧩 Code Scaffolding
+
+Generate new components, directives, pipes, or services with the Angular CLI:
+
+```bash
+# Generate a new component
+ng generate component components/my-component
+
+# List available schematics
+ng generate --help
+```
+
+---
+
+## 📚 Documentation & Resources
+
+- [Angular Documentation](https://angular.dev)
+- [Angular Material 3 Theming](https://material.angular.dev/guide/theming)
+- [Angular Zoneless Guide](https://angular.dev/guides/zoneless)
+- [Angular CLI Overview & Command Reference](https://angular.dev/tools/cli)
