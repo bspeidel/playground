@@ -1,0 +1,174 @@
+<div class="api-container">
+  <div class="page-header">
+    <h1>Explorateur API & <code>resource()</code> Réseau</h1>
+    <p class="subtitle">
+      Recherche en direct sur l'API publique de GitHub démontrant la réactivité réseau native
+      d'Angular 22, la gestion d'états asynchrones et l'annulation automatique des requêtes en cours
+      via <code>AbortSignal</code>.
+    </p>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <mat-card appearance="outlined" class="controls-card">
+    <mat-card-content>
+      <div class="search-bar">
+        <mat-form-field appearance="outline" class="search-input">
+          <mat-label>Rechercher un dépôt GitHub</mat-label>
+          <input
+            matInput
+            [ngModel]="searchTerm()"
+            (ngModelChange)="searchTerm.set($event)"
+            placeholder="Ex: angular, rxjs, vite..."
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="sort-select">
+          <mat-label>Trier par</mat-label>
+          <mat-select [ngModel]="selectedSort()" (ngModelChange)="selectedSort.set($event)">
+            <mat-option value="stars">Étoiles (Stars)</mat-option>
+            <mat-option value="forks">Forks</mat-option>
+            <mat-option value="updated">Récemment mis à jour</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          mat-stroked-button
+          class="reload-btn"
+          (click)="reposResource.reload()"
+          [disabled]="reposResource.isLoading()"
+        >
+          <mat-icon>refresh</mat-icon>
+          Actualiser
+        </button>
+      </div>
+
+      <div class="quick-tags">
+        <span class="tags-label">Suggestions rapides :</span>
+        <button mat-button class="tag-btn" (click)="setSearch('angular')">Angular</button>
+        <button mat-button class="tag-btn" (click)="setSearch('typescript')">TypeScript</button>
+        <button mat-button class="tag-btn" (click)="setSearch('material-components')">
+          Material
+        </button>
+        <button mat-button class="tag-btn" (click)="setSearch('rxjs')">RxJS</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Status & AbortSignal Metrics Bar -->
+  <div class="metrics-bar">
+    <div class="status-indicator">
+      @if (reposResource.isLoading()) {
+        <span class="status-chip loading">
+          <mat-icon class="spin-icon">sync</mat-icon>
+          Chargement en cours via resource()...
+        </span>
+      } @else if (reposResource.error()) {
+        <span class="status-chip error">
+          <mat-icon>error_outline</mat-icon>
+          Erreur de requête
+        </span>
+      } @else {
+        <span class="status-chip success">
+          <mat-icon>check_circle</mat-icon>
+          {{ reposResource.value().total_count | number }} dépôts trouvés
+        </span>
+      }
+    </div>
+
+    <div class="abort-info">
+      <mat-icon>cancel</mat-icon>
+      <span
+        >Requêtes annulées automatiquement (AbortSignal) : <strong>{{ abortCount() }}</strong></span
+      >
+    </div>
+  </div>
+
+  @if (reposResource.isLoading()) {
+    <mat-progress-bar mode="indeterminate" class="loading-bar"></mat-progress-bar>
+  }
+
+  <!-- Error State -->
+  @if (reposResource.error(); as err) {
+    <mat-card appearance="outlined" class="error-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="warn">warning</mat-icon>
+        <mat-card-title>Impossible de charger les dépôts</mat-card-title>
+        <mat-card-subtitle>{{ err.message }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="reposResource.reload()">
+          <mat-icon>refresh</mat-icon>
+          Réessayer
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+
+  <!-- Results Grid -->
+  <div class="repos-grid">
+    @for (repo of reposResource.value().items; track repo.id) {
+      <mat-card appearance="outlined" class="repo-card">
+        <mat-card-header>
+          <img
+            mat-card-avatar
+            [src]="repo.owner.avatar_url"
+            [alt]="repo.owner.login"
+            class="owner-avatar"
+          />
+          <mat-card-title>
+            <a [href]="repo.html_url" target="_blank" rel="noopener noreferrer" class="repo-link">
+              {{ repo.name }}
+              <mat-icon class="external-icon">open_in_new</mat-icon>
+            </a>
+          </mat-card-title>
+          <mat-card-subtitle>{{ repo.full_name }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="repo-desc">
+            {{ repo.description || 'Aucune description fournie.' }}
+          </p>
+
+          <div class="repo-stats">
+            <span class="stat-badge">
+              <mat-icon>star</mat-icon>
+              {{ repo.stargazers_count | number }}
+            </span>
+            <span class="stat-badge">
+              <mat-icon>fork_right</mat-icon>
+              {{ repo.forks_count | number }}
+            </span>
+            @if (repo.language) {
+              <span class="stat-badge language">
+                <mat-icon>code</mat-icon>
+                {{ repo.language }}
+              </span>
+            }
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <a
+            mat-button
+            color="primary"
+            [href]="repo.html_url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Voir sur GitHub
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    } @empty {
+      @if (!reposResource.isLoading() && !reposResource.error()) {
+        <div class="empty-results">
+          <mat-icon>search_off</mat-icon>
+          <h3>Aucun résultat trouvé pour "{{ searchTerm() }}"</h3>
+          <p>Essayez une autre recherche comme "angular", "typescript" ou "material".</p>
+        </div>
+      }
+    }
+  </div>
+</div>

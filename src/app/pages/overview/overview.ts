@@ -38,5 +38,13 @@ export class OverviewPage {
       link: '/defer',
       tag: 'Optimisation',
     },
+    {
+      title: 'Explorateur API & resource()',
+      icon: 'public',
+      description:
+        "Recherche asynchrone sur l'API publique GitHub avec provideHttpClient, AbortSignal et gestion d'erreurs.",
+      link: '/api-explorer',
+      tag: 'Réseau',
+    },
   ];
 }

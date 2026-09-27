@@ -28,6 +28,11 @@ export const routes: Routes = [
     title: 'Deferrable Views (@defer) | Playground',
   },
   {
+    path: 'api-explorer',
+    loadComponent: () => import('./pages/api-explorer/api-explorer').then((m) => m.ApiExplorerPage),
+    title: 'API & Réseau (GitHub) | Playground',
+  },
+  {
     path: '**',
     redirectTo: 'overview',
   },
