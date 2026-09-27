@@ -9,10 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
     <div class="heavy-box">
       <mat-icon class="icon">check_circle</mat-icon>
       <div class="content">
-        <h4>Composant chargé à la demande (&#64;defer) !</h4>
+        <h4>Komponente bei Bedarf geladen (&#64;defer)!</h4>
         <p>
-          Ce composant et son code JavaScript ont été téléchargés et instanciés uniquement lorsque
-          la condition de déclenchement s'est produite.
+          Diese Komponente und ihr JavaScript-Code wurden erst heruntergeladen und instanziiert, als
+          die Trigger-Bedingung erfüllt war.
         </p>
       </div>
     </div>

@@ -18,7 +18,7 @@ export class OverviewPage {
       title: 'Angular 22 Core & Zoneless',
       icon: 'bolt',
       description:
-        'Zoneless change detection (provideZonelessChangeDetection), signal-first architecture, and high performance.',
+        'Zoneless-Änderungserkennung (provideZonelessChangeDetection), Signal-First-Architektur und maximale Performance.',
       link: '/signals',
       tag: 'Performance',
     },
@@ -26,7 +26,7 @@ export class OverviewPage {
       title: 'Angular Material 3',
       icon: 'palette',
       description:
-        'Complete Material Design 3 theming with Azure and Blue palettes, tokens, and modern components.',
+        'Vollständiges Material Design 3 Theming mit Azure- und Blue-Paletten, Tokens und modernen Komponenten.',
       link: '/material',
       tag: 'UI/UX',
     },
@@ -34,73 +34,73 @@ export class OverviewPage {
       title: 'Deferrable Views (@defer)',
       icon: 'hourglass_empty',
       description:
-        'Built-in template lazy-loading with triggers like viewport, hover, interaction, and timer.',
+        'Integriertes Template-Lazy-Loading mit Triggern wie Viewport, Hover, Interaction und Timer.',
       link: '/defer',
-      tag: 'Optimisation',
+      tag: 'Optimierung',
     },
     {
-      title: 'Explorateur API & resource()',
+      title: 'API-Explorer & resource()',
       icon: 'public',
       description:
-        "Recherche asynchrone sur l'API publique GitHub avec provideHttpClient, AbortSignal et gestion d'erreurs.",
+        'Asynchrone Suche über die öffentliche GitHub-API mit provideHttpClient, AbortSignal und Fehlerbehandlung.',
       link: '/api-explorer',
-      tag: 'Réseau',
+      tag: 'Netzwerk',
     },
     {
-      title: 'Data Table & Dashboard KPIs',
+      title: 'Datentabelle & Dashboard-KPIs',
       icon: 'table_chart',
       description:
-        'Tableau interactif MatTable avec tri, pagination, filtres réactifs Signals, sélection multiple et export CSV/JSON.',
+        'Interaktive MatTable mit Sortierung, Paginierung, reaktiven Signal-Filtern, Mehrfachauswahl und CSV/JSON-Export.',
       link: '/table',
-      tag: 'Données',
+      tag: 'Daten',
     },
     {
-      title: 'Kanban Board Drag & Drop',
+      title: 'Kanban-Board Drag & Drop',
       icon: 'view_kanban',
       description:
-        'Gestion de tâches agile avec @angular/cdk/drag-drop, colonnes connectées, prévisualisation fluide et réactivité Signals.',
+        'Agiles Aufgabenmanagement mit @angular/cdk/drag-drop, verbundenen Spalten, flüssiger Vorschau und Signal-Reaktivität.',
       link: '/kanban',
-      tag: 'Productivité',
+      tag: 'Produktivität',
     },
     {
-      title: 'Formulaires Réactifs & Typed Forms',
+      title: 'Reaktive & typisierte Formulare',
       icon: 'dynamic_form',
       description:
-        'Validation asynchrone debouncée, collections FormArray extensibles, validations croisées et jauge de mot de passe.',
+        'Asynchrone debouncte Validierung, erweiterbare FormArray-Sammlungen, Kreuzvalidierung und Passwortstärke-Anzeige.',
       link: '/forms',
-      tag: 'Formulaires',
+      tag: 'Formulare',
     },
     {
-      title: 'Virtual Scrolling & Benchmark',
+      title: 'Virtuelles Scrollen & Benchmark',
       icon: 'speed',
       description:
-        'Rendu instantané de 50 000+ logs avec @angular/cdk/scrolling, 99.9% de réduction DOM et 60 FPS en Zoneless.',
+        'Sofortiges Rendern von 50.000+ Logs mit @angular/cdk/scrolling, 99,9 % DOM-Reduzierung und 60 FPS in Zoneless.',
       link: '/virtual-scroll',
       tag: 'Performance',
     },
     {
-      title: 'Visualisation SVG & Analytics',
+      title: 'SVG-Visualisierung & Analysen',
       icon: 'insights',
       description:
-        'Donut chart interactif, bar chart de vélocité et courbes sparklines en SVG natif réactif 100% sans bibliothèque tierce.',
+        'Interaktives Donut-Diagramm, Geschwindigkeits-Balkendiagramm und Sparklines in nativem, reaktivem SVG ohne externe Bibliotheken.',
       link: '/charts',
-      tag: 'Visualisation',
+      tag: 'Visualisierung',
     },
     {
-      title: 'Assistant Déploiement Cloud (Stepper)',
+      title: 'Cloud-Bereitstellungsassistent (Stepper)',
       icon: 'rocket_launch',
       description:
-        'Workflow multi-étapes MatStepper M3 : dimensionnement, calcul de coûts réactif en direct, gestion de secrets et logs CI/CD.',
+        'Mehrstufiger MatStepper M3 Workflow: Dimensionierung, reaktive Live-Kostenberechnung, Secret-Verwaltung und CI/CD-Logs.',
       link: '/stepper',
       tag: 'Workflow',
     },
     {
-      title: 'Explorateur de Fichiers (MatTree)',
+      title: 'Datei-Explorer (MatTree)',
       icon: 'folder_open',
       description:
-        'Arborescence de projet MatTree M3 avec childrenAccessor : filtrage instantané, breadcrumbs, gestion de nœuds et visionneuse de code.',
+        'Projekt-Baumstruktur mit MatTree M3 und childrenAccessor: Sofortfilter, Breadcrumbs, Knotenverwaltung und Code-Viewer.',
       link: '/tree',
-      tag: 'Hiérarchie',
+      tag: 'Hierarchie',
     },
   ];
 }

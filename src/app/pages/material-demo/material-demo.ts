@@ -107,7 +107,7 @@ export class MaterialDemoPage {
   readonly selectedRangeStart = signal<Date | null>(new Date());
   readonly selectedRangeEnd = signal<Date | null>(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000));
   readonly timeInterval = signal<'15m' | '30m' | '1h'>('15m');
-  readonly eventTitle = signal("Revue d'Architecture Sprint 42");
+  readonly eventTitle = signal('Architektur-Review Sprint 42');
   readonly frameworkSearch = signal('');
 
   // Autocomplete data
@@ -131,10 +131,10 @@ export class MaterialDemoPage {
 
   // Checkbox parent / children state
   readonly subTasks = signal<TaskItem[]>([
-    { name: 'Architecture Standalone & Zoneless', completed: true },
-    { name: 'Palette Material 3 Azure & Blue', completed: true },
-    { name: 'Validation Tests Jest & E2E', completed: false },
-    { name: 'Documentation Interactive & Guide', completed: false },
+    { name: 'Standalone- & Zoneless-Architektur', completed: true },
+    { name: 'Material 3 Palette Azure & Blue', completed: true },
+    { name: 'Jest- & E2E-Testvalidierung', completed: false },
+    { name: 'Interaktive Dokumentation & Leitfaden', completed: false },
   ]);
 
   readonly allComplete = computed(() => this.subTasks().every((t) => t.completed));
@@ -178,7 +178,7 @@ export class MaterialDemoPage {
     d.setHours(hours, minutes, 0, 0);
     this.selectedTime.set(d);
     this.showSnackBar(
-      `Heure réglée à ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`,
+      `Uhrzeit eingestellt auf ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} Uhr`,
     );
   }
 
@@ -187,7 +187,9 @@ export class MaterialDemoPage {
     d.setDate(d.getDate() + daysOffset);
     this.selectedDate.set(d);
     this.showSnackBar(
-      daysOffset === 0 ? "Date réglée à aujourd'hui" : `Date réglée à J+${daysOffset}`,
+      daysOffset === 0
+        ? 'Datum auf heute eingestellt'
+        : `Datum auf +${daysOffset} Tag(e) eingestellt`,
     );
   }
 
@@ -196,8 +198,8 @@ export class MaterialDemoPage {
     this.dateAdapter.setLocale(locale);
     this.showSnackBar(
       locale === 'de-DE'
-        ? 'Datepicker configuré au format Allemand (de-DE · TT.MM.JJJJ) 🇩🇪'
-        : `Datepicker configuré au format ${locale}`,
+        ? 'Datepicker auf deutsches Format eingestellt (de-DE · TT.MM.JJJJ) 🇩🇪'
+        : `Datepicker auf Format ${locale} eingestellt`,
     );
   }
 
@@ -217,7 +219,7 @@ export class MaterialDemoPage {
     const summary = `📅 ${this.eventTitle()} : ${dateStr} um ${timeStr}${suffix}`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(summary);
-      this.showSnackBar('Termin / Événement copié dans le presse-papiers !');
+      this.showSnackBar('Termin in die Zwischenablage kopiert!');
     }
   }
 }

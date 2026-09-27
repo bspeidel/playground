@@ -100,29 +100,29 @@ export class StepperDemoPage implements OnDestroy {
   readonly serviceTypes: ServiceTypeOption[] = [
     {
       id: 'webapp',
-      title: 'Web App & SSR',
-      description: 'Angular 22 / Node.js avec rendu hybride et CDN edge',
+      title: 'Web-App & SSR',
+      description: 'Angular 22 / Node.js mit hybridem Rendering und Edge-CDN',
       icon: 'web',
       defaultPort: 4200,
     },
     {
       id: 'api',
       title: 'API & Microservice',
-      description: 'Service REST / gRPC haute performance (Nest, Go, FastAPI)',
+      description: 'Hochleistungsfähiger REST- / gRPC-Dienst (Nest, Go, FastAPI)',
       icon: 'api',
       defaultPort: 8080,
     },
     {
       id: 'worker',
       title: 'Worker & Queue',
-      description: 'Consommateur de messages asynchrone (Kafka / RabbitMQ)',
+      description: 'Asynchroner Nachrichtenverarbeiter (Kafka / RabbitMQ)',
       icon: 'sync_alt',
       defaultPort: 9090,
     },
     {
       id: 'cache',
       title: 'Cache & In-Memory',
-      description: 'Instance dédiée Redis / Valkey avec réplication automatique',
+      description: 'Dedizierte Redis- / Valkey-Instanz mit automatischer Replikation',
       icon: 'storage',
       defaultPort: 6379,
     },
@@ -131,39 +131,39 @@ export class StepperDemoPage implements OnDestroy {
   readonly regions: RegionOption[] = [
     {
       id: 'europe-west9',
-      name: 'Europe Ouest (Paris)',
-      location: 'France, Île-de-France',
+      name: 'Westeuropa (Paris)',
+      location: 'Frankreich, Île-de-France',
       flag: '🇫🇷',
       latencyMs: 14,
       carbonScore: 'A',
-      co2Label: '100% Énergie Bas Carbone',
+      co2Label: '100% kohlenstoffarme Energie',
     },
     {
       id: 'europe-west1',
-      name: 'Europe Nord (Belgique)',
-      location: 'Belgique, St. Ghislain',
+      name: 'Nordeuropa (Belgien)',
+      location: 'Belgien, St. Ghislain',
       flag: '🇧🇪',
       latencyMs: 19,
       carbonScore: 'A',
-      co2Label: 'Énergie Renouvelable',
+      co2Label: 'Erneuerbare Energie',
     },
     {
       id: 'us-east4',
-      name: 'US Est (Virginie du Nord)',
+      name: 'US Ost (Nord-Virginia)',
       location: 'USA, Virginia',
       flag: '🇺🇸',
       latencyMs: 82,
       carbonScore: 'B',
-      co2Label: 'Standard Grid',
+      co2Label: 'Standard-Stromnetz',
     },
     {
       id: 'asia-northeast1',
-      name: 'Asie Est (Tokyo)',
-      location: 'Japon, Tokyo',
+      name: 'Ost-Asien (Tokio)',
+      location: 'Japan, Tokio',
       flag: '🇯🇵',
       latencyMs: 215,
       carbonScore: 'C',
-      co2Label: 'Compensation Carbone',
+      co2Label: 'CO2-Kompensation',
     },
   ];
 
@@ -333,7 +333,7 @@ export class StepperDemoPage implements OnDestroy {
     }
 
     this.envVars.set(presets);
-    this.snackBar.open(`Modèle ${preset.toUpperCase()} injecté avec succès !`, 'OK', {
+    this.snackBar.open(`Vorlage ${preset.toUpperCase()} erfolgreich eingefügt!`, 'OK', {
       duration: 2500,
     });
   }
@@ -358,7 +358,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 1,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Validation de la spécification cloud & cluster Kubernetes [${region}]... OK`,
+          message: `Validierung der Cloud-Spezifikation & Kubernetes-Cluster [${region}]... OK`,
         },
       },
       {
@@ -368,7 +368,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 2,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Clonage du dépôt Git (branche '${branch}') & vérification des dépendances...`,
+          message: `Klonen des Git-Repositorys (Branch '${branch}') & Abhängigkeitsprüfung...`,
         },
       },
       {
@@ -378,7 +378,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 3,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Construction de l'image conteneur OCI multi-arch (BuildKit sha256:7f4a01)... Terminé`,
+          message: `Multi-Arch-OCI-Container-Image-Build (BuildKit sha256:7f4a01)... Abgeschlossen`,
         },
       },
       {
@@ -388,7 +388,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 4,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Chiffrement et injection de ${this.envVars().length} variables d'environnement (KMS Vault)...`,
+          message: `Verschlüsselung und Injektion von ${this.envVars().length} Umgebungsvariablen (KMS Vault)...`,
         },
       },
       {
@@ -398,7 +398,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 5,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Provisionnement de ${this.minReplicas()} pods (${this.cpuCores()} vCPU, ${this.ramGb()} GB RAM) avec Multi-AZ...`,
+          message: `Bereitstellung von ${this.minReplicas()} Pods (${this.cpuCores()} vCPU, ${this.ramGb()} GB RAM) mit Multi-AZ...`,
         },
       },
       {
@@ -408,7 +408,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 6,
           timestamp: this.getNowTime(),
           level: 'ready',
-          message: `Health checks réussis (HTTP 200). Routeur Ingress SSL certifié Let's Encrypt actif !`,
+          message: `Health-Checks erfolgreich (HTTP 200). SSL-Ingress-Router mit Let's Encrypt-Zertifikat aktiv!`,
         },
       },
     ];
@@ -423,9 +423,13 @@ export class StepperDemoPage implements OnDestroy {
           const endpoint = `https://${serviceName}.cloud.playground.internal`;
           this.deployedEndpoint.set(endpoint);
           this.deploymentStatus.set('success');
-          this.snackBar.open('Microservice déployé avec succès sur le cluster ! 🚀', 'Super', {
-            duration: 4000,
-          });
+          this.snackBar.open(
+            'Microservice erfolgreich auf dem Cluster bereitgestellt! 🚀',
+            'Super',
+            {
+              duration: 4000,
+            },
+          );
         }
       }, delay);
     });
@@ -456,14 +460,16 @@ export class StepperDemoPage implements OnDestroy {
     this.highAvailability.set(true);
 
     stepper.reset();
-    this.snackBar.open('Assistant et configurations réinitialisés.', 'Fermer', { duration: 2500 });
+    this.snackBar.open('Assistent und Konfigurationen zurückgesetzt.', 'Schließen', {
+      duration: 2500,
+    });
   }
 
   copyEndpoint(): void {
     const url = this.deployedEndpoint();
     if (url && navigator.clipboard) {
       navigator.clipboard.writeText(`curl -i ${url}/healthz`);
-      this.snackBar.open('Commande cURL copiée dans le presse-papiers !', 'OK', { duration: 2500 });
+      this.snackBar.open('cURL-Befehl in die Zwischenablage kopiert!', 'OK', { duration: 2500 });
     }
   }
 

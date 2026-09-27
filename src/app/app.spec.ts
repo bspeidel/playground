@@ -29,9 +29,9 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
     expect(app.navCategories.length).toBe(3);
-    expect(app.navCategories[0].name).toBe('Général');
-    expect(app.navCategories[1].name).toBe('Fonctionnalités Angular & Perf');
-    expect(app.navCategories[2].name).toBe('Composants & Démos UI');
+    expect(app.navCategories[0].name).toBe('Allgemein');
+    expect(app.navCategories[1].name).toBe('Angular-Funktionen & Performance');
+    expect(app.navCategories[2].name).toBe('UI-Komponenten & Demos');
   });
 
   it('should have navigation links configured with 12 items', () => {

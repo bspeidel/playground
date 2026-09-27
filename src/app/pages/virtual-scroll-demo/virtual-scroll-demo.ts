@@ -39,14 +39,14 @@ const SERVICES = [
 ];
 const LEVELS: TelemetryLog['level'][] = ['INFO', 'INFO', 'INFO', 'WARN', 'ERROR', 'DEBUG'];
 const MESSAGES = [
-  'Requête HTTP traitée avec succès',
-  'Cache Hit sur Redis cluster',
-  'Temps de réponse supérieur au SLA (p99)',
-  'Jeton JWT renouvelé automatiquement',
-  'Échec de connexion au nœud de base de données secondaire',
-  'Synchronisation WebSocket persistante active',
-  "Nettoyage mémoire du pool d'objets terminé",
-  'Exécution du worker asynchrone achevée',
+  'HTTP-Anfrage erfolgreich verarbeitet',
+  'Cache-Treffer auf Redis-Cluster',
+  'Antwortzeit überschreitet SLA (p99)',
+  'JWT-Token automatisch erneuert',
+  'Verbindungsfehler zum sekundären Datenbankknoten',
+  'Dauerhafte WebSocket-Synchronisation aktiv',
+  'Speicherbereinigung des Objektpools abgeschlossen',
+  'Ausführung des asynchronen Workers abgeschlossen',
 ];
 
 function generateDataset(count: number): TelemetryLog[] {
@@ -167,7 +167,7 @@ export class VirtualScrollDemoPage {
 
     this.targetIndexInput.set(Math.floor(size / 2));
     this.scrollToTop();
-    this.snackBar.open(`${size.toLocaleString()} logs générés en ${duration} ms !`, 'OK', {
+    this.snackBar.open(`${size.toLocaleString()} Logs in ${duration} ms generiert!`, 'OK', {
       duration: 3000,
     });
   }
@@ -206,13 +206,13 @@ export class VirtualScrollDemoPage {
 
     if (vp && idx >= 0 && idx <= maxIdx) {
       vp.scrollToIndex(idx, 'smooth');
-      this.snackBar.open(`Navigation instantanée vers l'index #${idx.toLocaleString()}`, 'OK', {
+      this.snackBar.open(`Sofortige Navigation zu Index #${idx.toLocaleString()}`, 'OK', {
         duration: 2000,
       });
     } else {
       this.snackBar.open(
-        `Veuillez entrer un index entre 0 et ${maxIdx.toLocaleString()}`,
-        'Fermer',
+        `Bitte geben Sie einen Index zwischen 0 und ${maxIdx.toLocaleString()} ein`,
+        'Schließen',
         {
           duration: 3000,
         },

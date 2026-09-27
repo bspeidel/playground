@@ -62,7 +62,7 @@ describe('FormsDemoPage', () => {
     expect(component.passwordScore()).toBe(100);
     expect(component.passwordCriteria().hasUpper).toBe(true);
     expect(component.passwordCriteria().hasSpecial).toBe(true);
-    expect(component.passwordStrengthLabel()).toContain('Excellent');
+    expect(component.passwordStrengthLabel()).toContain('Ausgezeichnet');
   });
 
   it('should add and remove skills from FormArray', () => {

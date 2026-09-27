@@ -7,30 +7,30 @@
         <span class="tech-pill m3">Material 3 Table</span>
         <span class="tech-pill zoneless">Zoneless Computed Signals</span>
       </div>
-      <h1 class="page-title">Tableau de Bord & Data Table</h1>
+      <h1 class="page-title">Dashboard & Datentabelle</h1>
       <p class="page-subtitle">
-        Gestion de portefeuille de projets haute performance combinant
+        Hochleistungs-Projektportfoliomanagement mit
         <code>MatTable</code>, <code>MatSort</code>, <code>MatPaginator</code>,
-        <code>SelectionModel</code> et réactivité sans zone avec Angular Signals.
+        <code>SelectionModel</code> und zonenloser Reaktivität mit Angular Signals.
       </p>
     </div>
     <div class="header-actions">
       <button mat-flat-button color="primary" (click)="openCreateDialog()">
         <mat-icon>add</mat-icon>
-        Nouveau projet
+        Neues Projekt
       </button>
     </div>
   </header>
 
   <!-- KPI Cards Grid -->
-  <section class="kpi-grid" aria-label="Indicateurs clés de performance">
+  <section class="kpi-grid" aria-label="Wichtigste Leistungskennzahlen">
     <mat-card class="kpi-card" appearance="outlined">
       <mat-card-header>
         <div class="kpi-icon-wrapper primary">
           <mat-icon>business_center</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Projets Filtrés</div>
+          <div class="kpi-label">Gefilterte Projekte</div>
           <div class="kpi-value">
             {{ filteredProjectsCount() }}
             <span class="kpi-sub">/ {{ totalProjectsCount() }}</span>
@@ -38,7 +38,7 @@
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>{{ activeProjectsCount() }} actifs en production</span>
+        <span>{{ activeProjectsCount() }} aktiv in Produktion</span>
       </mat-card-content>
     </mat-card>
 
@@ -48,14 +48,14 @@
           <mat-icon>euro</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Budget Global</div>
+          <div class="kpi-label">Gesamtbudget</div>
           <div class="kpi-value">
             {{ totalBudget() | currency: 'EUR' : 'symbol' : '1.0-0' }}
           </div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Cumul sur la sélection actuelle</span>
+        <span>Gesamtbetrag der aktuellen Auswahl</span>
       </mat-card-content>
     </mat-card>
 
@@ -65,7 +65,7 @@
           <mat-icon>trending_up</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Progression Moyenne</div>
+          <div class="kpi-label">Durchschnittlicher Fortschritt</div>
           <div class="kpi-value">{{ avgProgress() }}%</div>
         </div>
       </mat-card-header>
@@ -80,15 +80,15 @@
           <mat-icon>checklist</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Sélection Active</div>
+          <div class="kpi-label">Aktive Auswahl</div>
           <div class="kpi-value">
             {{ selectedCount() }}
-            <span class="kpi-sub">coché(s)</span>
+            <span class="kpi-sub">ausgewählt</span>
           </div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>{{ selectedBudget() | currency: 'EUR' : 'symbol' : '1.0-0' }} engagés</span>
+        <span>{{ selectedBudget() | currency: 'EUR' : 'symbol' : '1.0-0' }} gebunden</span>
       </mat-card-content>
     </mat-card>
   </section>
@@ -98,12 +98,12 @@
     <div class="filters-bar">
       <!-- Search Input -->
       <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
-        <mat-label>Rechercher un projet, un client ou un identifiant...</mat-label>
+        <mat-label>Projekt, Kunde oder Kennung suchen...</mat-label>
         <input
           matInput
           [ngModel]="searchTerm()"
           (ngModelChange)="searchTerm.set($event)"
-          placeholder="Ex: Refonte, FinTech, PRJ-1025..."
+          placeholder="Z. B.: Refonte, FinTech, PRJ-1025..."
         />
         <mat-icon matPrefix>search</mat-icon>
         @if (searchTerm()) {
@@ -111,7 +111,7 @@
             mat-icon-button
             matSuffix
             (click)="searchTerm.set('')"
-            aria-label="Effacer recherche"
+            aria-label="Suche zurücksetzen"
           >
             <mat-icon>close</mat-icon>
           </button>
@@ -120,9 +120,9 @@
 
       <!-- Category Filter -->
       <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
-        <mat-label>Catégorie</mat-label>
+        <mat-label>Kategorie</mat-label>
         <mat-select [ngModel]="categoryFilter()" (ngModelChange)="categoryFilter.set($event)">
-          <mat-option value="all">Toutes les catégories</mat-option>
+          <mat-option value="all">Alle Kategorien</mat-option>
           <mat-option value="Web App">Web App</mat-option>
           <mat-option value="Mobile App">Mobile App</mat-option>
           <mat-option value="Cloud / DevOps">Cloud / DevOps</mat-option>
@@ -134,13 +134,13 @@
 
       <!-- Status Filter -->
       <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
-        <mat-label>Statut</mat-label>
+        <mat-label>Status</mat-label>
         <mat-select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
-          <mat-option value="all">Tous les statuts</mat-option>
-          <mat-option value="Actif">Actif</mat-option>
-          <mat-option value="En attente">En attente</mat-option>
-          <mat-option value="Terminé">Terminé</mat-option>
-          <mat-option value="Bloqué">Bloqué</mat-option>
+          <mat-option value="all">Alle Status</mat-option>
+          <mat-option value="Actif">Aktiv</mat-option>
+          <mat-option value="En attente">Ausstehend</mat-option>
+          <mat-option value="Terminé">Abgeschlossen</mat-option>
+          <mat-option value="Bloqué">Blockiert</mat-option>
         </mat-select>
         <mat-icon matPrefix>flag</mat-icon>
       </mat-form-field>
@@ -152,27 +152,19 @@
             mat-stroked-button
             color="warn"
             (click)="resetFilters()"
-            matTooltip="Réinitialiser les filtres"
+            matTooltip="Filter zurücksetzen"
           >
             <mat-icon>filter_alt_off</mat-icon>
-            Réinitialiser
+            Zurücksetzen
           </button>
         }
 
-        <button
-          mat-stroked-button
-          (click)="exportFilteredCsv()"
-          matTooltip="Exporter au format CSV"
-        >
+        <button mat-stroked-button (click)="exportFilteredCsv()" matTooltip="Als CSV exportieren">
           <mat-icon>download</mat-icon>
           CSV
         </button>
 
-        <button
-          mat-stroked-button
-          (click)="exportFilteredJson()"
-          matTooltip="Exporter au format JSON"
-        >
+        <button mat-stroked-button (click)="exportFilteredJson()" matTooltip="Als JSON exportieren">
           <mat-icon>data_object</mat-icon>
           JSON
         </button>
@@ -185,7 +177,7 @@
     <div class="batch-bar animate-slide-in">
       <div class="batch-info">
         <mat-icon class="batch-icon">check_circle</mat-icon>
-        <span class="batch-count">{{ selectedCount() }} projet(s) sélectionné(s)</span>
+        <span class="batch-count">{{ selectedCount() }} Projekt(e) ausgewählt</span>
         <span class="batch-budget"
           >({{ selectedBudget() | currency: 'EUR' : 'symbol' : '1.0-0' }})</span
         >
@@ -194,15 +186,15 @@
       <div class="batch-actions">
         <button mat-stroked-button (click)="updateSelectedStatus('Actif')">
           <mat-icon>play_arrow</mat-icon>
-          Passer en Actif
+          Auf Aktiv setzen
         </button>
         <button mat-stroked-button (click)="updateSelectedStatus('Terminé')">
           <mat-icon>task_alt</mat-icon>
-          Marquer Terminé
+          Als abgeschlossen markieren
         </button>
         <button mat-flat-button color="warn" (click)="deleteSelected()">
           <mat-icon>delete</mat-icon>
-          Supprimer la sélection
+          Auswahl löschen
         </button>
       </div>
     </div>
@@ -244,7 +236,7 @@
 
         <!-- Project & Client Column -->
         <ng-container matColumnDef="project">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Projet & Client</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Projekt & Kunde</th>
           <td mat-cell *matCellDef="let row" class="col-project">
             <div class="project-title">{{ row.name }}</div>
             <div class="project-client">{{ row.client }}</div>
@@ -253,7 +245,7 @@
 
         <!-- Category Column -->
         <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Catégorie</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Kategorie</th>
           <td mat-cell *matCellDef="let row">
             <div class="category-badge">
               <mat-icon class="cat-icon">{{ getCategoryIcon(row.category) }}</mat-icon>
@@ -264,7 +256,7 @@
 
         <!-- Status Column -->
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
           <td mat-cell *matCellDef="let row">
             <span class="status-pill" [ngClass]="getStatusClass(row.status)">
               <span class="status-dot"></span>
@@ -275,7 +267,7 @@
 
         <!-- Priority Column -->
         <ng-container matColumnDef="priority">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Priorité</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Priorität</th>
           <td mat-cell *matCellDef="let row">
             <span class="priority-badge" [ngClass]="getPriorityClass(row.priority)">
               {{ row.priority }}
@@ -293,7 +285,7 @@
 
         <!-- Progress Column -->
         <ng-container matColumnDef="progress">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Progression</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fortschritt</th>
           <td mat-cell *matCellDef="let row" class="col-progress">
             <div class="progress-wrapper">
               <mat-progress-bar mode="determinate" [value]="row.progress"></mat-progress-bar>
@@ -304,7 +296,7 @@
 
         <!-- Due Date Column -->
         <ng-container matColumnDef="dueDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Échéance</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fälligkeit</th>
           <td mat-cell *matCellDef="let row">
             {{ row.dueDate | date: 'dd/MM/yyyy' }}
           </td>
@@ -312,19 +304,19 @@
 
         <!-- Actions Column -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef class="col-actions">Actions</th>
+          <th mat-header-cell *matHeaderCellDef class="col-actions">Aktionen</th>
           <td mat-cell *matCellDef="let row" class="col-actions">
-            <button mat-icon-button [matMenuTriggerFor]="rowMenu" aria-label="Options du projet">
+            <button mat-icon-button [matMenuTriggerFor]="rowMenu" aria-label="Projektoptionen">
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #rowMenu="matMenu">
               <button mat-menu-item (click)="openEditDialog(row)">
                 <mat-icon>edit</mat-icon>
-                <span>Modifier</span>
+                <span>Bearbeiten</span>
               </button>
               <button mat-menu-item (click)="deleteProject(row)">
                 <mat-icon color="warn">delete</mat-icon>
-                <span class="text-warn">Supprimer</span>
+                <span class="text-warn">Löschen</span>
               </button>
             </mat-menu>
           </td>
@@ -345,11 +337,13 @@
           <td class="mat-cell empty-table-cell" [attr.colspan]="displayedColumns.length">
             <div class="empty-state">
               <mat-icon class="empty-icon">search_off</mat-icon>
-              <h3 class="empty-title">Aucun projet ne correspond à vos critères</h3>
-              <p class="empty-subtitle">Modifiez vos filtres de recherche ou réinitialisez-les.</p>
+              <h3 class="empty-title">Keine Projekte entsprechen Ihren Kriterien</h3>
+              <p class="empty-subtitle">
+                Passen Sie Ihre Suchfilter an oder setzen Sie sie zurück.
+              </p>
               <button mat-stroked-button color="primary" (click)="resetFilters()">
                 <mat-icon>refresh</mat-icon>
-                Réinitialiser les filtres
+                Filter zurücksetzen
               </button>
             </div>
           </td>
@@ -362,7 +356,7 @@
       [pageSizeOptions]="[5, 10, 20]"
       [pageSize]="10"
       showFirstLastButtons
-      aria-label="Sélectionner la page des projets"
+      aria-label="Projektseite auswählen"
       class="paginator"
     >
     </mat-paginator>

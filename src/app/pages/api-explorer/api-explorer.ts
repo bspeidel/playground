@@ -84,10 +84,10 @@ export class ApiExplorerPage {
       if (!response.ok) {
         if (response.status === 403) {
           throw new Error(
-            'Limite de taux API GitHub atteinte (rate limit). Réessayez dans un instant.',
+            'GitHub-API-Ratenlimit erreicht (Rate Limit). Bitte versuchen Sie es in Kürze erneut.',
           );
         }
-        throw new Error(`Erreur réseau GitHub (${response.status}) : ${response.statusText}`);
+        throw new Error(`GitHub-Netzwerkfehler (${response.status}) : ${response.statusText}`);
       }
 
       return (await response.json()) as GitHubSearchResponse;

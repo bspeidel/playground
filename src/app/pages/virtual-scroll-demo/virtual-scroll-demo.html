@@ -7,15 +7,15 @@
         <span class="tech-pill m3">CDK Scrolling</span>
         <span class="tech-pill zoneless">Zoneless 60 FPS</span>
       </div>
-      <h1 class="page-title">Virtual Scrolling & Benchmark de Performance</h1>
+      <h1 class="page-title">Virtuelles Scrollen & Performance-Benchmark</h1>
       <p class="page-subtitle">
-        Rendu fluide et instantané de <strong>50 000+</strong> éléments avec
-        <code>&#64;angular/cdk/scrolling</code>. Le viewport recycle continuellement un nombre fixe
-        de nœuds DOM au lieu de surcharger le navigateur.
+        Flüssiges und verzögerungsfreies Rendering von <strong>50.000+</strong> Elementen mit
+        <code>&#64;angular/cdk/scrolling</code>. Der Viewport recycelt kontinuierlich eine feste
+        Anzahl von DOM-Knoten, anstatt den Browser zu überlasten.
       </p>
     </div>
     <div class="header-actions">
-      <span class="scale-label">Taille du jeu de données :</span>
+      <span class="scale-label">Datensatzgröße :</span>
       <div class="scale-buttons">
         <button
           mat-stroked-button
@@ -50,19 +50,19 @@
   </header>
 
   <!-- Benchmark & Performance KPIs -->
-  <section class="kpi-grid" aria-label="Indicateurs de performance de virtualisation">
+  <section class="kpi-grid" aria-label="Leistungsindikatoren der Virtualisierung">
     <mat-card class="kpi-card" appearance="outlined">
       <mat-card-header>
         <div class="kpi-icon-wrapper primary">
           <mat-icon>storage</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Éléments en Mémoire</div>
+          <div class="kpi-label">Elemente im Speicher</div>
           <div class="kpi-value">{{ filteredLogs().length | number }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Tableau source complet en mémoire JS</span>
+        <span>Vollständiges Quell-Array im JS-Speicher</span>
       </mat-card-content>
     </mat-card>
 
@@ -72,12 +72,12 @@
           <mat-icon>memory</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Nœuds DOM Actifs</div>
+          <div class="kpi-label">Aktive DOM-Knoten</div>
           <div class="kpi-value">~{{ estimatedVirtualDomNodes() }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Recyclage constant dans le DOM</span>
+        <span>Kontinuierliches Recycling im DOM</span>
       </mat-card-content>
     </mat-card>
 
@@ -87,12 +87,12 @@
           <mat-icon>speed</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Réduction Empreinte DOM</div>
+          <div class="kpi-label">DOM-Reduktion</div>
           <div class="kpi-value">{{ domReductionPercent() }}%</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Économie de mémoire navigateur</span>
+        <span>Browser-Speichereinsparung</span>
       </mat-card-content>
     </mat-card>
 
@@ -102,12 +102,12 @@
           <mat-icon>timer</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Latence Moyenne (p50)</div>
+          <div class="kpi-label">Durchschnittliche Latenz (p50)</div>
           <div class="kpi-value">{{ avgLatency() }} ms</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>{{ errorLogsCount() }} logs d'erreur détectés</span>
+        <span>{{ errorLogsCount() }} Fehlerprotokolle erkannt</span>
       </mat-card-content>
     </mat-card>
   </section>
@@ -117,16 +117,16 @@
     <div class="filters-bar">
       <!-- Search -->
       <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
-        <mat-label>Rechercher (service, message, #ID)...</mat-label>
+        <mat-label>Suchen (Dienst, Nachricht, #ID)...</mat-label>
         <input
           matInput
           [ngModel]="searchQuery()"
           (ngModelChange)="searchQuery.set($event)"
-          placeholder="Ex: auth-service, Redis, #4200..."
+          placeholder="Z. B.: auth-service, Redis, #4200..."
         />
         <mat-icon matPrefix>search</mat-icon>
         @if (searchQuery()) {
-          <button mat-icon-button matSuffix (click)="searchQuery.set('')" aria-label="Effacer">
+          <button mat-icon-button matSuffix (click)="searchQuery.set('')" aria-label="Löschen">
             <mat-icon>close</mat-icon>
           </button>
         }
@@ -134,9 +134,9 @@
 
       <!-- Level Filter -->
       <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
-        <mat-label>Niveau de log</mat-label>
+        <mat-label>Protokollstufe</mat-label>
         <mat-select [ngModel]="selectedLevel()" (ngModelChange)="selectedLevel.set($event)">
-          <mat-option value="all">Tous les niveaux</mat-option>
+          <mat-option value="all">Alle Stufen</mat-option>
           <mat-option value="INFO">INFO</mat-option>
           <mat-option value="WARN">WARN</mat-option>
           <mat-option value="ERROR">ERROR</mat-option>
@@ -147,17 +147,21 @@
 
       <!-- Jump Navigation -->
       <div class="navigation-group">
-        <button mat-stroked-button (click)="scrollToTop()" matTooltip="Aller au début (Index #1)">
+        <button
+          mat-stroked-button
+          (click)="scrollToTop()"
+          matTooltip="Zum Anfang springen (Index #1)"
+        >
           <mat-icon>vertical_align_top</mat-icon>
-          Début
+          Anfang
         </button>
-        <button mat-stroked-button (click)="scrollToMiddle()" matTooltip="Aller au milieu">
+        <button mat-stroked-button (click)="scrollToMiddle()" matTooltip="Zur Mitte springen">
           <mat-icon>vertical_align_center</mat-icon>
-          Milieu
+          Mitte
         </button>
-        <button mat-stroked-button (click)="scrollToBottom()" matTooltip="Aller à la fin">
+        <button mat-stroked-button (click)="scrollToBottom()" matTooltip="Zum Ende springen">
           <mat-icon>vertical_align_bottom</mat-icon>
-          Fin
+          Ende
         </button>
 
         <div class="custom-jump-wrap">
@@ -170,7 +174,7 @@
             [max]="filteredLogs().length - 1"
           />
           <button mat-flat-button color="primary" (click)="scrollToCustomIndex()">
-            Sauter à l'index
+            Zu Index springen
           </button>
         </div>
       </div>
@@ -181,8 +185,8 @@
   <mat-card class="viewport-card" appearance="outlined">
     <div class="viewport-header">
       <span class="viewport-stats">
-        Affichage de <strong>{{ filteredLogs().length | number }}</strong> entrées télémétriques
-        (Offset actuel : <strong>{{ currentScrollOffset() | number }}px</strong>)
+        Anzeige von <strong>{{ filteredLogs().length | number }}</strong> Telemetrieeinträgen
+        (Aktueller Offset: <strong>{{ currentScrollOffset() | number }}px</strong>)
       </span>
       <span class="viewport-fps-tag">
         <span class="fps-dot"></span>
@@ -235,22 +239,22 @@
     <mat-card appearance="outlined" class="info-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">architecture</mat-icon>
-        <mat-card-title>Pourquoi la virtualisation est essentielle ?</mat-card-title>
-        <mat-card-subtitle>Comparatif standard DOM vs CDK Virtual Scroll</mat-card-subtitle>
+        <mat-card-title>Warum ist Virtualisierung essenziell?</mat-card-title>
+        <mat-card-subtitle>Vergleich Standard-DOM vs. CDK Virtual Scroll</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <p>
-          Si vous affichiez 50 000 éléments avec un simple <code>&#64;for</code> classique, le
-          navigateur devrait allouer et calculer le layout de plus de
-          <strong>150 000 nœuds DOM</strong> simultanément. Cela provoquerait un gel total de
-          l'interface (plusieurs secondes d'inactivité) et une consommation mémoire de plusieurs
-          centaines de mégaoctets.
+          Wenn Sie 50.000 Elemente mit einem einfachen klassischen <code>&#64;for</code> rendern
+          würden, müsste der Browser mehr als <strong>150.000 DOM-Knoten</strong> gleichzeitig
+          zuweisen und berechnen. Dies würde zu einem vollständigen Einfrieren der
+          Benutzeroberfläche (mehrere Sekunden Blockade) und einem Speicherverbrauch von mehreren
+          hundert Megabyte führen.
         </p>
         <p>
-          Avec <code>CdkVirtualScrollViewport</code>, Angular n'injecte dans le DOM que les
-          <strong>~14 éléments visibles</strong> sur l'écran. En combinant cette technique avec
-          <code>provideZonelessChangeDetection()</code>, la bande passante CPU est réduite au
-          minimum absolu et le défilement reste ultra-fluide à 60/120 images par seconde.
+          Mit <code>CdkVirtualScrollViewport</code> injiziert Angular nur die
+          <strong>~14 sichtbaren Elemente</strong> auf dem Bildschirm in das DOM. In Kombination mit
+          <code>provideZonelessChangeDetection()</code> wird die CPU-Auslastung auf ein absolutes
+          Minimum reduziert und das Scrollen bleibt ultraflüssig bei 60/120 Bildern pro Sekunde.
         </p>
       </mat-card-content>
     </mat-card>

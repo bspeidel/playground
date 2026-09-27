@@ -5,25 +5,25 @@
       <div class="badge-title">
         <span class="tech-pill">Angular 22</span>
         <span class="tech-pill m3">MatStepper M3</span>
-        <span class="tech-pill zoneless">Calcul Réactif Temps Réel</span>
+        <span class="tech-pill zoneless">Echtzeit-Berechnung</span>
         <span class="tech-pill devops">DevOps Cloud</span>
       </div>
-      <h1 class="page-title">Assistant Déploiement Cloud & Stepper M3</h1>
+      <h1 class="page-title">Cloud-Bereitstellungsassistent & M3-Stepper</h1>
       <p class="page-subtitle">
-        Workflow multi-étapes guidé avec <code>MatStepper</code> : dimensionnement des ressources,
-        estimation budgétaire en temps réel avec signaux <code>computed()</code>, injection de
-        secrets et simulation interactive de déploiement Kubernetes.
+        Geführter mehrstufiger Workflow mit <code>MatStepper</code>: Ressourcendimensionierung,
+        Budgetschätzung in Echtzeit mit <code>computed()</code>-Signals, Secrets-Injektion und
+        interaktive Simulation der Kubernetes-Bereitstellung.
       </p>
     </div>
 
     <!-- Stepper Configuration Controls Toolbar -->
     <div class="header-controls">
       <div class="control-group">
-        <span class="control-label">Orientation :</span>
+        <span class="control-label">Ausrichtung :</span>
         <mat-button-toggle-group
           [value]="stepperOrientation()"
           (change)="setOrientation($event.value)"
-          aria-label="Orientation du Stepper"
+          aria-label="Stepper-Ausrichtung"
         >
           <mat-button-toggle value="horizontal">
             <mat-icon>linear_scale</mat-icon>
@@ -38,13 +38,13 @@
 
       <div class="control-group">
         <mat-slide-toggle [checked]="isLinear()" (change)="toggleLinear($event.checked)">
-          Mode Linéaire Strict
+          Strikter linearer Modus
         </mat-slide-toggle>
       </div>
 
       <button mat-stroked-button (click)="resetAll(stepper)" class="btn-reset">
         <mat-icon>restart_alt</mat-icon>
-        Réinitialiser
+        Zurücksetzen
       </button>
     </div>
   </header>
@@ -62,8 +62,8 @@
         <form [formGroup]="serviceForm" class="step-form-content">
           <ng-template matStepLabel>
             <div class="step-label-custom">
-              <span class="step-label-title">Architecture</span>
-              <span class="step-label-desc">Service & Région</span>
+              <span class="step-label-title">Architektur</span>
+              <span class="step-label-desc">Dienst & Region</span>
             </div>
           </ng-template>
 
@@ -72,10 +72,10 @@
               <mat-icon color="primary">rocket_launch</mat-icon>
             </div>
             <div>
-              <h2 class="step-title">Définition du Service & Infrastructure</h2>
+              <h2 class="step-title">Dienstdefinition & Infrastruktur</h2>
               <p class="step-desc">
-                Configurez l'identité, le modèle applicatif et la localisation géographique de votre
-                cluster.
+                Konfigurieren Sie Identität, Anwendungsmodell und geografischen Standort Ihres
+                Clusters.
               </p>
             </div>
           </div>
@@ -83,7 +83,7 @@
           <div class="form-grid">
             <!-- Service Name -->
             <mat-form-field appearance="outline" class="col-span-full">
-              <mat-label>Nom Unique du Service</mat-label>
+              <mat-label>Eindeutiger Dienstname</mat-label>
               <span matPrefix class="field-prefix">https://&nbsp;</span>
               <input
                 matInput
@@ -94,19 +94,19 @@
               <span matSuffix class="field-suffix">.cloud.internal</span>
               <mat-icon matIconSuffix>dns</mat-icon>
               @if (serviceForm.get('name')?.hasError('required')) {
-                <mat-error>Le nom du service est obligatoire</mat-error>
+                <mat-error>Der Dienstname ist erforderlich</mat-error>
               }
               @if (serviceForm.get('name')?.hasError('pattern')) {
-                <mat-error>Uniquement des lettres minuscules, chiffres et tirets</mat-error>
+                <mat-error>Nur Kleinbuchstaben, Ziffern und Bindestriche</mat-error>
               }
               @if (serviceForm.get('name')?.hasError('minlength')) {
-                <mat-error>Au moins 3 caractères requis</mat-error>
+                <mat-error>Mindestens 3 Zeichen erforderlich</mat-error>
               }
             </mat-form-field>
 
             <!-- Service Template Cards -->
             <div class="col-span-full">
-              <span class="section-subheading">Type de charge de travail :</span>
+              <span class="section-subheading">Art der Arbeitslast:</span>
               <div class="type-cards-grid">
                 @for (item of serviceTypes; track item.id) {
                   <button
@@ -128,7 +128,7 @@
 
             <!-- Cloud Region Select -->
             <mat-form-field appearance="outline" class="col-half">
-              <mat-label>Région Cloud & Datacenter</mat-label>
+              <mat-label>Cloud-Region & Rechenzentrum</mat-label>
               <mat-select formControlName="region">
                 @for (reg of regions; track reg.id) {
                   <mat-option [value]="reg.id">
@@ -141,7 +141,7 @@
                 }
               </mat-select>
               <mat-hint>
-                Région sélectionnée : <strong>{{ selectedRegion().location }}</strong> ({{
+                Ausgewählte Region: <strong>{{ selectedRegion().location }}</strong> ({{
                   selectedRegion().co2Label
                 }})
               </mat-hint>
@@ -149,7 +149,7 @@
 
             <!-- Git Repository & Branch -->
             <mat-form-field appearance="outline" class="col-half">
-              <mat-label>Dépôt Git Source</mat-label>
+              <mat-label>Git-Quell-Repository</mat-label>
               <input
                 matInput
                 formControlName="repoUrl"
@@ -157,16 +157,16 @@
               />
               <mat-icon matIconSuffix>code</mat-icon>
               @if (serviceForm.get('repoUrl')?.hasError('required')) {
-                <mat-error>Le dépôt Git est requis</mat-error>
+                <mat-error>Das Git-Repository ist erforderlich</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="col-half">
-              <mat-label>Branche de Déploiement</mat-label>
+              <mat-label>Bereitstellungs-Branch</mat-label>
               <mat-select formControlName="branch">
-                <mat-option value="main">main (Production)</mat-option>
-                <mat-option value="staging">staging (Recette)</mat-option>
-                <mat-option value="develop">develop (Intégration)</mat-option>
+                <mat-option value="main">main (Produktion)</mat-option>
+                <mat-option value="staging">staging (Staging)</mat-option>
+                <mat-option value="develop">develop (Entwicklung)</mat-option>
               </mat-select>
               <mat-icon matIconSuffix>alt_route</mat-icon>
             </mat-form-field>
@@ -181,7 +181,7 @@
               matStepperNext
               [disabled]="serviceForm.invalid && isLinear()"
             >
-              Étape suivante : Ressources & Coûts
+              Nächster Schritt: Ressourcen & Kosten
               <mat-icon iconPositionEnd>arrow_forward</mat-icon>
             </button>
           </div>
@@ -192,8 +192,8 @@
       <mat-step>
         <ng-template matStepLabel>
           <div class="step-label-custom">
-            <span class="step-label-title">Dimensionnement</span>
-            <span class="step-label-desc">Ressources & Coûts</span>
+            <span class="step-label-title">Dimensionierung</span>
+            <span class="step-label-desc">Ressourcen & Kosten</span>
           </div>
         </ng-template>
 
@@ -203,10 +203,11 @@
               <mat-icon color="primary">tune</mat-icon>
             </div>
             <div>
-              <h2 class="step-title">Dimensionnement & Calculateur de Coûts en Direct</h2>
+              <h2 class="step-title">Dimensionierung & Live-Kostenrechner</h2>
               <p class="step-desc">
-                Ajustez les curseurs vCPU, RAM et réplicas. Le budget mensuel et horaire se met à
-                jour instantanément grâce aux signaux réactifs <code>computed()</code>.
+                Passen Sie die Schieberegler für vCPU, RAM und Replikate an. Das monatliche und
+                stündliche Budget aktualisiert sich sofort dank der reaktiven
+                <code>computed()</code>-Signals.
               </p>
             </div>
           </div>
@@ -219,7 +220,7 @@
                 <div class="slider-header">
                   <div class="slider-title-grp">
                     <mat-icon>memory</mat-icon>
-                    <span class="title">Processeurs vCPU alloués</span>
+                    <span class="title">Zugewiesene vCPU-Prozessoren</span>
                   </div>
                   <span class="val-badge">{{ cpuCores() }} vCPUs</span>
                 </div>
@@ -239,18 +240,18 @@
                 <div class="slider-header">
                   <div class="slider-title-grp">
                     <mat-icon>speed</mat-icon>
-                    <span class="title">Mémoire Vive (RAM)</span>
+                    <span class="title">Arbeitsspeicher (RAM)</span>
                   </div>
-                  <span class="val-badge">{{ ramGb() }} Go RAM</span>
+                  <span class="val-badge">{{ ramGb() }} GB RAM</span>
                 </div>
                 <mat-slider min="1" max="64" step="1" discrete class="custom-slider">
                   <input matSliderThumb [value]="ramGb()" (valueChange)="ramGb.set($event)" />
                 </mat-slider>
                 <div class="slider-ticks">
-                  <span>1 Go</span>
-                  <span>16 Go</span>
-                  <span>32 Go</span>
-                  <span>64 Go</span>
+                  <span>1 GB</span>
+                  <span>16 GB</span>
+                  <span>32 GB</span>
+                  <span>64 GB</span>
                 </div>
               </div>
 
@@ -260,9 +261,9 @@
                   <div class="slider-header">
                     <div class="slider-title-grp">
                       <mat-icon>layers</mat-icon>
-                      <span class="title">Réplicas Min (Base)</span>
+                      <span class="title">Min. Replikate (Basis)</span>
                     </div>
-                    <span class="val-badge">{{ minReplicas() }} instances</span>
+                    <span class="val-badge">{{ minReplicas() }} Instanzen</span>
                   </div>
                   <mat-slider min="1" max="5" step="1" discrete class="custom-slider">
                     <input
@@ -277,9 +278,9 @@
                   <div class="slider-header">
                     <div class="slider-title-grp">
                       <mat-icon>trending_up</mat-icon>
-                      <span class="title">Autoscale Max (Pic)</span>
+                      <span class="title">Max. Autoscaling (Spitze)</span>
                     </div>
-                    <span class="val-badge">{{ maxReplicas() }} instances</span>
+                    <span class="val-badge">{{ maxReplicas() }} Instanzen</span>
                   </div>
                   <mat-slider min="2" max="20" step="1" discrete class="custom-slider">
                     <input
@@ -296,9 +297,9 @@
                 <div class="slider-header">
                   <div class="slider-title-grp">
                     <mat-icon>storage</mat-icon>
-                    <span class="title">Disque SSD Persistant NVMe</span>
+                    <span class="title">Persistente NVMe-SSD-Festplatte</span>
                   </div>
-                  <span class="val-badge">{{ storageGb() }} Go</span>
+                  <span class="val-badge">{{ storageGb() }} GB</span>
                 </div>
                 <mat-slider min="10" max="500" step="10" discrete class="custom-slider">
                   <input
@@ -314,10 +315,10 @@
                   [checked]="highAvailability()"
                   (change)="highAvailability.set($event.checked)"
                 >
-                  <strong>Haute Disponibilité Multi-AZ (99.99% SLA)</strong>
+                  <strong>Multi-AZ-Hochverfügbarkeit (99,99% SLA)</strong>
                   <p class="ha-desc">
-                    Distribue automatiquement vos conteneurs sur 3 zones de disponibilité distinctes
-                    pour éliminer tout point unique de panne (+25% coût de réplication).
+                    Verteilt Ihre Container automatisch auf 3 separate Verfügbarkeitszonen, um jeden
+                    Single Point of Failure auszuschließen (+25% Replikationskosten).
                   </p>
                 </mat-slide-toggle>
               </div>
@@ -329,8 +330,8 @@
                 <div class="cost-card-header">
                   <mat-icon class="calc-icon">payments</mat-icon>
                   <div>
-                    <span class="cost-subtitle">Estimation Budgétaire en Direct</span>
-                    <h3 class="cost-main-title">Coût Prévisionnel</h3>
+                    <span class="cost-subtitle">Echtzeit-Budgetschätzung</span>
+                    <h3 class="cost-main-title">Voraussichtliche Kosten</h3>
                   </div>
                 </div>
 
@@ -338,39 +339,39 @@
                   <div class="price-val">
                     {{ monthlyCost() | currency: 'EUR' : 'symbol' : '1.2-2' }}
                   </div>
-                  <div class="price-period">/ mois (charge nominale)</div>
+                  <div class="price-period">/ Monat (Nennlast)</div>
                   <div class="price-hourly">
-                    ~ {{ hourlyCost() | currency: 'EUR' : 'symbol' : '1.3-3' }} / heure
+                    ~ {{ hourlyCost() | currency: 'EUR' : 'symbol' : '1.3-3' }} / Stunde
                   </div>
                 </div>
 
                 <div class="cost-breakdown-list">
                   <div class="cost-line">
-                    <span class="label">vCPU ({{ cpuCores() }} coeurs)</span>
+                    <span class="label">vCPU ({{ cpuCores() }} Kerne)</span>
                     <span class="val">{{
                       cpuCores() * 16.5 | currency: 'EUR' : 'symbol' : '1.2-2'
                     }}</span>
                   </div>
                   <div class="cost-line">
-                    <span class="label">RAM ({{ ramGb() }} Go)</span>
+                    <span class="label">RAM ({{ ramGb() }} GB)</span>
                     <span class="val">{{
                       ramGb() * 4.2 | currency: 'EUR' : 'symbol' : '1.2-2'
                     }}</span>
                   </div>
                   <div class="cost-line">
-                    <span class="label">Disque NVMe ({{ storageGb() }} Go)</span>
+                    <span class="label">NVMe-Speicher ({{ storageGb() }} GB)</span>
                     <span class="val">{{
                       storageGb() * 0.1 | currency: 'EUR' : 'symbol' : '1.2-2'
                     }}</span>
                   </div>
                   <div class="cost-line">
                     <span class="label">Multi-AZ SLA</span>
-                    <span class="val">{{ highAvailability() ? '+25%' : 'Inclus' }}</span>
+                    <span class="val">{{ highAvailability() ? '+25%' : 'Inbegriffen' }}</span>
                   </div>
                   <div class="cost-line highlight">
-                    <span class="label">Plafond Max Auto-Scale</span>
+                    <span class="label">Maximales Autoscaling-Limit</span>
                     <span class="val"
-                      >{{ maxMonthlyCost() | currency: 'EUR' : 'symbol' : '1.0-0' }}/m</span
+                      >{{ maxMonthlyCost() | currency: 'EUR' : 'symbol' : '1.0-0' }}/Monat</span
                     >
                   </div>
                 </div>
@@ -378,11 +379,11 @@
                 <div class="specs-pill-container">
                   <span class="spec-pill">
                     <mat-icon>speed</mat-icon>
-                    {{ cpuCores() * minReplicas() }} vCPU Total
+                    {{ cpuCores() * minReplicas() }} vCPU insgesamt
                   </span>
                   <span class="spec-pill">
                     <mat-icon>memory</mat-icon>
-                    {{ ramGb() * minReplicas() }} Go RAM
+                    {{ ramGb() * minReplicas() }} GB RAM
                   </span>
                   <span class="spec-pill">
                     <mat-icon>shield</mat-icon>
@@ -397,11 +398,11 @@
           <div class="step-footer-actions">
             <button mat-stroked-button matStepperPrevious>
               <mat-icon>arrow_back</mat-icon>
-              Précédent
+              Zurück
             </button>
             <div class="spacer"></div>
             <button mat-flat-button color="primary" matStepperNext>
-              Étape suivante : Variables & Secrets
+              Nächster Schritt: Variablen & Secrets
               <mat-icon iconPositionEnd>arrow_forward</mat-icon>
             </button>
           </div>
@@ -412,8 +413,8 @@
       <mat-step>
         <ng-template matStepLabel>
           <div class="step-label-custom">
-            <span class="step-label-title">Configuration</span>
-            <span class="step-label-desc">Variables & Secrets</span>
+            <span class="step-label-title">Konfiguration</span>
+            <span class="step-label-desc">Variablen & Secrets</span>
           </div>
         </ng-template>
 
@@ -423,17 +424,18 @@
               <mat-icon color="primary">key</mat-icon>
             </div>
             <div>
-              <h2 class="step-title">Variables d'Environnement & Secrets Chiffrés</h2>
+              <h2 class="step-title">Umgebungsvariablen & verschlüsselte Secrets</h2>
               <p class="step-desc">
-                Gérez dynamiquement vos variables applicatives. Marquez les clés sensibles comme
-                secrets pour activer le masquage et le chiffrement KMS au repos.
+                Verwalten Sie Ihre Anwendungsvariablen dynamisch. Markieren Sie vertrauliche
+                Schlüssel als Secrets, um Maskierung und KMS-Verschlüsselung im Ruhezustand zu
+                aktivieren.
               </p>
             </div>
           </div>
 
           <!-- Quick Presets -->
           <div class="presets-bar">
-            <span class="presets-label">Charger un profil type :</span>
+            <span class="presets-label">Standardprofil laden:</span>
             <div class="presets-buttons">
               <button mat-stroked-button (click)="loadPreset('node')">
                 <mat-icon>javascript</mat-icon>
@@ -445,7 +447,7 @@
               </button>
               <button mat-stroked-button (click)="loadPreset('go')">
                 <mat-icon>bolt</mat-icon>
-                Go Microservice
+                Go-Mikroservice
               </button>
             </div>
           </div>
@@ -453,10 +455,10 @@
           <!-- Dynamic Variables List -->
           <div class="env-table-wrapper">
             <div class="env-table-header">
-              <span class="col-name">Clé de la Variable</span>
-              <span class="col-val">Valeur</span>
-              <span class="col-sec">Secret</span>
-              <span class="col-act">Actions</span>
+              <span class="col-name">Variablenschlüssel</span>
+              <span class="col-val">Wert</span>
+              <span class="col-sec">Geheimnis</span>
+              <span class="col-act">Aktionen</span>
             </div>
 
             <div class="env-table-rows">
@@ -468,7 +470,7 @@
                         matInput
                         [value]="item.key"
                         (input)="updateEnvKey(item.id, $any($event.target).value)"
-                        placeholder="EX: DB_HOST"
+                        placeholder="Z. B.: DB_HOST"
                       />
                     </mat-form-field>
                   </div>
@@ -480,7 +482,7 @@
                         [type]="item.isSecret ? 'password' : 'text'"
                         [value]="item.value"
                         (input)="updateEnvValue(item.id, $any($event.target).value)"
-                        placeholder="valeur ou chaine de connexion"
+                        placeholder="Wert oder Verbindungszeichenfolge"
                       />
                     </mat-form-field>
                   </div>
@@ -488,7 +490,9 @@
                   <div class="col-sec">
                     <button
                       mat-icon-button
-                      [matTooltip]="item.isSecret ? 'Chiffré KMS (Masqué)' : 'Non masqué'"
+                      [matTooltip]="
+                        item.isSecret ? 'KMS-verschlüsselt (Maskiert)' : 'Nicht maskiert'
+                      "
                       (click)="toggleSecretVisibility(item.id)"
                       [color]="item.isSecret ? 'primary' : ''"
                     >
@@ -500,7 +504,7 @@
                     <button
                       mat-icon-button
                       color="warn"
-                      matTooltip="Supprimer la variable"
+                      matTooltip="Variable löschen"
                       (click)="removeEnvVar(item.id)"
                     >
                       <mat-icon>delete_outline</mat-icon>
@@ -513,11 +517,11 @@
             <div class="add-var-bar">
               <button mat-stroked-button color="primary" (click)="addEnvVar()">
                 <mat-icon>add</mat-icon>
-                Ajouter une variable
+                Variable hinzufügen
               </button>
               <span class="var-counter-text">
-                {{ envVars().length }} variable(s) configurée(s) dont {{ secretCount() }} secret(s)
-                chiffré(s)
+                {{ envVars().length }} Variable(n) konfiguriert, davon
+                {{ secretCount() }} verschlüsselte(s) Secret(s)
               </span>
             </div>
           </div>
@@ -526,11 +530,11 @@
           <div class="step-footer-actions">
             <button mat-stroked-button matStepperPrevious>
               <mat-icon>arrow_back</mat-icon>
-              Précédent
+              Zurück
             </button>
             <div class="spacer"></div>
             <button mat-flat-button color="primary" matStepperNext>
-              Étape suivante : Synthèse & Déploiement
+              Nächster Schritt: Übersicht & Bereitstellung
               <mat-icon iconPositionEnd>arrow_forward</mat-icon>
             </button>
           </div>
@@ -541,8 +545,8 @@
       <mat-step>
         <ng-template matStepLabel>
           <div class="step-label-custom">
-            <span class="step-label-title">Déploiement</span>
-            <span class="step-label-desc">Revue & Lancement</span>
+            <span class="step-label-title">Bereitstellung</span>
+            <span class="step-label-desc">Überprüfung & Start</span>
           </div>
         </ng-template>
 
@@ -552,10 +556,10 @@
               <mat-icon color="primary">cloud_done</mat-icon>
             </div>
             <div>
-              <h2 class="step-title">Revue Finale & Déploiement en Direct</h2>
+              <h2 class="step-title">Abschließende Überprüfung & Live-Bereitstellung</h2>
               <p class="step-desc">
-                Vérifiez la configuration complète puis déclenchez le pipeline de déploiement simulé
-                avec retour logs en temps réel.
+                Überprüfen Sie die vollständige Konfiguration und starten Sie anschließend die
+                simulierte Bereitstellungspipeline mit Echtzeit-Protokollrückmeldung.
               </p>
             </div>
           </div>
@@ -565,23 +569,23 @@
             <div class="recap-card">
               <div class="recap-card-header">
                 <mat-icon color="primary">badge</mat-icon>
-                <span>Identité du Service</span>
+                <span>Dienstidentität</span>
               </div>
               <div class="recap-content">
                 <div class="recap-row">
-                  <span class="k">Service :</span>
+                  <span class="k">Dienst:</span>
                   <span class="v code-highlight">{{ serviceForm.get('name')?.value }}</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Type :</span>
+                  <span class="k">Typ:</span>
                   <span class="v">{{ selectedType().title }}</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Région :</span>
+                  <span class="k">Region:</span>
                   <span class="v">{{ selectedRegion().flag }} {{ selectedRegion().name }}</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Branche Git :</span>
+                  <span class="k">Git-Branch:</span>
                   <span class="v code-highlight">{{ serviceForm.get('branch')?.value }}</span>
                 </div>
               </div>
@@ -590,24 +594,24 @@
             <div class="recap-card">
               <div class="recap-card-header">
                 <mat-icon color="primary">dns</mat-icon>
-                <span>Ressources & Disponibilité</span>
+                <span>Ressourcen & Verfügbarkeit</span>
               </div>
               <div class="recap-content">
                 <div class="recap-row">
-                  <span class="k">Processeurs :</span>
-                  <span class="v">{{ cpuCores() }} vCPUs / pod</span>
+                  <span class="k">Prozessoren:</span>
+                  <span class="v">{{ cpuCores() }} vCPUs / Pod</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Mémoire :</span>
-                  <span class="v">{{ ramGb() }} Go RAM / pod</span>
+                  <span class="k">Speicher:</span>
+                  <span class="v">{{ ramGb() }} GB RAM / Pod</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Replicas :</span>
-                  <span class="v">{{ minReplicas() }} min - {{ maxReplicas() }} max</span>
+                  <span class="k">Replikate:</span>
+                  <span class="v">{{ minReplicas() }} Min. - {{ maxReplicas() }} Max.</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Résilience :</span>
-                  <span class="v">{{ highAvailability() ? 'Multi-AZ (99.99%)' : 'Standard' }}</span>
+                  <span class="k">Resilienz:</span>
+                  <span class="v">{{ highAvailability() ? 'Multi-AZ (99,99%)' : 'Standard' }}</span>
                 </div>
               </div>
             </div>
@@ -615,28 +619,28 @@
             <div class="recap-card highlight-recap">
               <div class="recap-card-header">
                 <mat-icon color="primary">receipt_long</mat-icon>
-                <span>Budget & Paramètres</span>
+                <span>Budget & Einstellungen</span>
               </div>
               <div class="recap-content">
                 <div class="recap-row">
-                  <span class="k">Coût Mensuel :</span>
+                  <span class="k">Monatliche Kosten:</span>
                   <span class="v price-accent">
                     {{ monthlyCost() | currency: 'EUR' : 'symbol' : '1.2-2' }}
                   </span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Coût Horaire :</span>
+                  <span class="k">Stündliche Kosten:</span>
                   <span class="v">
                     ~ {{ hourlyCost() | currency: 'EUR' : 'symbol' : '1.3-3' }} / h
                   </span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Variables d'env :</span>
-                  <span class="v">{{ envVars().length }} déclarées</span>
+                  <span class="k">Umgebungsvariablen:</span>
+                  <span class="v">{{ envVars().length }} deklariert</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Secrets KMS :</span>
-                  <span class="v">{{ secretCount() }} chiffrés</span>
+                  <span class="k">KMS-Geheimnisse:</span>
+                  <span class="v">{{ secretCount() }} verschlüsselt</span>
                 </div>
               </div>
             </div>
@@ -652,13 +656,13 @@
                 (click)="startDeployment()"
               >
                 <mat-icon>rocket_launch</mat-icon>
-                Lancer le Déploiement Cloud
+                Cloud-Bereitstellung starten
               </button>
             } @else if (deploymentStatus() === 'deploying') {
               <div class="deploying-state">
                 <div class="deploy-spinner-text">
                   <mat-icon class="spin-icon">sync</mat-icon>
-                  <span>Déploiement du cluster en cours... ({{ deploymentProgress() }}%)</span>
+                  <span>Cluster-Bereitstellung läuft... ({{ deploymentProgress() }}%)</span>
                 </div>
                 <mat-progress-bar
                   mode="determinate"
@@ -670,22 +674,19 @@
                 <div class="success-top">
                   <mat-icon class="check-icon">check_circle</mat-icon>
                   <div>
-                    <h3 class="success-title">Déploiement Terminé avec Succès !</h3>
+                    <h3 class="success-title">Bereitstellung erfolgreich abgeschlossen!</h3>
                     <p class="success-subtitle">
-                      Le microservice est en ligne, opérationnel et sécurisé par certificat SSL.
+                      Der Microservice ist online, betriebsbereit und mit einem SSL-Zertifikat
+                      gesichert.
                     </p>
                   </div>
-                  <span class="status-chip-live">🟢 EN LIGNE (200 OK)</span>
+                  <span class="status-chip-live">🟢 ONLINE (200 OK)</span>
                 </div>
 
                 <div class="endpoint-bar">
-                  <span class="endpoint-label">Endpoint public :</span>
+                  <span class="endpoint-label">Öffentlicher Endpunkt:</span>
                   <code class="endpoint-code">{{ deployedEndpoint() }}</code>
-                  <button
-                    mat-icon-button
-                    (click)="copyEndpoint()"
-                    matTooltip="Copier le curl de test"
-                  >
+                  <button mat-icon-button (click)="copyEndpoint()" matTooltip="Test-cURL kopieren">
                     <mat-icon>content_copy</mat-icon>
                   </button>
                 </div>
@@ -693,11 +694,11 @@
                 <div class="success-actions">
                   <button mat-stroked-button (click)="copyEndpoint()">
                     <mat-icon>terminal</mat-icon>
-                    Copier commande cURL
+                    cURL-Befehl kopieren
                   </button>
                   <button mat-flat-button color="primary" (click)="startDeployment()">
                     <mat-icon>refresh</mat-icon>
-                    Redéployer
+                    Erneut bereitstellen
                   </button>
                 </div>
               </div>
@@ -714,7 +715,7 @@
               </div>
               <div class="terminal-title">
                 <mat-icon class="term-icon">terminal</mat-icon>
-                <span>k8s-cloud-runner — logs de déploiement en continu</span>
+                <span>k8s-cloud-runner — kontinuierliche Bereitstellungsprotokolle</span>
               </div>
               <span class="term-status-badge">
                 {{
@@ -730,9 +731,9 @@
             <div class="terminal-body">
               @if (deploymentLogs().length === 0) {
                 <div class="terminal-placeholder">
-                  $ en attente du déclenchement du pipeline de déploiement...
+                  $ Warten auf Auslösung der Bereitstellungspipeline...
                   <br />
-                  Cliquez sur "Lancer le Déploiement Cloud" pour exécuter les étapes CI/CD.
+                  Klicken Sie auf „Cloud-Bereitstellung starten“, um die CI/CD-Schritte auszuführen.
                 </div>
               }
 
@@ -750,12 +751,12 @@
           <div class="step-footer-actions">
             <button mat-stroked-button matStepperPrevious>
               <mat-icon>arrow_back</mat-icon>
-              Précédent
+              Zurück
             </button>
             <div class="spacer"></div>
             <button mat-stroked-button (click)="resetAll(stepper)">
               <mat-icon>restart_alt</mat-icon>
-              Réinitialiser l'Assistant
+              Assistenten zurücksetzen
             </button>
           </div>
         </div>

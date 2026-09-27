@@ -48,28 +48,28 @@ export class App {
 
   readonly navCategories: readonly NavCategory[] = [
     {
-      name: 'Général',
-      items: [{ path: '/overview', label: "Vue d'ensemble", icon: 'dashboard' }],
+      name: 'Allgemein',
+      items: [{ path: '/overview', label: 'Übersicht', icon: 'dashboard' }],
     },
     {
-      name: 'Fonctionnalités Angular & Perf',
+      name: 'Angular-Funktionen & Performance',
       items: [
         { path: '/signals', label: 'Signals & Zoneless', icon: 'bolt' },
         { path: '/defer', label: 'Defer (@defer)', icon: 'hourglass_empty' },
-        { path: '/api-explorer', label: 'API & Réseau', icon: 'public' },
-        { path: '/virtual-scroll', label: 'Virtual Scroll & Perf', icon: 'speed' },
+        { path: '/api-explorer', label: 'API & Netzwerk', icon: 'public' },
+        { path: '/virtual-scroll', label: 'Virtuelles Scrollen & Performance', icon: 'speed' },
       ],
     },
     {
-      name: 'Composants & Démos UI',
+      name: 'UI-Komponenten & Demos',
       items: [
         { path: '/material', label: 'Material 3', icon: 'palette' },
-        { path: '/forms', label: 'Formulaires Typés', icon: 'dynamic_form' },
-        { path: '/table', label: 'Data Table & KPIs', icon: 'table_chart' },
-        { path: '/kanban', label: 'Kanban Board', icon: 'view_kanban' },
-        { path: '/charts', label: 'Analytics & Graphiques', icon: 'insights' },
-        { path: '/stepper', label: 'Assistant Déploiement', icon: 'rocket_launch' },
-        { path: '/tree', label: 'Explorateur Fichiers', icon: 'folder_open' },
+        { path: '/forms', label: 'Typisierte Formulare', icon: 'dynamic_form' },
+        { path: '/table', label: 'Datentabelle & KPIs', icon: 'table_chart' },
+        { path: '/kanban', label: 'Kanban-Board', icon: 'view_kanban' },
+        { path: '/charts', label: 'Analysen & Diagramme', icon: 'insights' },
+        { path: '/stepper', label: 'Bereitstellungsassistent', icon: 'rocket_launch' },
+        { path: '/tree', label: 'Datei-Explorer', icon: 'folder_open' },
       ],
     },
   ];

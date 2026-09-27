@@ -33,23 +33,23 @@ export interface KanbanColumn {
 const INITIAL_COLUMNS: KanbanColumn[] = [
   {
     id: 'backlog',
-    title: 'Backlog Idées',
+    title: 'Backlog-Ideen',
     icon: 'lightbulb',
     color: '#64748b',
     tasks: [
       {
         id: 'TSK-101',
-        title: 'Étudier les WebGPU Shaders en Canvas',
-        description: 'Évaluer la compatibilité des navigateurs et le gain de rendu 3D.',
+        title: 'WebGPU-Shader in Canvas evaluieren',
+        description: 'Browser-Kompatibilität und 3D-Rendering-Gewinn prüfen.',
         priority: 'Basse',
         assignee: { name: 'Benjamin S.', initials: 'BS', color: '#2563eb' },
-        tags: ['R&D', 'Graphisme'],
+        tags: ['F&E', 'Grafik'],
         createdAt: new Date('2026-09-20'),
       },
       {
         id: 'TSK-102',
-        title: 'Audit des Core Web Vitals (INP)',
-        description: 'Vérifier la réactivité aux interactions utilisateur sur mobile.',
+        title: 'Core Web Vitals (INP) Audit',
+        description: 'Reaktivität auf Benutzerinteraktionen auf Mobilgeräten prüfen.',
         priority: 'Moyenne',
         assignee: { name: 'Sophie Martin', initials: 'SM', color: '#7c3aed' },
         tags: ['Audit', 'Perf'],
@@ -59,23 +59,23 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
   },
   {
     id: 'todo',
-    title: 'À Faire',
+    title: 'Zu erledigen',
     icon: 'assignment',
     color: '#2563eb',
     tasks: [
       {
         id: 'TSK-103',
-        title: 'Migration des formulaires vers Typed Forms',
-        description: 'Remplacer les anciens UntypedFormGroup par la version typée stricte.',
+        title: 'Migration der Formulare zu Typed Forms',
+        description: 'Alte UntypedFormGroup durch die strikte typisierte Version ersetzen.',
         priority: 'Haute',
         assignee: { name: 'Alexandre Roy', initials: 'AR', color: '#059669' },
-        tags: ['Refacto', 'Forms'],
+        tags: ['Refacto', 'Formulare'],
         createdAt: new Date('2026-09-22'),
       },
       {
         id: 'TSK-104',
-        title: 'Tests de non-régression Playwright',
-        description: 'Ajouter des tests bout-en-bout automatisés pour le pipeline CI/CD.',
+        title: 'Playwright Regressionstests',
+        description: 'Automatisierte End-to-End-Tests für die CI/CD-Pipeline hinzufügen.',
         priority: 'Moyenne',
         assignee: { name: 'Camille Leroy', initials: 'CL', color: '#ea580c' },
         tags: ['QA', 'Testing'],
@@ -85,14 +85,14 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
   },
   {
     id: 'in_progress',
-    title: 'En Cours',
+    title: 'In Bearbeitung',
     icon: 'pending',
     color: '#ea580c',
     tasks: [
       {
         id: 'TSK-105',
-        title: 'Intégration Drag & Drop CDK fluide',
-        description: 'Mettre en place cdkDropListConnectedTo avec animations Material 3.',
+        title: 'Flüssige CDK Drag & Drop Integration',
+        description: 'cdkDropListConnectedTo mit Material-3-Animationen implementieren.',
         priority: 'Critique',
         assignee: { name: 'Benjamin S.', initials: 'BS', color: '#2563eb' },
         tags: ['CDK', 'UI/UX'],
@@ -100,25 +100,25 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       },
       {
         id: 'TSK-106',
-        title: 'Optimisation du bundle Vite / esbuild',
-        description: 'Analyser les chunks de styles et compresser les ressources.',
+        title: 'Optimierung des Vite / esbuild Bundles',
+        description: 'Style-Chunks analysieren und Assets komprimieren.',
         priority: 'Haute',
         assignee: { name: 'Alexandre Roy', initials: 'AR', color: '#059669' },
-        tags: ['Build', 'Optimisation'],
+        tags: ['Build', 'Optimierung'],
         createdAt: new Date('2026-09-25'),
       },
     ],
   },
   {
     id: 'done',
-    title: 'Terminé',
+    title: 'Abgeschlossen',
     icon: 'task_alt',
     color: '#059669',
     tasks: [
       {
         id: 'TSK-107',
-        title: 'Architecture Zoneless Angular 22',
-        description: 'Activation de provideZonelessChangeDetection et suppression de Zone.js.',
+        title: 'Zoneless-Architektur Angular 22',
+        description: 'Aktivierung von provideZonelessChangeDetection und Entfernung von Zone.js.',
         priority: 'Critique',
         assignee: { name: 'Benjamin S.', initials: 'BS', color: '#2563eb' },
         tags: ['Core', 'Zoneless'],
@@ -126,8 +126,8 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       },
       {
         id: 'TSK-108',
-        title: 'Dark / Light mode thématique Material 3',
-        description: 'Gestion des variables CSS et persistance dans le localStorage.',
+        title: 'Material 3 Dark- / Light-Theme',
+        description: 'Verwaltung von CSS-Variablen und Speicherung im localStorage.',
         priority: 'Haute',
         assignee: { name: 'Sophie Martin', initials: 'SM', color: '#7c3aed' },
         tags: ['M3', 'Theme'],
@@ -135,8 +135,8 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       },
       {
         id: 'TSK-109',
-        title: 'Déploiement GitHub Actions CI/CD',
-        description: 'Automatisation des tests Jest et publication GitHub Pages.',
+        title: 'GitHub Actions CI/CD Bereitstellung',
+        description: 'Automatisierung von Jest-Tests und GitHub Pages Veröffentlichung.',
         priority: 'Haute',
         assignee: { name: 'Camille Leroy', initials: 'CL', color: '#ea580c' },
         tags: ['DevOps', 'CI/CD'],
@@ -216,7 +216,7 @@ export class KanbanDemoPage {
 
     // Trigger immutable signal update so zoneless change detection propagates seamlessly
     this.columns.update((cols) => cols.map((col) => ({ ...col, tasks: [...col.tasks] })));
-    this.snackBar.open('Tâche déplacée avec succès !', 'OK', { duration: 2000 });
+    this.snackBar.open('Aufgabe erfolgreich verschoben!', 'OK', { duration: 2000 });
   }
 
   // Filter check helper
@@ -250,7 +250,7 @@ export class KanbanDemoPage {
             col.id === columnId ? { ...col, tasks: [result, ...col.tasks] } : col,
           ),
         );
-        this.snackBar.open(`Tâche "${result.title}" créée`, 'Fermer', { duration: 3000 });
+        this.snackBar.open(`Aufgabe "${result.title}" erstellt`, 'Schließen', { duration: 3000 });
       }
     });
   }
@@ -270,7 +270,9 @@ export class KanbanDemoPage {
               : col,
           ),
         );
-        this.snackBar.open(`Tâche "${result.title}" mise à jour`, 'Fermer', { duration: 3000 });
+        this.snackBar.open(`Aufgabe "${result.title}" aktualisiert`, 'Schließen', {
+          duration: 3000,
+        });
       }
     });
   }
@@ -281,7 +283,7 @@ export class KanbanDemoPage {
         col.id === columnId ? { ...col, tasks: col.tasks.filter((t) => t.id !== taskId) } : col,
       ),
     );
-    this.snackBar.open('Tâche supprimée', 'Fermer', { duration: 2500 });
+    this.snackBar.open('Aufgabe gelöscht', 'Schließen', { duration: 2500 });
   }
 
   moveTaskToColumn(task: KanbanTask, sourceColId: string, targetColId: string): void {
@@ -306,19 +308,19 @@ export class KanbanDemoPage {
     });
 
     const targetTitle = this.columns().find((c) => c.id === targetColId)?.title ?? targetColId;
-    this.snackBar.open(`Tâche déplacée vers "${targetTitle}"`, 'Fermer', { duration: 2500 });
+    this.snackBar.open(`Aufgabe verschoben nach "${targetTitle}"`, 'Schließen', { duration: 2500 });
   }
 
   resetBoard(): void {
     this.columns.set(
-      JSON.parse(JSON.stringify(INITIAL_COLUMNS)).map((col: KanbanColumn) => ({
+      INITIAL_COLUMNS.map((col: KanbanColumn) => ({
         ...col,
         tasks: col.tasks.map((t) => ({ ...t, createdAt: new Date(t.createdAt) })),
       })),
     );
     this.searchQuery.set('');
     this.priorityFilter.set('all');
-    this.snackBar.open('Tableau réinitialisé à son état initial', 'OK', { duration: 2500 });
+    this.snackBar.open('Board auf Ausgangszustand zurückgesetzt', 'OK', { duration: 2500 });
   }
 
   getPriorityClass(priority: KanbanTask['priority']): string {
@@ -331,6 +333,19 @@ export class KanbanDemoPage {
         return 'priority-medium';
       case 'Basse':
         return 'priority-low';
+    }
+  }
+
+  getPriorityLabel(priority: KanbanTask['priority']): string {
+    switch (priority) {
+      case 'Critique':
+        return 'Kritisch';
+      case 'Haute':
+        return 'Hoch';
+      case 'Moyenne':
+        return 'Mittel';
+      case 'Basse':
+        return 'Niedrig';
     }
   }
 }

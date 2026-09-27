@@ -7,21 +7,22 @@
         <span class="tech-pill m3">Typed Reactive Forms</span>
         <span class="tech-pill zoneless">Zoneless Signals</span>
       </div>
-      <h1 class="page-title">Formulaires Réactifs Avancés</h1>
+      <h1 class="page-title">Fortgeschrittene reaktive Formulare</h1>
       <p class="page-subtitle">
-        Architecture de saisie robuste avec <code>FormGroup</code> typé strict, validation
-        asynchrone avec debouncing (disponibilité du pseudonyme), <code>FormArray</code> dynamique
-        pour collections extensibles et validations croisées.
+        Robuste Eingabearchitektur mit strikt typisiertem <code>FormGroup</code>, asynchroner
+        Validierung mit Debouncing (Verfügbarkeit des Benutzernamens), dynamischem
+        <code>FormArray</code>
+        für erweiterbare Listen und feldübergreifenden Validierungen.
       </p>
     </div>
     <div class="header-actions">
       <button mat-stroked-button (click)="resetForm()">
         <mat-icon>restart_alt</mat-icon>
-        Réinitialiser
+        Zurücksetzen
       </button>
       <button mat-flat-button color="accent" (click)="fillSampleData()">
         <mat-icon>auto_fix_high</mat-icon>
-        Remplir exemple
+        Beispieldaten ausfüllen
       </button>
     </div>
   </header>
@@ -34,18 +35,18 @@
         <mat-card appearance="outlined" class="section-card">
           <mat-card-header>
             <mat-icon mat-card-avatar color="primary">badge</mat-icon>
-            <mat-card-title>Profil & Identifiants</mat-card-title>
-            <mat-card-subtitle>Informations du compte et validation asynchrone</mat-card-subtitle>
+            <mat-card-title>Profil & Anmeldedaten</mat-card-title>
+            <mat-card-subtitle>Kontoinformationen und asynchrone Validierung</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="form-grid">
               <!-- Username with Async Validator -->
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Pseudonyme (Validation asynchrone)</mat-label>
+                <mat-label>Benutzername (Asynchrone Validierung)</mat-label>
                 <input
                   matInput
                   formControlName="username"
-                  placeholder="Ex: dev_expert"
+                  placeholder="Z. B.: dev_expert"
                   autocomplete="username"
                 />
                 <mat-icon matPrefix>person</mat-icon>
@@ -57,44 +58,49 @@
                 }
 
                 @if (form.controls.username.hasError('required')) {
-                  <mat-error>Le pseudonyme est requis</mat-error>
+                  <mat-error>Der Benutzername ist erforderlich</mat-error>
                 } @else if (form.controls.username.hasError('minlength')) {
-                  <mat-error>Au moins 3 caractères requis</mat-error>
+                  <mat-error>Mindestens 3 Zeichen erforderlich</mat-error>
                 } @else if (form.controls.username.hasError('pattern')) {
-                  <mat-error>Seuls lettres, chiffres, - et _ sont acceptés</mat-error>
+                  <mat-error>Nur Buchstaben, Ziffern, - und _ sind erlaubt</mat-error>
                 } @else if (form.controls.username.hasError('usernameTaken')) {
-                  <mat-error>Ce pseudonyme est déjà réservé (ex: admin, angular, google)</mat-error>
+                  <mat-error
+                    >Dieser Benutzername ist bereits vergeben (z. B.: admin, angular,
+                    google)</mat-error
+                  >
                 }
-                <mat-hint>Testez 'admin' ou 'angular' pour voir l'erreur de disponibilité</mat-hint>
+                <mat-hint
+                  >Testen Sie 'admin' oder 'angular', um den Verfügbarkeitsfehler zu sehen</mat-hint
+                >
               </mat-form-field>
 
               <!-- Email -->
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Adresse email professionnelle</mat-label>
+                <mat-label>Geschäftliche E-Mail-Adresse</mat-label>
                 <input
                   matInput
                   type="email"
                   formControlName="email"
-                  placeholder="nom@entreprise.com"
+                  placeholder="name@unternehmen.de"
                   autocomplete="email"
                 />
                 <mat-icon matPrefix>email</mat-icon>
                 @if (form.controls.email.hasError('required')) {
-                  <mat-error>L'adresse email est requise</mat-error>
+                  <mat-error>Die E-Mail-Adresse ist erforderlich</mat-error>
                 } @else if (form.controls.email.hasError('email')) {
-                  <mat-error>Format d'email invalide</mat-error>
+                  <mat-error>Ungültiges E-Mail-Format</mat-error>
                 }
               </mat-form-field>
 
               <!-- Role Select -->
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Rôle principal</mat-label>
+                <mat-label>Hauptrolle</mat-label>
                 <mat-select formControlName="role">
-                  <mat-option value="Tech Lead">Tech Lead / Architecte</mat-option>
-                  <mat-option value="Architecte Cloud">Architecte Cloud & DevOps</mat-option>
-                  <mat-option value="Développeur Senior">Développeur Senior Fullstack</mat-option>
-                  <mat-option value="Designer UI/UX">Designer Système UI/UX</mat-option>
-                  <mat-option value="Ingénieur IA">Ingénieur Modèles & IA</mat-option>
+                  <mat-option value="Tech Lead">Tech Lead / Architekt</mat-option>
+                  <mat-option value="Architecte Cloud">Cloud- & DevOps-Architekt</mat-option>
+                  <mat-option value="Développeur Senior">Senior Fullstack-Entwickler</mat-option>
+                  <mat-option value="Designer UI/UX">UI/UX-Systemdesigner</mat-option>
+                  <mat-option value="Ingénieur IA">KI- & Modell-Ingenieur</mat-option>
                 </mat-select>
                 <mat-icon matPrefix>work</mat-icon>
               </mat-form-field>
@@ -106,21 +112,21 @@
         <mat-card appearance="outlined" class="section-card" formGroupName="passwordGroup">
           <mat-card-header>
             <mat-icon mat-card-avatar color="primary">shield</mat-icon>
-            <mat-card-title>Sécurité & Mot de Passe</mat-card-title>
+            <mat-card-title>Sicherheit & Passwort</mat-card-title>
             <mat-card-subtitle
-              >Jauge de robustesse en temps réel et validation croisée</mat-card-subtitle
+              >Echtzeit-Stärkeanzeige und feldübergreifende Validierung</mat-card-subtitle
             >
           </mat-card-header>
           <mat-card-content>
             <div class="form-grid">
               <!-- Password -->
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Mot de passe</mat-label>
+                <mat-label>Passwort</mat-label>
                 <input
                   matInput
                   [type]="hidePassword() ? 'password' : 'text'"
                   formControlName="password"
-                  placeholder="Minimum 8 caractères"
+                  placeholder="Mindestens 8 Zeichen"
                 />
                 <mat-icon matPrefix>lock</mat-icon>
                 <button
@@ -128,23 +134,21 @@
                   matSuffix
                   type="button"
                   (click)="hidePassword.set(!hidePassword())"
-                  [attr.aria-label]="
-                    hidePassword() ? 'Afficher mot de passe' : 'Masquer mot de passe'
-                  "
+                  [attr.aria-label]="hidePassword() ? 'Passwort anzeigen' : 'Passwort ausblenden'"
                 >
                   <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
                 </button>
                 @if (form.controls.passwordGroup.controls.password.hasError('required')) {
-                  <mat-error>Le mot de passe est obligatoire</mat-error>
+                  <mat-error>Das Passwort ist erforderlich</mat-error>
                 } @else if (form.controls.passwordGroup.controls.password.hasError('minlength')) {
-                  <mat-error>Au moins 8 caractères requis</mat-error>
+                  <mat-error>Mindestens 8 Zeichen erforderlich</mat-error>
                 }
               </mat-form-field>
 
               <!-- Strength Progress Meter -->
               <div class="strength-meter-wrap">
                 <div class="strength-header">
-                  <span class="strength-label">Robustesse :</span>
+                  <span class="strength-label">Sicherheit :</span>
                   <span class="strength-status" [ngClass]="passwordStrengthClass()">
                     {{ passwordStrengthLabel() }} ({{ passwordScore() }}%)
                   </span>
@@ -159,12 +163,12 @@
 
               <!-- Confirm Password -->
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Confirmer le mot de passe</mat-label>
+                <mat-label>Passwort bestätigen</mat-label>
                 <input
                   matInput
                   [type]="hideConfirmPassword() ? 'password' : 'text'"
                   formControlName="confirmPassword"
-                  placeholder="Répétez le mot de passe"
+                  placeholder="Passwort wiederholen"
                 />
                 <mat-icon matPrefix>lock_reset</mat-icon>
                 <button
@@ -172,14 +176,14 @@
                   matSuffix
                   type="button"
                   (click)="hideConfirmPassword.set(!hideConfirmPassword())"
-                  [attr.aria-label]="hideConfirmPassword() ? 'Afficher' : 'Masquer'"
+                  [attr.aria-label]="hideConfirmPassword() ? 'Anzeigen' : 'Ausblenden'"
                 >
                   <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
                 </button>
                 @if (form.controls.passwordGroup.controls.confirmPassword.hasError('required')) {
-                  <mat-error>Veuillez confirmer votre mot de passe</mat-error>
+                  <mat-error>Bitte bestätigen Sie Ihr Passwort</mat-error>
                 } @else if (form.controls.passwordGroup.hasError('passwordMismatch')) {
-                  <mat-error>Les deux mots de passe ne correspondent pas</mat-error>
+                  <mat-error>Die beiden Passwörter stimmen nicht überein</mat-error>
                 }
               </mat-form-field>
             </div>
@@ -190,9 +194,9 @@
         <mat-card appearance="outlined" class="section-card">
           <mat-card-header>
             <mat-icon mat-card-avatar color="primary">psychology</mat-icon>
-            <mat-card-title>Compétences Techniques (FormArray Dynamique)</mat-card-title>
+            <mat-card-title>Technische Qualifikationen (Dynamisches FormArray)</mat-card-title>
             <mat-card-subtitle
-              >Ajout et suppression dynamique de lignes de formulaire</mat-card-subtitle
+              >Dynamisches Hinzufügen und Entfernen von Formularzeilen</mat-card-subtitle
             >
           </mat-card-header>
           <mat-card-content>
@@ -200,29 +204,29 @@
               @for (skill of skillsArray.controls; track $index; let i = $index) {
                 <div [formGroupName]="i" class="skill-row animate-fade-in">
                   <mat-form-field appearance="outline" class="skill-name">
-                    <mat-label>Compétence #{{ i + 1 }}</mat-label>
+                    <mat-label>Qualifikation #{{ i + 1 }}</mat-label>
                     <input
                       matInput
                       formControlName="name"
-                      placeholder="Ex: Angular, Docker, Rust"
+                      placeholder="Z. B.: Angular, Docker, Rust"
                     />
                     @if (skill.controls.name.hasError('required')) {
-                      <mat-error>Requis</mat-error>
+                      <mat-error>Erforderlich</mat-error>
                     }
                   </mat-form-field>
 
                   <mat-form-field appearance="outline" class="skill-level">
                     <mat-label>Niveau</mat-label>
                     <mat-select formControlName="level">
-                      <mat-option value="Débutant">Débutant</mat-option>
-                      <mat-option value="Intermédiaire">Intermédiaire</mat-option>
-                      <mat-option value="Avancé">Avancé</mat-option>
-                      <mat-option value="Expert">Expert</mat-option>
+                      <mat-option value="Débutant">Einsteiger</mat-option>
+                      <mat-option value="Intermédiaire">Mittelstufe</mat-option>
+                      <mat-option value="Avancé">Fortgeschritten</mat-option>
+                      <mat-option value="Expert">Experte</mat-option>
                     </mat-select>
                   </mat-form-field>
 
                   <mat-form-field appearance="outline" class="skill-years">
-                    <mat-label>Années</mat-label>
+                    <mat-label>Jahre</mat-label>
                     <input matInput type="number" formControlName="years" min="1" max="30" />
                   </mat-form-field>
 
@@ -232,7 +236,7 @@
                     type="button"
                     (click)="removeSkill(i)"
                     [disabled]="skillsArray.length <= 1"
-                    matTooltip="Supprimer cette compétence"
+                    matTooltip="Diese Qualifikation entfernen"
                     class="remove-skill-btn"
                   >
                     <mat-icon>delete_outline</mat-icon>
@@ -249,7 +253,7 @@
               class="add-skill-btn"
             >
               <mat-icon>add</mat-icon>
-              Ajouter une compétence
+              Qualifikation hinzufügen
             </button>
           </mat-card-content>
         </mat-card>
@@ -259,15 +263,17 @@
           <mat-card-content>
             <div class="consent-grid">
               <mat-slide-toggle formControlName="newsletter" color="primary">
-                Recevoir les alertes d'architecture et mises à jour du projet
+                Architektur-Benachrichtigungen und Projekt-Updates erhalten
               </mat-slide-toggle>
 
               <mat-checkbox formControlName="terms" color="primary">
-                J'accepte les conditions d'utilisation et la politique de données
-                <strong>(requis)</strong>
+                Ich akzeptiere die Nutzungsbedingungen und Datenschutzrichtlinien
+                <strong>(erforderlich)</strong>
               </mat-checkbox>
               @if (form.controls.terms.touched && form.controls.terms.hasError('required')) {
-                <div class="terms-error">Vous devez accepter les conditions pour continuer.</div>
+                <div class="terms-error">
+                  Sie müssen den Bedingungen zustimmen, um fortzufahren.
+                </div>
               }
             </div>
 
@@ -283,9 +289,9 @@
               >
                 @if (isSubmitting()) {
                   <mat-spinner diameter="18" class="inline-spinner"></mat-spinner>
-                  <span>Enregistrement...</span>
+                  <span>Speichern...</span>
                 } @else {
-                  <span>Soumettre le profil</span>
+                  <span>Profil absenden</span>
                 }
               </button>
             </div>
@@ -300,13 +306,13 @@
       <mat-card appearance="outlined" class="inspector-card">
         <mat-card-header>
           <mat-icon mat-card-avatar color="primary">monitoring</mat-icon>
-          <mat-card-title>État du Formulaire</mat-card-title>
-          <mat-card-subtitle>Métadonnées de réactivité Angular</mat-card-subtitle>
+          <mat-card-title>Formularstatus</mat-card-title>
+          <mat-card-subtitle>Metadaten der Angular-Reaktivität</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="status-badges-grid">
             <div class="badge-item">
-              <span class="badge-label">Statut Global</span>
+              <span class="badge-label">Gesamtstatus</span>
               <span
                 class="status-indicator"
                 [ngClass]="{
@@ -335,7 +341,7 @@
             </div>
 
             <div class="badge-item">
-              <span class="badge-label">Nombre de Compétences</span>
+              <span class="badge-label">Anzahl der Qualifikationen</span>
               <span class="tag-flag highlight">{{ skillsArray.length }}</span>
             </div>
           </div>
@@ -344,27 +350,27 @@
 
           <!-- Password Checklist -->
           <div class="checklist-section">
-            <h4 class="checklist-title">Critères du mot de passe :</h4>
+            <h4 class="checklist-title">Passwortkriterien:</h4>
             <div class="criteria-list">
               <div class="criterion" [class.met]="passwordCriteria().minLength">
                 <mat-icon>{{ passwordCriteria().minLength ? 'check_circle' : 'cancel' }}</mat-icon>
-                <span>8 caractères minimum</span>
+                <span>Mindestens 8 Zeichen</span>
               </div>
               <div class="criterion" [class.met]="passwordCriteria().hasUpper">
                 <mat-icon>{{ passwordCriteria().hasUpper ? 'check_circle' : 'cancel' }}</mat-icon>
-                <span>Au moins une lettre majuscule</span>
+                <span>Mindestens ein Großbuchstabe</span>
               </div>
               <div class="criterion" [class.met]="passwordCriteria().hasLower">
                 <mat-icon>{{ passwordCriteria().hasLower ? 'check_circle' : 'cancel' }}</mat-icon>
-                <span>Au moins une lettre minuscule</span>
+                <span>Mindestens ein Kleinbuchstabe</span>
               </div>
               <div class="criterion" [class.met]="passwordCriteria().hasDigit">
                 <mat-icon>{{ passwordCriteria().hasDigit ? 'check_circle' : 'cancel' }}</mat-icon>
-                <span>Au moins un chiffre</span>
+                <span>Mindestens eine Ziffer</span>
               </div>
               <div class="criterion" [class.met]="passwordCriteria().hasSpecial">
                 <mat-icon>{{ passwordCriteria().hasSpecial ? 'check_circle' : 'cancel' }}</mat-icon>
-                <span>Au moins un caractère spécial</span>
+                <span>Mindestens ein Sonderzeichen</span>
               </div>
             </div>
           </div>
@@ -375,8 +381,8 @@
       <mat-card appearance="outlined" class="inspector-card">
         <mat-card-header>
           <mat-icon mat-card-avatar color="primary">data_object</mat-icon>
-          <mat-card-title>Flux JSON en Direct (Signals)</mat-card-title>
-          <mat-card-subtitle>Valeur brute form.getRawValue()</mat-card-subtitle>
+          <mat-card-title>Live-JSON-Stream (Signals)</mat-card-title>
+          <mat-card-subtitle>Rohwert form.getRawValue()</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <pre class="json-preview">{{ formRawValue() | json }}</pre>
@@ -388,8 +394,8 @@
         <mat-card appearance="outlined" class="inspector-card animate-fade-in">
           <mat-card-header>
             <mat-icon mat-card-avatar color="primary">history_edu</mat-icon>
-            <mat-card-title>Profils Enregistrés ({{ submittedProfiles().length }})</mat-card-title>
-            <mat-card-subtitle>Historique de la session</mat-card-subtitle>
+            <mat-card-title>Gespeicherte Profile ({{ submittedProfiles().length }})</mat-card-title>
+            <mat-card-subtitle>Sitzungsverlauf</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="profiles-list">
@@ -401,7 +407,7 @@
                   </div>
                   <div class="profile-meta">
                     <span>{{ item.email }}</span>
-                    <span class="skills-tag">{{ item.skillsCount }} compétence(s)</span>
+                    <span class="skills-tag">{{ item.skillsCount }} Qualifikation(en)</span>
                   </div>
                 </div>
               }

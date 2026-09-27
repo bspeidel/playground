@@ -39,43 +39,43 @@ export interface KanbanDialogData {
   template: `
     <h2 mat-dialog-title>
       <mat-icon class="dialog-icon">{{ data?.task ? 'edit' : 'add_task' }}</mat-icon>
-      {{ data?.task ? 'Modifier la tâche' : 'Nouvelle tâche' }}
+      {{ data?.task ? 'Aufgabe bearbeiten' : 'Neue Aufgabe' }}
     </h2>
 
     <mat-dialog-content class="dialog-content">
       <form [formGroup]="form" class="kanban-form">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Titre de la tâche</mat-label>
-          <input matInput formControlName="title" placeholder="Ex: Développer le composant Auth" />
+          <mat-label>Aufgabentitel</mat-label>
+          <input matInput formControlName="title" placeholder="Z. B.: Auth-Komponente entwickeln" />
           <mat-icon matPrefix>title</mat-icon>
           @if (form.get('title')?.hasError('required')) {
-            <mat-error>Le titre est requis</mat-error>
+            <mat-error>Der Titel ist erforderlich</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Description détaillée</mat-label>
+          <mat-label>Detaillierte Beschreibung</mat-label>
           <textarea
             matInput
             rows="3"
             formControlName="description"
-            placeholder="Détails, critères d'acceptation..."
+            placeholder="Details, Akzeptanzkriterien..."
           ></textarea>
         </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Priorité</mat-label>
+            <mat-label>Priorität</mat-label>
             <mat-select formControlName="priority">
-              <mat-option value="Basse">Basse</mat-option>
-              <mat-option value="Moyenne">Moyenne</mat-option>
-              <mat-option value="Haute">Haute</mat-option>
-              <mat-option value="Critique">Critique</mat-option>
+              <mat-option value="Basse">Niedrig</mat-option>
+              <mat-option value="Moyenne">Mittel</mat-option>
+              <mat-option value="Haute">Hoch</mat-option>
+              <mat-option value="Critique">Kritisch</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Assigné à</mat-label>
+            <mat-label>Zugewiesen an</mat-label>
             <mat-select formControlName="assigneeIndex">
               @for (member of teamMembers; track member.name; let i = $index) {
                 <mat-option [value]="i">{{ member.name }}</mat-option>
@@ -85,17 +85,17 @@ export interface KanbanDialogData {
         </div>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Tags (séparés par des virgules)</mat-label>
-          <input matInput formControlName="tags" placeholder="Ex: Frontend, Signals, UI" />
+          <mat-label>Tags (kommagetrennt)</mat-label>
+          <input matInput formControlName="tags" placeholder="Z. B.: Frontend, Signals, UI" />
           <mat-icon matPrefix>label</mat-icon>
         </mat-form-field>
       </form>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end" class="dialog-actions">
-      <button mat-button (click)="cancel()">Annuler</button>
+      <button mat-button (click)="cancel()">Abbrechen</button>
       <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="save()">
-        {{ data?.task ? 'Enregistrer' : 'Créer la tâche' }}
+        {{ data?.task ? 'Speichern' : 'Aufgabe erstellen' }}
       </button>
     </mat-dialog-actions>
   `,
@@ -177,10 +177,10 @@ export class KanbanDialog {
       const result: KanbanTask = {
         id: this.data?.task?.id ?? `TSK-${Math.floor(100 + Math.random() * 900)}`,
         title: val.title!,
-        description: val.description || 'Aucune description fournie.',
+        description: val.description || 'Keine Beschreibung angegeben.',
         priority: val.priority! as KanbanTask['priority'],
         assignee: member,
-        tags: tagsArray.length > 0 ? tagsArray : ['Général'],
+        tags: tagsArray.length > 0 ? tagsArray : ['Allgemein'],
         createdAt: this.data?.task?.createdAt ?? new Date(),
       };
 

@@ -4,7 +4,7 @@
     <button
       mat-icon-button
       (click)="sidenav.toggle()"
-      aria-label="Basculer le menu de navigation"
+      aria-label="Navigationsmenü umschalten"
       class="menu-toggle-btn"
     >
       <mat-icon>menu</mat-icon>
@@ -23,7 +23,9 @@
     <button
       mat-icon-button
       (click)="themeService.toggleTheme()"
-      [attr.aria-label]="themeService.isDark() ? 'Passer en mode clair' : 'Passer en mode sombre'"
+      [attr.aria-label]="
+        themeService.isDark() ? 'Zu hellem Modus wechseln' : 'Zu dunklem Modus wechseln'
+      "
       class="theme-toggle-btn"
     >
       <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
@@ -71,7 +73,9 @@
       <!-- Footer -->
       <footer class="app-footer">
         <div class="footer-content">
-          <p>Playground interactif Angular 22 • Zoneless Change Detection • Angular Material 3</p>
+          <p>
+            Interaktiver Angular 22 Playground • Zoneless-Änderungserkennung • Angular Material 3
+          </p>
         </div>
       </footer>
     </mat-sidenav-content>

@@ -2,8 +2,7 @@
   <div class="page-header">
     <h1>Deferrable Views (<code>&#64;defer</code>)</h1>
     <p class="subtitle">
-      Optimisation de performance native d'Angular pour charger des composants de façon différée et
-      granulaire.
+      Native Performance-Optimierung von Angular zum granularen, verzögerten Laden von Komponenten.
     </p>
   </div>
 
@@ -12,8 +11,8 @@
     <mat-card appearance="outlined" class="defer-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">touch_app</mat-icon>
-        <mat-card-title>Déclencheur : <code>on interaction</code></mat-card-title>
-        <mat-card-subtitle>Chargement différé au clic sur le bouton déclencheur</mat-card-subtitle>
+        <mat-card-title>Trigger : <code>on interaction</code></mat-card-title>
+        <mat-card-subtitle>Verzögertes Laden beim Klick auf den Trigger-Button</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
@@ -22,16 +21,16 @@
             <app-heavy-content></app-heavy-content>
           } @placeholder {
             <div class="placeholder-box">
-              <p>Le contenu est en attente d'interaction.</p>
+              <p>Der Inhalt wartet auf Benutzerinteraktion.</p>
               <button #triggerBtn mat-flat-button color="primary">
                 <mat-icon>download</mat-icon>
-                Cliquer pour charger le composant
+                Klicken zum Laden der Komponente
               </button>
             </div>
           } @loading (minimum 500ms) {
             <div class="loading-box">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              <span>Chargement du chunk JavaScript en cours...</span>
+              <span>JavaScript-Chunk wird geladen...</span>
             </div>
           }
         </div>
@@ -42,8 +41,10 @@
     <mat-card appearance="outlined" class="defer-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">mouse</mat-icon>
-        <mat-card-title>Déclencheur : <code>on hover</code></mat-card-title>
-        <mat-card-subtitle>Chargement déclenché dès le survol de la zone</mat-card-subtitle>
+        <mat-card-title>Trigger : <code>on hover</code></mat-card-title>
+        <mat-card-subtitle
+          >Ladevorgang ausgelöst durch Überfahren mit dem Mauszeiger</mat-card-subtitle
+        >
       </mat-card-header>
 
       <mat-card-content>
@@ -53,12 +54,12 @@
           } @placeholder {
             <div #hoverTarget class="placeholder-box hoverable">
               <mat-icon>pan_tool</mat-icon>
-              <p>Survolez cette zone avec votre curseur pour déclencher le chargement immédiat !</p>
+              <p>Bewegen Sie die Maus über diesen Bereich, um das sofortige Laden auszulösen!</p>
             </div>
           } @loading (minimum 500ms) {
             <div class="loading-box">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              <span>Chargement déclenché par survol...</span>
+              <span>Laden durch Hover ausgelöst...</span>
             </div>
           }
         </div>
@@ -69,8 +70,8 @@
     <mat-card appearance="outlined" class="defer-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">schedule</mat-icon>
-        <mat-card-title>Déclencheur : <code>on timer(2s)</code></mat-card-title>
-        <mat-card-subtitle>Chargement différé automatique après 2 secondes</mat-card-subtitle>
+        <mat-card-title>Trigger : <code>on timer(2s)</code></mat-card-title>
+        <mat-card-subtitle>Automatisches verzögertes Laden nach 2 Sekunden</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
@@ -80,12 +81,12 @@
           } @placeholder {
             <div class="placeholder-box">
               <mat-icon>hourglass_bottom</mat-icon>
-              <p>Compte à rebours de 2 secondes avant le chargement automatique...</p>
+              <p>Countdown von 2 Sekunden vor dem automatischen Laden...</p>
             </div>
           } @loading (minimum 500ms) {
             <div class="loading-box">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              <span>Chargement automatique après délai...</span>
+              <span>Automatisches Laden nach Verzögerung...</span>
             </div>
           }
         </div>

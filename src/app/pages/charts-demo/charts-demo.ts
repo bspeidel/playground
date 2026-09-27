@@ -53,11 +53,11 @@ export class ChartsDemoPage {
 
   // Donut chart state
   readonly donutData = signal<DonutSegment[]>([
-    { label: 'Cloud & Infrastructure', value: 42000, color: '#2563eb', icon: 'cloud' },
-    { label: 'Développement Web & Mobile', value: 58000, color: '#7c3aed', icon: 'devices' },
-    { label: 'Modèles IA & LLM', value: 36000, color: '#059669', icon: 'smart_toy' },
-    { label: 'Sécurité & Conformité', value: 24000, color: '#ea580c', icon: 'security' },
-    { label: 'Design System & UX', value: 18000, color: '#0284c7', icon: 'palette' },
+    { label: 'Cloud & Infrastruktur', value: 42000, color: '#2563eb', icon: 'cloud' },
+    { label: 'Web- & Mobile-Entwicklung', value: 58000, color: '#7c3aed', icon: 'devices' },
+    { label: 'KI-Modelle & LLM', value: 36000, color: '#059669', icon: 'smart_toy' },
+    { label: 'Sicherheit & Compliance', value: 24000, color: '#ea580c', icon: 'security' },
+    { label: 'Design-System & UX', value: 18000, color: '#0284c7', icon: 'palette' },
   ]);
 
   readonly activeDonutIndex = signal<number | null>(null);
@@ -82,21 +82,21 @@ export class ChartsDemoPage {
   readonly metricsList = signal<SparklineMetric[]>([
     {
       id: 'traffic',
-      title: 'Trafic Utilisateurs (req/sec)',
-      unit: 'req/s',
+      title: 'Benutzerdatenverkehr (Req/Sek)',
+      unit: 'Req/s',
       values: [240, 290, 310, 450, 420, 560, 680, 640, 720, 850, 910, 890],
       color: '#2563eb',
     },
     {
       id: 'latency',
-      title: 'Temps de Réponse API (ms)',
+      title: 'API-Antwortzeit (ms)',
       unit: 'ms',
       values: [48, 52, 45, 59, 62, 54, 49, 43, 41, 38, 36, 35],
       color: '#059669',
     },
     {
       id: 'errors',
-      title: "Taux d'Erreurs 5xx (‰)",
+      title: '5xx-Fehlerrate (‰)',
       unit: '‰',
       values: [8, 12, 15, 9, 6, 14, 8, 4, 3, 2, 1, 2],
       color: '#ea580c',
@@ -221,6 +221,6 @@ export class ChartsDemoPage {
       })),
     );
 
-    this.snackBar.open('Séries de données régénérées avec succès !', 'OK', { duration: 2500 });
+    this.snackBar.open('Datenreihen erfolgreich neu generiert!', 'OK', { duration: 2500 });
   }
 }

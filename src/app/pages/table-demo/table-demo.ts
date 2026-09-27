@@ -328,9 +328,9 @@ export class TableDemo implements AfterViewInit {
 
   checkboxLabel(row?: ProjectItem): string {
     if (!row) {
-      return `${this.isAllSelected() ? 'Désélectionner' : 'Sélectionner'} tous les projets`;
+      return `${this.isAllSelected() ? 'Alle abwählen' : 'Alle auswählen'}`;
     }
-    return `${this.selection.isSelected(row) ? 'Désélectionner' : 'Sélectionner'} le projet ${row.name}`;
+    return `${this.selection.isSelected(row) ? 'Projekt abwählen' : 'Projekt auswählen'}: ${row.name}`;
   }
 
   // Filters reset
@@ -338,7 +338,7 @@ export class TableDemo implements AfterViewInit {
     this.searchTerm.set('');
     this.statusFilter.set('all');
     this.categoryFilter.set('all');
-    this.snackBar.open('Filtres réinitialisés', 'OK', { duration: 2500 });
+    this.snackBar.open('Filter zurückgesetzt', 'OK', { duration: 2500 });
   }
 
   // CRUD Operations
@@ -350,7 +350,7 @@ export class TableDemo implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result: ProjectItem | undefined) => {
       if (result) {
         this.items.update((current) => [result, ...current]);
-        this.snackBar.open(`Projet "${result.name}" ajouté avec succès`, 'Fermer', {
+        this.snackBar.open(`Projekt "${result.name}" erfolgreich hinzugefügt`, 'Schließen', {
           duration: 3500,
         });
       }
@@ -368,7 +368,7 @@ export class TableDemo implements AfterViewInit {
         this.items.update((current) =>
           current.map((item) => (item.id === result.id ? result : item)),
         );
-        this.snackBar.open(`Projet "${result.name}" mis à jour`, 'Fermer', {
+        this.snackBar.open(`Projekt "${result.name}" aktualisiert`, 'Schließen', {
           duration: 3500,
         });
       }
@@ -379,7 +379,7 @@ export class TableDemo implements AfterViewInit {
     this.items.update((current) => current.filter((p) => p.id !== project.id));
     this.selection.deselect(project);
     this.selectedCount.set(this.selection.selected.length);
-    this.snackBar.open(`Projet "${project.name}" supprimé`, 'Fermer', { duration: 3000 });
+    this.snackBar.open(`Projekt "${project.name}" gelöscht`, 'Schließen', { duration: 3000 });
   }
 
   // Batch actions
@@ -389,7 +389,7 @@ export class TableDemo implements AfterViewInit {
     this.items.update((current) => current.filter((p) => !selectedIds.has(p.id)));
     this.selection.clear();
     this.selectedCount.set(0);
-    this.snackBar.open(`${count} projet(s) supprimé(s)`, 'Fermer', { duration: 3500 });
+    this.snackBar.open(`${count} Projekt(e) gelöscht`, 'Schließen', { duration: 3500 });
   }
 
   updateSelectedStatus(newStatus: ProjectItem['status']): void {
@@ -400,27 +400,29 @@ export class TableDemo implements AfterViewInit {
     );
     this.selection.clear();
     this.selectedCount.set(0);
-    this.snackBar.open(`Statut mis à jour pour ${count} projet(s)`, 'Fermer', { duration: 3500 });
+    this.snackBar.open(`Status für ${count} Projekt(e) aktualisiert`, 'Schließen', {
+      duration: 3500,
+    });
   }
 
   // Export features
   exportFilteredCsv(): void {
     const data = this.filteredItems();
     if (!data.length) {
-      this.snackBar.open('Aucune donnée à exporter', 'Fermer', { duration: 2500 });
+      this.snackBar.open('Keine Daten zum Exportieren', 'Schließen', { duration: 2500 });
       return;
     }
 
     const headers = [
       'ID',
-      'Projet',
-      'Client',
-      'Categorie',
-      'Statut',
-      'Priorite',
+      'Projekt',
+      'Kunde',
+      'Kategorie',
+      'Status',
+      'Priorität',
       'Budget',
-      'Progression',
-      'Echeance',
+      'Fortschritt',
+      'Fälligkeit',
     ];
     const rows = data.map((p) => [
       p.id,
@@ -436,19 +438,21 @@ export class TableDemo implements AfterViewInit {
 
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
     this.triggerDownload(csvContent, 'projets-export.csv', 'text/csv;charset=utf-8;');
-    this.snackBar.open(`${data.length} projet(s) exporté(s) en CSV`, 'Super', { duration: 3000 });
+    this.snackBar.open(`${data.length} Projekt(e) als CSV exportiert`, 'Super', { duration: 3000 });
   }
 
   exportFilteredJson(): void {
     const data = this.filteredItems();
     if (!data.length) {
-      this.snackBar.open('Aucune donnée à exporter', 'Fermer', { duration: 2500 });
+      this.snackBar.open('Keine Daten zum Exportieren', 'Schließen', { duration: 2500 });
       return;
     }
 
     const jsonContent = JSON.stringify(data, null, 2);
     this.triggerDownload(jsonContent, 'projets-export.json', 'application/json');
-    this.snackBar.open(`${data.length} projet(s) exporté(s) en JSON`, 'Super', { duration: 3000 });
+    this.snackBar.open(`${data.length} Projekt(e) als JSON exportiert`, 'Super', {
+      duration: 3000,
+    });
   }
 
   private triggerDownload(content: string, filename: string, mimeType: string): void {

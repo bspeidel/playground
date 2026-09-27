@@ -6,13 +6,13 @@
         <span class="tech-pill">Angular 22</span>
         <span class="tech-pill m3">MatTree M3</span>
         <span class="tech-pill zoneless">childrenAccessor</span>
-        <span class="tech-pill tree-badge">Zéro Dépendance Externe</span>
+        <span class="tech-pill tree-badge">Keine externen Abhängigkeiten</span>
       </div>
-      <h1 class="page-title">Explorateur de Fichiers & Arborescence MatTree</h1>
+      <h1 class="page-title">Datei-Explorer & MatTree-Baumstruktur</h1>
       <p class="page-subtitle">
-        Gestionnaire hiérarchique réactif propulsé par <code>MatTree</code> et l'API moderne
-        <code>childrenAccessor</code> d'Angular Material 3. Navigation par fil d'Ariane, filtrage en
-        temps réel, gestion dynamique des nœuds et visionneuse de code intégrée.
+        Reaktiver hierarchischer Dateimanager powered by <code>MatTree</code> und der modernen
+        <code>childrenAccessor</code>-API von Angular Material 3. Breadcrumb-Navigation,
+        Echtzeit-Filterung, dynamische Knotenverwaltung und integrierter Code-Viewer.
       </p>
     </div>
   </header>
@@ -25,15 +25,15 @@
         <div class="sidebar-title-row">
           <div class="title-with-icon">
             <mat-icon color="primary">account_tree</mat-icon>
-            <span class="sidebar-title">Explorateur du Projet</span>
+            <span class="sidebar-title">Projekt-Explorer</span>
           </div>
           <div class="tree-action-buttons">
             <button
               mat-icon-button
               type="button"
               (click)="expandAll()"
-              matTooltip="Déplier toute l'arborescence"
-              aria-label="Déplier tout"
+              matTooltip="Gesamten Baum aufklappen"
+              aria-label="Alles aufklappen"
             >
               <mat-icon>unfold_more</mat-icon>
             </button>
@@ -41,8 +41,8 @@
               mat-icon-button
               type="button"
               (click)="collapseAll()"
-              matTooltip="Replier toute l'arborescence"
-              aria-label="Replier tout"
+              matTooltip="Gesamten Baum einklappen"
+              aria-label="Alles einklappen"
             >
               <mat-icon>unfold_less</mat-icon>
             </button>
@@ -51,8 +51,8 @@
               type="button"
               color="primary"
               (click)="openCreateNode('file')"
-              matTooltip="Nouveau fichier"
-              aria-label="Nouveau fichier"
+              matTooltip="Neue Datei"
+              aria-label="Neue Datei"
             >
               <mat-icon>note_add</mat-icon>
             </button>
@@ -61,8 +61,8 @@
               type="button"
               color="primary"
               (click)="openCreateNode('folder')"
-              matTooltip="Nouveau dossier"
-              aria-label="Nouveau dossier"
+              matTooltip="Neuer Ordner"
+              aria-label="Neuer Ordner"
             >
               <mat-icon>create_new_folder</mat-icon>
             </button>
@@ -70,8 +70,8 @@
               mat-icon-button
               type="button"
               (click)="resetWorkspace()"
-              matTooltip="Réinitialiser l'arborescence"
-              aria-label="Réinitialiser"
+              matTooltip="Baumstruktur zurücksetzen"
+              aria-label="Zurücksetzen"
             >
               <mat-icon>restart_alt</mat-icon>
             </button>
@@ -85,7 +85,7 @@
             matInput
             [ngModel]="searchQuery()"
             (ngModelChange)="searchQuery.set($event)"
-            placeholder="Rechercher fichier ou extension (ts, json...)"
+            placeholder="Datei oder Erweiterung suchen (ts, json...)"
           />
           @if (searchQuery()) {
             <button
@@ -93,7 +93,7 @@
               matSuffix
               type="button"
               (click)="searchQuery.set('')"
-              aria-label="Effacer recherche"
+              aria-label="Suche löschen"
             >
               <mat-icon>close</mat-icon>
             </button>
@@ -109,7 +109,7 @@
               newNodeType() === 'file' ? 'note_add' : 'create_new_folder'
             }}</mat-icon>
             <span class="banner-label">
-              Créer un {{ newNodeType() === 'file' ? 'fichier' : 'dossier' }} :
+              {{ newNodeType() === 'file' ? 'Neue Datei erstellen' : 'Neuen Ordner erstellen' }} :
             </span>
           </div>
           <div class="banner-inputs">
@@ -118,7 +118,7 @@
               class="banner-input"
               [ngModel]="newNodeName()"
               (ngModelChange)="newNodeName.set($event)"
-              placeholder="Nom du nœud..."
+              placeholder="Knotenname..."
               (keydown.enter)="confirmCreateNode()"
               (keydown.escape)="cancelCreateNode()"
             />
@@ -129,9 +129,9 @@
               class="btn-confirm"
               (click)="confirmCreateNode()"
             >
-              Créer
+              Erstellen
             </button>
-            <button mat-stroked-button type="button" (click)="cancelCreateNode()">Annuler</button>
+            <button mat-stroked-button type="button" (click)="cancelCreateNode()">Abbrechen</button>
           </div>
         </div>
       }
@@ -181,7 +181,7 @@
               mat-icon-button
               type="button"
               matTreeNodeToggle
-              [attr.aria-label]="'Bascule ' + node.name"
+              [attr.aria-label]="node.name + ' umschalten'"
               (click)="$event.stopPropagation()"
               class="btn-toggle"
             >
@@ -202,9 +202,9 @@
         @if (filteredTreeData().length === 0) {
           <div class="tree-empty-state">
             <mat-icon class="empty-icon">search_off</mat-icon>
-            <p>Aucun fichier ne correspond à "{{ searchQuery() }}"</p>
+            <p>Keine Dateien entsprechen „{{ searchQuery() }}“</p>
             <button mat-stroked-button type="button" (click)="searchQuery.set('')">
-              Effacer le filtre
+              Filter zurücksetzen
             </button>
           </div>
         }
@@ -214,15 +214,15 @@
       <div class="sidebar-footer">
         <div class="stat-item">
           <mat-icon class="footer-icon">insert_drive_file</mat-icon>
-          <span>{{ workspaceStats().fileCount }} fichiers</span>
+          <span>{{ workspaceStats().fileCount }} Dateien</span>
         </div>
         <div class="stat-item">
           <mat-icon class="footer-icon">folder</mat-icon>
-          <span>{{ workspaceStats().folderCount }} dossiers</span>
+          <span>{{ workspaceStats().folderCount }} Ordner</span>
         </div>
         <div class="stat-item">
           <mat-icon class="footer-icon">code</mat-icon>
-          <span>{{ workspaceStats().totalLines }} lignes</span>
+          <span>{{ workspaceStats().totalLines }} Zeilen</span>
         </div>
       </div>
     </mat-card>
@@ -249,8 +249,8 @@
               mat-icon-button
               type="button"
               color="warn"
-              matTooltip="Supprimer ce nœud"
-              aria-label="Supprimer nœud"
+              matTooltip="Diesen Knoten löschen"
+              aria-label="Knoten löschen"
               (click)="deleteSelectedNode()"
             >
               <mat-icon>delete_outline</mat-icon>
@@ -284,7 +284,7 @@
                     <mat-chip class="ext-chip">{{ node.extension.toUpperCase() }}</mat-chip>
                   }
                   <mat-chip>{{ node.size }}</mat-chip>
-                  <mat-chip>{{ node.lines }} lignes</mat-chip>
+                  <mat-chip>{{ node.lines }} Zeilen</mat-chip>
                   <mat-chip>{{ node.lastModified }}</mat-chip>
                 </mat-chip-set>
 
@@ -293,20 +293,20 @@
                     mat-stroked-button
                     type="button"
                     (click)="copyFileContent()"
-                    matTooltip="Copier le code dans le presse-papiers"
+                    matTooltip="Code in die Zwischenablage kopieren"
                   >
                     <mat-icon>content_copy</mat-icon>
-                    Copier
+                    Kopieren
                   </button>
                   <button
                     mat-flat-button
                     color="primary"
                     type="button"
                     (click)="downloadFile()"
-                    matTooltip="Télécharger ce fichier"
+                    matTooltip="Diese Datei herunterladen"
                   >
                     <mat-icon>download</mat-icon>
-                    Télécharger
+                    Herunterladen
                   </button>
                 </div>
               </div>
@@ -338,13 +338,13 @@
               <div>
                 <h2 class="folder-title">{{ node.name }} /</h2>
                 <p class="folder-subtitle">
-                  {{ node.path }} &bull; {{ node.children?.length || 0 }} éléments contenus
+                  {{ node.path }} &bull; {{ node.children?.length || 0 }} enthaltene Elemente
                 </p>
               </div>
             </div>
 
             <div class="folder-contents-section">
-              <h3 class="section-title">Contenu du répertoire :</h3>
+              <h3 class="section-title">Ordnerinhalt:</h3>
               <div class="folder-items-grid">
                 @for (child of node.children || []; track child.id) {
                   <button type="button" class="folder-child-card" (click)="selectNode(child)">
@@ -358,7 +358,7 @@
                       <span class="child-meta">
                         {{
                           child.type === 'folder'
-                            ? (child.children?.length || 0) + ' éléments'
+                            ? (child.children?.length || 0) + ' Elemente'
                             : child.size
                         }}
                       </span>
@@ -373,10 +373,10 @@
         <!-- Empty State -->
         <div class="no-selection-placeholder">
           <mat-icon class="placeholder-icon">touch_app</mat-icon>
-          <h3>Aucun élément sélectionné</h3>
+          <h3>Kein Element ausgewählt</h3>
           <p>
-            Sélectionnez un fichier ou un dossier dans l'arborescence à gauche pour en inspecter le
-            contenu.
+            Wählen Sie links im Verzeichnisbaum eine Datei oder einen Ordner aus, um den Inhalt
+            anzuzeigen.
           </p>
         </div>
       }

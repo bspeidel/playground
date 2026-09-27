@@ -9,7 +9,7 @@ export const routes: Routes = [
   {
     path: 'overview',
     loadComponent: () => import('./pages/overview/overview').then((m) => m.OverviewPage),
-    title: "Vue d'ensemble | Playground",
+    title: 'Übersicht | Playground',
   },
   {
     path: 'signals',
@@ -30,12 +30,12 @@ export const routes: Routes = [
   {
     path: 'api-explorer',
     loadComponent: () => import('./pages/api-explorer/api-explorer').then((m) => m.ApiExplorerPage),
-    title: 'API & Réseau (GitHub) | Playground',
+    title: 'API & Netzwerk (GitHub) | Playground',
   },
   {
     path: 'table',
     loadComponent: () => import('./pages/table-demo/table-demo').then((m) => m.TableDemo),
-    title: 'Data Table & KPIs | Playground',
+    title: 'Datentabelle & KPIs | Playground',
   },
   {
     path: 'kanban',
@@ -45,7 +45,7 @@ export const routes: Routes = [
   {
     path: 'forms',
     loadComponent: () => import('./pages/forms-demo/forms-demo').then((m) => m.FormsDemoPage),
-    title: 'Formulaires Réactifs | Playground',
+    title: 'Typisierte Formulare | Playground',
   },
   {
     path: 'virtual-scroll',
@@ -53,22 +53,22 @@ export const routes: Routes = [
       import('./pages/virtual-scroll-demo/virtual-scroll-demo').then(
         (m) => m.VirtualScrollDemoPage,
       ),
-    title: 'Virtual Scrolling & Benchmark | Playground',
+    title: 'Virtuelles Scrollen & Benchmark | Playground',
   },
   {
     path: 'charts',
     loadComponent: () => import('./pages/charts-demo/charts-demo').then((m) => m.ChartsDemoPage),
-    title: 'Visualisation SVG & Analytics | Playground',
+    title: 'SVG-Visualisierung & Analysen | Playground',
   },
   {
     path: 'stepper',
     loadComponent: () => import('./pages/stepper-demo/stepper-demo').then((m) => m.StepperDemoPage),
-    title: 'Assistant Déploiement Cloud (Stepper) | Playground',
+    title: 'Cloud-Bereitstellungsassistent (Stepper) | Playground',
   },
   {
     path: 'tree',
     loadComponent: () => import('./pages/tree-demo/tree-demo').then((m) => m.TreeDemoPage),
-    title: 'Explorateur de Fichiers (MatTree) | Playground',
+    title: 'Datei-Explorer (MatTree) | Playground',
   },
   {
     path: '**',

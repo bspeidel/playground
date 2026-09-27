@@ -7,39 +7,43 @@
         <span class="tech-pill m3">CDK Drag & Drop</span>
         <span class="tech-pill zoneless">Zoneless Signals</span>
       </div>
-      <h1 class="page-title">Tableau Kanban Interactif</h1>
+      <h1 class="page-title">Interaktives Kanban-Board</h1>
       <p class="page-subtitle">
-        Gestion de flux agile avec <code>&#64;angular/cdk/drag-drop</code>. Glissez-déposez les
-        cartes entre les colonnes connectées (<code>cdkDropListGroup</code>), avec prévisualisations
-        fluides et réactivité instantanée par Signals.
+        Agiles Workflow-Management mit <code>&#64;angular/cdk/drag-drop</code>. Ziehen und Ablegen
+        von Karten zwischen verbundenen Spalten (<code>cdkDropListGroup</code>), mit flüssigen
+        Vorschauen und sofortiger Reaktivität durch Signals.
       </p>
     </div>
     <div class="header-actions">
-      <button mat-stroked-button (click)="resetBoard()" matTooltip="Réinitialiser l'état initial">
+      <button
+        mat-stroked-button
+        (click)="resetBoard()"
+        matTooltip="Ausgangszustand wiederherstellen"
+      >
         <mat-icon>refresh</mat-icon>
-        Réinitialiser
+        Zurücksetzen
       </button>
       <button mat-flat-button color="primary" (click)="openCreateTaskDialog()">
         <mat-icon>add</mat-icon>
-        Nouvelle tâche
+        Neue Aufgabe
       </button>
     </div>
   </header>
 
   <!-- KPI Grid -->
-  <section class="kpi-grid" aria-label="Indicateurs Kanban">
+  <section class="kpi-grid" aria-label="Kanban-Kennzahlen">
     <mat-card class="kpi-card" appearance="outlined">
       <mat-card-header>
         <div class="kpi-icon-wrapper primary">
           <mat-icon>format_list_bulleted</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Total Tâches</div>
+          <div class="kpi-label">Aufgaben insgesamt</div>
           <div class="kpi-value">{{ totalTasksCount() }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Réparties sur 4 colonnes</span>
+        <span>Aufgeteilt auf 4 Spalten</span>
       </mat-card-content>
     </mat-card>
 
@@ -49,12 +53,12 @@
           <mat-icon>pending_actions</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">En Cours</div>
+          <div class="kpi-label">In Bearbeitung</div>
           <div class="kpi-value">{{ inProgressCount() }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>En cours de développement</span>
+        <span>In der Entwicklung</span>
       </mat-card-content>
     </mat-card>
 
@@ -64,12 +68,12 @@
           <mat-icon>check_circle</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Terminées</div>
+          <div class="kpi-label">Abgeschlossen</div>
           <div class="kpi-value">{{ completedTasksCount() }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Validées en production</span>
+        <span>In Produktion validiert</span>
       </mat-card-content>
     </mat-card>
 
@@ -79,12 +83,12 @@
           <mat-icon>donut_large</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Taux d'Achèvement</div>
+          <div class="kpi-label">Abschlussrate</div>
           <div class="kpi-value">{{ completionRate() }}%</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Ratio tâches accomplies</span>
+        <span>Anteil erledigter Aufgaben</span>
       </mat-card-content>
     </mat-card>
   </section>
@@ -93,12 +97,12 @@
   <mat-card class="controls-card" appearance="outlined">
     <div class="filters-bar">
       <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
-        <mat-label>Filtrer les cartes (titre, tag, identifiant)...</mat-label>
+        <mat-label>Karten filtern (Titel, Tag, Kennung)...</mat-label>
         <input
           matInput
           [ngModel]="searchQuery()"
           (ngModelChange)="searchQuery.set($event)"
-          placeholder="Ex: WebGPU, CDK, Refacto, TSK-105..."
+          placeholder="Z. B.: WebGPU, CDK, Refacto, TSK-105..."
         />
         <mat-icon matPrefix>search</mat-icon>
         @if (searchQuery()) {
@@ -106,7 +110,7 @@
             mat-icon-button
             matSuffix
             (click)="searchQuery.set('')"
-            aria-label="Effacer recherche"
+            aria-label="Suche löschen"
           >
             <mat-icon>close</mat-icon>
           </button>
@@ -114,13 +118,13 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
-        <mat-label>Priorité</mat-label>
+        <mat-label>Priorität</mat-label>
         <mat-select [ngModel]="priorityFilter()" (ngModelChange)="priorityFilter.set($event)">
-          <mat-option value="all">Toutes les priorités</mat-option>
-          <mat-option value="Critique">Critique</mat-option>
-          <mat-option value="Haute">Haute</mat-option>
-          <mat-option value="Moyenne">Moyenne</mat-option>
-          <mat-option value="Basse">Basse</mat-option>
+          <mat-option value="all">Alle Prioritäten</mat-option>
+          <mat-option value="Critique">Kritisch</mat-option>
+          <mat-option value="Haute">Hoch</mat-option>
+          <mat-option value="Moyenne">Mittel</mat-option>
+          <mat-option value="Basse">Niedrig</mat-option>
         </mat-select>
         <mat-icon matPrefix>flag</mat-icon>
       </mat-form-field>
@@ -141,8 +145,8 @@
           <button
             mat-icon-button
             (click)="openCreateTaskDialog(column.id)"
-            [matTooltip]="'Ajouter une tâche dans ' + column.title"
-            aria-label="Ajouter tâche"
+            [matTooltip]="'Aufgabe hinzufügen in ' + column.title"
+            aria-label="Aufgabe hinzufügen"
           >
             <mat-icon>add</mat-icon>
           </button>
@@ -165,23 +169,23 @@
               <div class="card-header">
                 <span class="card-id">{{ task.id }}</span>
                 <span class="priority-pill" [ngClass]="getPriorityClass(task.priority)">
-                  {{ task.priority }}
+                  {{ getPriorityLabel(task.priority) }}
                 </span>
                 <button
                   mat-icon-button
                   [matMenuTriggerFor]="cardMenu"
                   class="card-menu-btn"
-                  aria-label="Options tâche"
+                  aria-label="Aufgabenoptionen"
                 >
                   <mat-icon>more_horiz</mat-icon>
                 </button>
                 <mat-menu #cardMenu="matMenu">
                   <button mat-menu-item (click)="openEditTaskDialog(task, column.id)">
                     <mat-icon>edit</mat-icon>
-                    <span>Modifier</span>
+                    <span>Bearbeiten</span>
                   </button>
                   <mat-divider></mat-divider>
-                  <div class="menu-sub-title">Déplacer vers :</div>
+                  <div class="menu-sub-title">Verschieben nach:</div>
                   @for (targetCol of columns(); track targetCol.id) {
                     @if (targetCol.id !== column.id) {
                       <button
@@ -196,7 +200,7 @@
                   <mat-divider></mat-divider>
                   <button mat-menu-item (click)="deleteTask(task.id, column.id)">
                     <mat-icon color="warn">delete</mat-icon>
-                    <span class="text-warn">Supprimer</span>
+                    <span class="text-warn">Löschen</span>
                   </button>
                 </mat-menu>
               </div>
@@ -226,7 +230,7 @@
           } @empty {
             <div class="empty-column-msg">
               <mat-icon class="empty-icon">drag_indicator</mat-icon>
-              <span>Déposez une tâche ici</span>
+              <span>Aufgabe hier ablegen</span>
             </div>
           }
         </div>

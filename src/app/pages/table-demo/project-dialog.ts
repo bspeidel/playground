@@ -38,32 +38,32 @@ export interface ProjectItem {
   template: `
     <h2 mat-dialog-title>
       <mat-icon class="dialog-icon">{{ data ? 'edit' : 'add_circle' }}</mat-icon>
-      {{ data ? 'Modifier le projet' : 'Nouveau projet' }}
+      {{ data ? 'Projekt bearbeiten' : 'Neues Projekt' }}
     </h2>
 
     <mat-dialog-content class="dialog-content">
       <form [formGroup]="form" class="project-form">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nom du projet</mat-label>
-          <input matInput formControlName="name" placeholder="Ex: Refonte Dashboard V3" />
+          <mat-label>Projektname</mat-label>
+          <input matInput formControlName="name" placeholder="Z. B.: Dashboard-Relaunch V3" />
           <mat-icon matPrefix>folder</mat-icon>
           @if (form.get('name')?.hasError('required')) {
-            <mat-error>Le nom est requis</mat-error>
+            <mat-error>Der Name ist erforderlich</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Client / Entreprise</mat-label>
-          <input matInput formControlName="client" placeholder="Ex: Acme Corp" />
+          <mat-label>Kunde / Unternehmen</mat-label>
+          <input matInput formControlName="client" placeholder="Z. B.: Acme Corp" />
           <mat-icon matPrefix>business</mat-icon>
           @if (form.get('client')?.hasError('required')) {
-            <mat-error>Le client est requis</mat-error>
+            <mat-error>Der Kunde ist erforderlich</mat-error>
           }
         </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Catégorie</mat-label>
+            <mat-label>Kategorie</mat-label>
             <mat-select formControlName="category">
               <mat-option value="Web App">Web App</mat-option>
               <mat-option value="Mobile App">Mobile App</mat-option>
@@ -74,24 +74,24 @@ export interface ProjectItem {
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Priorité</mat-label>
+            <mat-label>Priorität</mat-label>
             <mat-select formControlName="priority">
-              <mat-option value="Basse">Basse</mat-option>
-              <mat-option value="Moyenne">Moyenne</mat-option>
-              <mat-option value="Haute">Haute</mat-option>
-              <mat-option value="Critique">Critique</mat-option>
+              <mat-option value="Basse">Niedrig</mat-option>
+              <mat-option value="Moyenne">Mittel</mat-option>
+              <mat-option value="Haute">Hoch</mat-option>
+              <mat-option value="Critique">Kritisch</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Statut</mat-label>
+            <mat-label>Status</mat-label>
             <mat-select formControlName="status">
-              <mat-option value="Actif">Actif</mat-option>
-              <mat-option value="En attente">En attente</mat-option>
-              <mat-option value="Terminé">Terminé</mat-option>
-              <mat-option value="Bloqué">Bloqué</mat-option>
+              <mat-option value="Actif">Aktiv</mat-option>
+              <mat-option value="En attente">Wartend</mat-option>
+              <mat-option value="Terminé">Abgeschlossen</mat-option>
+              <mat-option value="Bloqué">Blockiert</mat-option>
             </mat-select>
           </mat-form-field>
 
@@ -104,7 +104,7 @@ export interface ProjectItem {
 
         <div class="slider-field">
           <label for="project-progress" class="slider-label">
-            Progression : {{ form.get('progress')?.value }}%
+            Fortschritt : {{ form.get('progress')?.value }}%
           </label>
           <mat-slider min="0" max="100" step="5" discrete>
             <input id="project-progress" matSliderThumb formControlName="progress" />
@@ -114,9 +114,9 @@ export interface ProjectItem {
     </mat-dialog-content>
 
     <mat-dialog-actions align="end" class="dialog-actions">
-      <button mat-button (click)="cancel()">Annuler</button>
+      <button mat-button (click)="cancel()">Abbrechen</button>
       <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="save()">
-        {{ data ? 'Mettre à jour' : 'Créer le projet' }}
+        {{ data ? 'Aktualisieren' : 'Projekt erstellen' }}
       </button>
     </mat-dialog-actions>
   `,

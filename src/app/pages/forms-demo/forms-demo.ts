@@ -197,11 +197,11 @@ export class FormsDemoPage {
 
   readonly passwordStrengthLabel = computed(() => {
     const s = this.passwordScore();
-    if (s === 0) return 'Non renseigné';
-    if (s <= 40) return 'Très faible';
-    if (s <= 60) return 'Moyen';
-    if (s <= 80) return 'Fort';
-    return 'Excellent (Robuste)';
+    if (s === 0) return 'Nicht angegeben';
+    if (s <= 40) return 'Sehr schwach';
+    if (s <= 60) return 'Mittel';
+    if (s <= 80) return 'Stark';
+    return 'Ausgezeichnet (Sehr sicher)';
   });
 
   readonly passwordStrengthClass = computed(() => {
@@ -243,13 +243,13 @@ export class FormsDemoPage {
 
   addSkill(): void {
     this.skillsArray.push(this.createSkillGroup());
-    this.snackBar.open('Nouvelle compétence ajoutée au FormArray', 'OK', { duration: 1500 });
+    this.snackBar.open('Neue Qualifikation zum FormArray hinzugefügt', 'OK', { duration: 1500 });
   }
 
   removeSkill(index: number): void {
     if (this.skillsArray.length > 1) {
       this.skillsArray.removeAt(index);
-      this.snackBar.open('Compétence retirée', 'Fermer', { duration: 1500 });
+      this.snackBar.open('Qualifikation entfernt', 'Schließen', { duration: 1500 });
     }
   }
 
@@ -272,7 +272,7 @@ export class FormsDemoPage {
     this.skillsArray.push(this.createSkillGroup('Kubernetes & Cloud', 'Avancé', 4));
     this.skillsArray.push(this.createSkillGroup('TypeScript Stricte', 'Expert', 5));
 
-    this.snackBar.open('Formulaire pré-rempli avec des données valides', 'Génial', {
+    this.snackBar.open('Formular mit Beispieldaten vorausgefüllt', 'Super', {
       duration: 2500,
     });
   }
@@ -288,13 +288,13 @@ export class FormsDemoPage {
     this.skillsArray.clear();
     this.skillsArray.push(this.createSkillGroup('TypeScript', 'Expert', 5));
     this.skillsArray.push(this.createSkillGroup('Angular 22', 'Avancé', 4));
-    this.snackBar.open('Formulaire réinitialisé', 'OK', { duration: 2000 });
+    this.snackBar.open('Formular zurückgesetzt', 'OK', { duration: 2000 });
   }
 
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open('Le formulaire contient des erreurs. Veuillez les corriger.', 'Fermer', {
+      this.snackBar.open('Das Formular enthält Fehler. Bitte korrigieren Sie diese.', 'Schließen', {
         duration: 3500,
       });
       return;
@@ -316,7 +316,7 @@ export class FormsDemoPage {
       };
 
       this.submittedProfiles.update((list) => [profile, ...list]);
-      this.snackBar.open(`Profil de "${val.username}" enregistré avec succès ! 🎉`, 'Super !', {
+      this.snackBar.open(`Profil von "${val.username}" erfolgreich gespeichert! 🎉`, 'Super!', {
         duration: 4000,
       });
     }, 600);

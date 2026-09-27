@@ -8,8 +8,8 @@
     </div>
     <h1>Angular Material 3 Showcase</h1>
     <p class="subtitle">
-      Vitrine interactive exhaustive des composants Material Design 3 stylisés avec la palette Azure
-      & Blue, enrichis par la réactivité des Signals Angular.
+      Umfassende interaktive Schau der Material Design 3 Komponenten im Azure- & Blue-Design,
+      erweitert durch reaktive Angular Signals.
     </p>
   </header>
 
@@ -18,9 +18,9 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">smart_button</mat-icon>
-        <mat-card-title>Boutons, FABs & Boutons à Bascule M3</mat-card-title>
+        <mat-card-title>Schaltflächen, FABs & M3-Umschalter</mat-card-title>
         <mat-card-subtitle
-          >Différentes variantes d'emphase et sélecteurs de vue segmentés</mat-card-subtitle
+          >Verschiedene Betonungsstufen und segmentierte Ansichtsauswahlen</mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content>
@@ -35,22 +35,22 @@
         <mat-divider></mat-divider>
 
         <div class="components-row">
-          <button mat-fab color="primary" aria-label="Action principale FAB">
+          <button mat-fab color="primary" aria-label="Hauptaktion FAB">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-mini-fab color="accent" aria-label="Action secondaire mini FAB">
+          <button mat-mini-fab color="accent" aria-label="Sekundäraktion Mini-FAB">
             <mat-icon>favorite</mat-icon>
           </button>
           <button
             mat-icon-button
             (click)="incrementBadge()"
-            aria-label="Notifications"
+            aria-label="Benachrichtigungen"
             [matBadge]="badgeCount()"
             matBadgeColor="warn"
           >
             <mat-icon>notifications</mat-icon>
           </button>
-          <span class="hint-text">Cliquez sur la cloche pour incrémenter le badge !</span>
+          <span class="hint-text">Klicken Sie auf die Glocke, um das Badge zu erhöhen!</span>
         </div>
 
         <mat-divider></mat-divider>
@@ -59,17 +59,17 @@
         <div class="segmented-row">
           <div class="toggle-group-wrapper">
             <span class="control-label"
-              >Bouton à bascule (Vue active : <strong>{{ viewMode() }}</strong
+              >Umschalt-Schaltfläche (Aktive Ansicht : <strong>{{ viewMode() }}</strong
               >) :</span
             >
             <mat-button-toggle-group
               [ngModel]="viewMode()"
               (ngModelChange)="viewMode.set($event)"
-              aria-label="Mode d'affichage"
+              aria-label="Anzeigemodus"
             >
               <mat-button-toggle value="grid">
                 <mat-icon>grid_view</mat-icon>
-                Grille
+                Raster
               </mat-button-toggle>
               <mat-button-toggle value="list">
                 <mat-icon>view_list</mat-icon>
@@ -77,7 +77,7 @@
               </mat-button-toggle>
               <mat-button-toggle value="table">
                 <mat-icon>table_rows</mat-icon>
-                Tableau
+                Tabelle
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
@@ -89,31 +89,31 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">edit_note</mat-icon>
-        <mat-card-title>Saisie, Autocomplete & Sélecteur de Date</mat-card-title>
+        <mat-card-title>Eingaben, Autocomplete & Datumsauswahl</mat-card-title>
         <mat-card-subtitle
-          >Composants de formulaires avancés avec suggestions filtrées et popup
-          calendrier</mat-card-subtitle
+          >Erweiterte Formularkomponenten mit gefilterten Vorschlägen und
+          Kalender-Popup</mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content>
         <div class="form-grid">
           <!-- Text Input -->
           <mat-form-field appearance="outline">
-            <mat-label>Nom d'utilisateur</mat-label>
-            <input matInput placeholder="Ex: Benjamin" value="Playground User" />
+            <mat-label>Benutzername</mat-label>
+            <input matInput placeholder="Z. B.: Benjamin" value="Playground User" />
             <mat-icon matSuffix>person</mat-icon>
           </mat-form-field>
 
           <!-- Select -->
           <mat-form-field appearance="outline">
-            <mat-label>Palette active</mat-label>
+            <mat-label>Aktive Palette</mat-label>
             <mat-select
               [ngModel]="selectedThemeColor()"
               (ngModelChange)="selectedThemeColor.set($event)"
             >
               <mat-option value="azure">Azure (Primary)</mat-option>
               <mat-option value="blue">Blue (Tertiary)</mat-option>
-              <mat-option value="custom">Custom Theme</mat-option>
+              <mat-option value="custom">Benutzerdefiniertes Design</mat-option>
             </mat-select>
           </mat-form-field>
 
@@ -122,7 +122,7 @@
             <mat-label>Technologie / Framework (Autocomplete)</mat-label>
             <input
               type="text"
-              placeholder="Tapez pour filtrer..."
+              placeholder="Tippen zum Filtern..."
               matInput
               [ngModel]="frameworkSearch()"
               (ngModelChange)="frameworkSearch.set($event)"
@@ -136,7 +136,6 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <!-- Datepicker -->
           <!-- Datepicker (Format Allemand : TT.MM.JJJJ) -->
           <mat-form-field appearance="outline">
             <mat-label>Fälligkeitsdatum (TT.MM.JJJJ)</mat-label>
@@ -153,7 +152,7 @@
 
           <!-- Quick Timepicker -->
           <mat-form-field appearance="outline">
-            <mat-label>Heure de rappel (Timepicker)</mat-label>
+            <mat-label>Erinnerungszeit (Timepicker)</mat-label>
             <input
               matInput
               [matTimepicker]="quickTimePicker"
@@ -171,9 +170,9 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">tune</mat-icon>
-        <mat-card-title>Commutateurs, Radios & Cases à Cocher</mat-card-title>
+        <mat-card-title>Schalter, Radio-Buttons & Kontrollkästchen</mat-card-title>
         <mat-card-subtitle
-          >Sélections uniques, multiples et état partiel indéterminé</mat-card-subtitle
+          >Einfach-, Mehrfachauswahl und unbestimmter Teilzustand</mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content>
@@ -184,13 +183,13 @@
               (ngModelChange)="toggleActive.set($event)"
               color="primary"
             >
-              Mode interactif actif : <strong>{{ toggleActive() ? 'OUI' : 'NON' }}</strong>
+              Interaktiver Modus aktiv : <strong>{{ toggleActive() ? 'JA' : 'NEIN' }}</strong>
             </mat-slide-toggle>
           </div>
 
           <div class="slider-item">
             <span class="slider-label"
-              >Slider réactif : <strong>{{ sliderValue() }}%</strong></span
+              >Reaktiver Slider : <strong>{{ sliderValue() }}%</strong></span
             >
             <mat-slider min="0" max="100" step="1">
               <input
@@ -207,24 +206,24 @@
         <div class="selection-grid">
           <!-- Radio Group -->
           <div class="selection-box">
-            <h4 class="box-title">Mode de performance (Radio Group) :</h4>
+            <h4 class="box-title">Leistungsmodus (Radio Group) :</h4>
             <mat-radio-group
               [ngModel]="selectedSpeed()"
               (ngModelChange)="selectedSpeed.set($event)"
               class="radio-group-vertical"
             >
-              <mat-radio-button value="eco">Éco (Économie d'énergie)</mat-radio-button>
-              <mat-radio-button value="normal">Standard (Usage recommandé)</mat-radio-button>
-              <mat-radio-button value="turbo">Turbo (Vitesse maximale)</mat-radio-button>
+              <mat-radio-button value="eco">Öko (Energiesparmodus)</mat-radio-button>
+              <mat-radio-button value="normal">Standard (Empfohlene Nutzung)</mat-radio-button>
+              <mat-radio-button value="turbo">Turbo (Maximale Geschwindigkeit)</mat-radio-button>
             </mat-radio-group>
             <div class="selection-result">
-              Option choisie : <strong>{{ selectedSpeed() | uppercase }}</strong>
+              Gewählte Option : <strong>{{ selectedSpeed() | uppercase }}</strong>
             </div>
           </div>
 
           <!-- Checkboxes with Indeterminate State -->
           <div class="selection-box">
-            <h4 class="box-title">Checklist modules (Indeterminate Checkbox) :</h4>
+            <h4 class="box-title">Modul-Checkliste (Unbestimmtes Kontrollkästchen) :</h4>
             <div class="parent-checkbox">
               <mat-checkbox
                 [checked]="allComplete()"
@@ -232,7 +231,7 @@
                 (change)="setAllTasks($event.checked)"
                 color="primary"
               >
-                <strong>Tous les modules du projet</strong>
+                <strong>Alle Projektmodule</strong>
               </mat-checkbox>
             </div>
             <div class="sub-tasks-list">
@@ -255,9 +254,9 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">hourglass_top</mat-icon>
-        <mat-card-title>Indicateurs de Progression & Spinners</mat-card-title>
+        <mat-card-title>Fortschrittsanzeigen & Spinner</mat-card-title>
         <mat-card-subtitle
-          >Barres de progression linéaires et spinners d'activité circulaires</mat-card-subtitle
+          >Lineare Fortschrittsbalken und kreisförmige Aktivitäts-Spinner</mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content>
@@ -265,19 +264,19 @@
           <div class="progress-col">
             <div class="progress-item">
               <span class="progress-title"
-                >Progression Déterminée (synchronisée avec le slider : {{ sliderValue() }}%) :</span
+                >Bestimmter Fortschritt (synchronisiert mit Slider : {{ sliderValue() }}%) :</span
               >
               <mat-progress-bar mode="determinate" [value]="sliderValue()"></mat-progress-bar>
             </div>
 
             <div class="progress-item">
-              <span class="progress-title">Progression Indéterminée (chargement en cours) :</span>
+              <span class="progress-title">Unbestimmter Fortschritt (Ladevorgang läuft) :</span>
               <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
             </div>
 
             <div class="progress-item">
               <span class="progress-title"
-                >Progression Tampon (Buffer : {{ sliderValue() }}% / {{ sliderValue() + 20 }}%)
+                >Puffer-Fortschritt (Buffer : {{ sliderValue() }}% / {{ sliderValue() + 20 }}%)
                 :</span
               >
               <mat-progress-bar
@@ -297,9 +296,9 @@
                 diameter="64"
               >
               </mat-progress-spinner>
-              <span class="spinner-caption">Mode : {{ spinnerMode() }}</span>
+              <span class="spinner-caption">Modus : {{ spinnerMode() }}</span>
               <button mat-stroked-button (click)="toggleSpinnerMode()">
-                Basculer mode spinner
+                Spinner-Modus umschalten
               </button>
             </div>
           </div>
@@ -311,9 +310,9 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">tab</mat-icon>
-        <mat-card-title>Onglets & Accordéon d'Expansion</mat-card-title>
+        <mat-card-title>Tabs & Erweiterungs-Akkordeon</mat-card-title>
         <mat-card-subtitle
-          >Organisation hiérarchique du contenu avec MatTabs et MatAccordion</mat-card-subtitle
+          >Hierarchische Inhaltsorganisation mit MatTabs und MatAccordion</mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content>
@@ -322,12 +321,12 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">palette</mat-icon>
-              Tokens & Couleurs
+              Tokens & Farben
             </ng-template>
             <div class="tab-body">
               <p>
-                Le système Material Design 3 utilise des tokens sémantiques dynamiques pour garantir
-                harmonie et contraste :
+                Das Material Design 3 System verwendet dynamische semantische Tokens für Harmonie
+                und Kontrast:
               </p>
               <div class="color-tokens-grid">
                 <div class="token-pill primary">Primary (Azure)</div>
@@ -342,16 +341,14 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">format_size</mat-icon>
-              Échelle Typographique
+              Typografische Skala
             </ng-template>
             <div class="tab-body">
               <div class="typography-samples">
-                <div class="typo-line display">Display Large (Robuste & Impactant)</div>
-                <div class="typo-line headline">Headline Medium (En-tête de section)</div>
-                <div class="typo-line title">Title Medium (Titres de cartes)</div>
-                <div class="typo-line body">
-                  Body Medium (Texte courant optimisé pour la lecture)
-                </div>
+                <div class="typo-line display">Display Large (Robust & Ausdrucksstark)</div>
+                <div class="typo-line headline">Headline Medium (Abschnittsüberschrift)</div>
+                <div class="typo-line title">Title Medium (Kartentitel)</div>
+                <div class="typo-line body">Body Medium (Fließtext, optimiert für Lesbarkeit)</div>
               </div>
             </div>
           </mat-tab>
@@ -359,13 +356,13 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">auto_awesome</mat-icon>
-              Formes & Mouvement
+              Formen & Bewegung
             </ng-template>
             <div class="tab-body">
               <p>
-                M3 introduit des angles adoucis (border-radius généreux jusqu'à 28px pour les cartes
-                et 12px pour les boutons) et des transitions subtiles et fluides respectant les
-                préférences utilisateurs de réduction des mouvements.
+                M3 führt weichere Ecken ein (großzügige Radien bis zu 28px für Karten und 12px für
+                Schaltflächen) sowie flüssige Übergänge, die Benutzereinstellungen zur
+                Bewegungsreduzierung berücksichtigen.
               </p>
             </div>
           </mat-tab>
@@ -379,17 +376,17 @@
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <mat-icon class="panel-icon">speed</mat-icon>
-                Performance Zoneless
+                Zoneless-Performance
               </mat-panel-title>
               <mat-panel-description>
-                Absence de Zone.js et déclenchement réactif ciblé
+                Kein Zone.js und gezielte reaktive Aktualisierung
               </mat-panel-description>
             </mat-expansion-panel-header>
             <p>
-              Grâce à <code>provideZonelessChangeDetection()</code>, Angular ne patche plus les API
-              du navigateur. Le rafraîchissement est provoqué avec précision par les signaux
-              réactifs <code>signal()</code> et <code>computed()</code>, offrant un temps de
-              démarrage réduit et un framerate stable à 60/120 fps.
+              Dank <code>provideZonelessChangeDetection()</code> patcht Angular keine Browser-APIs
+              mehr. Die Aktualisierung wird präzise durch die reaktiven Signale
+              <code>signal()</code> und <code>computed()</code> ausgelöst, was eine verkürzte
+              Startzeit und ein stabiles Bildratenverhalten bei 60/120 FPS bietet.
             </p>
           </mat-expansion-panel>
 
@@ -397,16 +394,15 @@
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <mat-icon class="panel-icon">security</mat-icon>
-                Accessibilité & Standards WCAG 2.1
+                Barrierefreiheit & WCAG 2.1 Standards
               </mat-panel-title>
               <mat-panel-description>
-                Support complet des lecteurs d'écran et navigation clavier
+                Vollständige Unterstützung für Screenreader und Tastaturnavigation
               </mat-panel-description>
             </mat-expansion-panel-header>
             <p>
-              Tous les composants Angular Material intègrent nativement les attributs ARIA
-              appropriés, la gestion du focus clavier, et des ratios de contraste de couleurs
-              validés selon les critères WCAG niveau AA/AAA.
+              Alle Angular Material Komponenten enthalten von Haus aus geeignete ARIA-Attribute,
+              Tastaturfokus-Verwaltung und Farbkontrastverhältnisse gemäß WCAG Stufe AA/AAA.
             </p>
           </mat-expansion-panel>
         </mat-accordion>
@@ -417,36 +413,36 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">feedback</mat-icon>
-        <mat-card-title>Feedback UI : Modales, Toasts, Menus & Tooltips</mat-card-title>
+        <mat-card-title>UI-Feedback : Modale Dialoge, Toasts, Menüs & Tooltips</mat-card-title>
         <mat-card-subtitle
-          >Composants d'interaction et de notification utilisateur</mat-card-subtitle
+          >Interaktions- und Benachrichtigungskomponenten für Benutzer</mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content>
         <div class="feedback-grid">
           <!-- Dialog Trigger -->
           <div class="feedback-col">
-            <h4 class="box-title">Boîtes de Dialogue (MatDialog) :</h4>
+            <h4 class="box-title">Dialogfenster (MatDialog) :</h4>
             <button mat-flat-button color="primary" (click)="openDemoDialog()">
               <mat-icon>open_in_new</mat-icon>
-              Ouvrir Dialogue M3
+              M3-Dialog öffnen
             </button>
           </div>
 
           <!-- SnackBars -->
           <div class="feedback-col">
-            <h4 class="box-title">Notifications Toasts (MatSnackBar) :</h4>
+            <h4 class="box-title">Toast-Benachrichtigungen (MatSnackBar) :</h4>
             <div class="button-wrap">
               <button
                 mat-stroked-button
-                (click)="showSnackBar('Action réussie avec succès !', 'Super')"
+                (click)="showSnackBar('Aktion erfolgreich abgeschlossen!', 'Super')"
               >
                 <mat-icon color="primary">check_circle</mat-icon>
-                Toast Succès
+                Toast Erfolg
               </button>
               <button
                 mat-stroked-button
-                (click)="showSnackBar('Attention : élément en cours de révision', 'Compris')"
+                (click)="showSnackBar('Achtung: Element wird derzeit überprüft', 'Verstanden')"
               >
                 <mat-icon>warning</mat-icon>
                 Toast Info
@@ -456,30 +452,30 @@
 
           <!-- Tooltips & Menu -->
           <div class="feedback-col">
-            <h4 class="box-title">Menus contextuels & Infobulles :</h4>
+            <h4 class="box-title">Kontextmenüs & Tooltips :</h4>
             <div class="button-wrap">
-              <button mat-icon-button [matMenuTriggerFor]="demoMenu" aria-label="Menu d'options">
+              <button mat-icon-button [matMenuTriggerFor]="demoMenu" aria-label="Optionsmenü">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #demoMenu="matMenu">
-                <button mat-menu-item (click)="showSnackBar('Profil sélectionné')">
+                <button mat-menu-item (click)="showSnackBar('Profil ausgewählt')">
                   <mat-icon>account_circle</mat-icon>
-                  <span>Mon Profil</span>
+                  <span>Mein Profil</span>
                 </button>
-                <button mat-menu-item (click)="showSnackBar('Paramètres ouverts')">
+                <button mat-menu-item (click)="showSnackBar('Einstellungen geöffnet')">
                   <mat-icon>settings</mat-icon>
-                  <span>Paramètres</span>
+                  <span>Einstellungen</span>
                 </button>
                 <mat-divider></mat-divider>
-                <button mat-menu-item (click)="showSnackBar('Déconnexion simulée')">
+                <button mat-menu-item (click)="showSnackBar('Abmeldung simuliert')">
                   <mat-icon color="warn">logout</mat-icon>
-                  <span>Déconnexion</span>
+                  <span>Abmelden</span>
                 </button>
               </mat-menu>
 
               <button
                 mat-stroked-button
-                matTooltip="Infobulle au-dessus avec Material 3"
+                matTooltip="Tooltip oben mit Material 3"
                 matTooltipPosition="above"
               >
                 Hover (Tooltip Top)
@@ -494,11 +490,11 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">label</mat-icon>
-        <mat-card-title>Chips & Badges Interactifs</mat-card-title>
-        <mat-card-subtitle>Étiquettes avec avatars, sélection et suppression</mat-card-subtitle>
+        <mat-card-title>Interaktive Chips & Badges</mat-card-title>
+        <mat-card-subtitle>Tags mit Avataren, Auswahl und Löschung</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <mat-chip-set aria-label="Technologies du projet">
+        <mat-chip-set aria-label="Projekt-Technologien">
           <mat-chip highlighted color="primary">
             <mat-icon matChipAvatar>code</mat-icon>
             Angular 22
@@ -532,11 +528,10 @@
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">schedule</mat-icon>
         <mat-card-title
-          >Sélecteurs Temporels M3 (Datepicker, Plage de Dates & Timepicker)</mat-card-title
+          >M3 Zeit- & Datumsauswahl (Datepicker, Datumsbereich & Timepicker)</mat-card-title
         >
         <mat-card-subtitle>
-          Calendrier natif, sélection d'intervalles de dates et nouveau composant Timepicker
-          officiel
+          Nativer Kalender, Datumsbereichsauswahl und offizielle neue Timepicker-Komponente
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
@@ -547,7 +542,7 @@
             <mat-button-toggle-group
               [value]="activeLocale()"
               (change)="setLocale($event.value)"
-              aria-label="Format linguistique du datepicker"
+              aria-label="Sprachformat des Datepickers"
             >
               <mat-button-toggle value="de-DE">
                 <span>🇩🇪 Deutsch (TT.MM.JJJJ)</span>
@@ -562,27 +557,27 @@
           </div>
 
           <div class="interval-selector">
-            <span class="toolbar-label">Intervalle Timepicker :</span>
+            <span class="toolbar-label">Timepicker-Intervall :</span>
             <mat-button-toggle-group
               [value]="timeInterval()"
               (change)="timeInterval.set($event.value)"
-              aria-label="Intervalle du timepicker"
+              aria-label="Timepicker-Intervall"
             >
-              <mat-button-toggle value="15m">15 min</mat-button-toggle>
-              <mat-button-toggle value="30m">30 min</mat-button-toggle>
-              <mat-button-toggle value="1h">1 heure</mat-button-toggle>
+              <mat-button-toggle value="15m">15 Min</mat-button-toggle>
+              <mat-button-toggle value="30m">30 Min</mat-button-toggle>
+              <mat-button-toggle value="1h">1 Stunde</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
 
           <div class="preset-buttons">
-            <span class="toolbar-label">Raccourcis :</span>
+            <span class="toolbar-label">Schnellzugriff :</span>
             <button
               mat-stroked-button
               type="button"
               (click)="setDatePreset(0); setTimePreset(9, 0)"
             >
               <mat-icon>wb_sunny</mat-icon>
-              Matin 09:00
+              Morgen 09:00
             </button>
             <button
               mat-stroked-button
@@ -590,11 +585,11 @@
               (click)="setDatePreset(0); setTimePreset(14, 30)"
             >
               <mat-icon>brightness_5</mat-icon>
-              Après-midi 14:30
+              Nachmittag 14:30
             </button>
             <button mat-stroked-button type="button" (click)="setDatePreset(1)">
               <mat-icon>event_repeat</mat-icon>
-              Demain (+1j)
+              Morgen (+1T)
             </button>
           </div>
         </div>
@@ -725,23 +720,23 @@
   </h2>
   <mat-dialog-content>
     <p>
-      Ceci est une boîte de dialogue modale native créée avec <code>MatDialog</code>. Elle respecte
-      les tokens de thème M3, piège le focus pour l'accessibilité et peut contenir n'importe quel
-      composant ou formulaire interactif.
+      Dies ist ein nativer modaler Dialog, der mit <code>MatDialog</code> erstellt wurde. Er
+      beachtet die M3-Designtokens, fängt den Fokus für Barrierefreiheit ein und kann beliebige
+      interaktive Komponenten oder Formulare enthalten.
     </p>
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Saisie rapide dans la boîte de dialogue</mat-label>
-      <input matInput placeholder="Ex: Commentaire ou note" />
+      <mat-label>Schnelleingabe im Dialogfenster</mat-label>
+      <input matInput placeholder="Z. B.: Kommentar oder Notiz" />
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button (click)="dialogRef.close()">Fermer</button>
+    <button mat-button (click)="dialogRef.close()">Schließen</button>
     <button
       mat-flat-button
       color="primary"
-      (click)="dialogRef.close(); showSnackBar('Action validée depuis le dialogue !')"
+      (click)="dialogRef.close(); showSnackBar('Aktion über den Dialog bestätigt!')"
     >
-      Confirmer
+      Bestätigen
     </button>
   </mat-dialog-actions>
 </ng-template>

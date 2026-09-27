@@ -7,17 +7,17 @@
         <span class="tech-pill m3">SVG Natif Pur</span>
         <span class="tech-pill zoneless">Zero Lib Externe</span>
       </div>
-      <h1 class="page-title">Visualisation Graphique & Analytics SVG</h1>
+      <h1 class="page-title">Grafische Visualisierung & SVG-Analytics</h1>
       <p class="page-subtitle">
-        Graphiques vectoriels interactifs 100% autonomes propulsés par les signaux
-        <code>computed()</code> d'Angular 22. Zéro kilo-octet superflu, performance maximale et
-        adaptation automatique au thème sombre / clair Material 3.
+        100% autonome interaktive Vektorgrafiken, angetrieben durch <code>computed()</code>-Signals
+        von Angular 22. Kein einziges überflüssiges Kilobyte, maximale Performance und automatische
+        Anpassung an das Material 3 Dark-/Light-Theme.
       </p>
     </div>
     <div class="header-actions">
       <button mat-flat-button color="primary" (click)="randomizeData()">
         <mat-icon>shuffle</mat-icon>
-        Régénérer les données
+        Daten neu generieren
       </button>
     </div>
   </header>
@@ -28,9 +28,9 @@
     <mat-card appearance="outlined" class="chart-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">pie_chart</mat-icon>
-        <mat-card-title>Répartition Budgétaire par Pôle</mat-card-title>
+        <mat-card-title>Budgetaufteilung nach Bereich</mat-card-title>
         <mat-card-subtitle
-          >Donut SVG avec trigonométrie réactive stroke-dashoffset</mat-card-subtitle
+          >SVG-Donut mit reaktiver stroke-dashoffset-Trigonometrie</mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content class="donut-card-content">
@@ -65,14 +65,14 @@
                   {{ activeSeg.value | currency: 'EUR' : 'symbol' : '1.0-0' }}
                 </text>
                 <text x="120" y="152" class="center-pct" text-anchor="middle">
-                  {{ activeSeg.percentage }}% du total
+                  {{ activeSeg.percentage }}% der Gesamtsumme
                 </text>
               } @else {
-                <text x="120" y="112" class="center-label" text-anchor="middle">Budget Total</text>
+                <text x="120" y="112" class="center-label" text-anchor="middle">Gesamtbudget</text>
                 <text x="120" y="138" class="center-value" text-anchor="middle">
                   {{ donutTotal() | currency: 'EUR' : 'symbol' : '1.0-0' }}
                 </text>
-                <text x="120" y="154" class="center-pct" text-anchor="middle">100% alloué</text>
+                <text x="120" y="154" class="center-pct" text-anchor="middle">100% zugewiesen</text>
               }
             </g>
           </svg>
@@ -101,9 +101,9 @@
     <mat-card appearance="outlined" class="chart-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">bar_chart</mat-icon>
-        <mat-card-title>Vélocité des Sprints Récents</mat-card-title>
+        <mat-card-title>Velocity der letzten Sprints</mat-card-title>
         <mat-card-subtitle
-          >Story Points planifiés vs réalisés (Moyenne :
+          >Geplante vs. realisierte Story Points (Durchschnitt:
           {{ avgCompletedStoryPoints() }} SP)</mat-card-subtitle
         >
       </mat-card-header>
@@ -174,15 +174,15 @@
           <div class="legend-series">
             <span class="series-tag">
               <span class="color-sample planned"></span>
-              Planifié (SP)
+              Geplant (SP)
             </span>
             <span class="series-tag">
               <span class="color-sample completed"></span>
-              Réalisé (SP)
+              Realisert (SP)
             </span>
             <span class="series-tag">
               <span class="color-sample target"></span>
-              Moyenne
+              Durchschnitt
             </span>
           </div>
 
@@ -192,7 +192,7 @@
               <strong>{{ currentSprint.sprint }} :</strong>
               <span>{{ currentSprint.completed }} / {{ currentSprint.planned }} SP</span>
             } @else {
-              <span class="hint-text">Survolez une barre pour voir le détail</span>
+              <span class="hint-text">Fahren Sie über einen Balken, um Details anzuzeigen</span>
             }
           </div>
         </div>
@@ -204,9 +204,9 @@
   <mat-card appearance="outlined" class="chart-card sparkline-card">
     <mat-card-header>
       <mat-icon mat-card-avatar color="primary">show_chart</mat-icon>
-      <mat-card-title>Courbe de Tendance & Métriques en Temps Réel</mat-card-title>
+      <mat-card-title>Trendkurve & Echtzeit-Metriken</mat-card-title>
       <mat-card-subtitle
-        >Interpolation spline de Bézier en SVG avec dégradé d'aire réactif</mat-card-subtitle
+        >Bézier-Spline-Interpolation in SVG mit reaktivem Flächenverlauf</mat-card-subtitle
       >
     </mat-card-header>
     <mat-card-content>
@@ -215,16 +215,16 @@
         <mat-button-toggle-group
           [ngModel]="selectedMetricId()"
           (ngModelChange)="selectedMetricId.set($event)"
-          aria-label="Métrique active"
+          aria-label="Aktive Metrik"
         >
-          <mat-button-toggle value="traffic">Trafic (req/s)</mat-button-toggle>
-          <mat-button-toggle value="latency">Latence (ms)</mat-button-toggle>
-          <mat-button-toggle value="errors">Erreurs (‰)</mat-button-toggle>
+          <mat-button-toggle value="traffic">Datenverkehr (Req/s)</mat-button-toggle>
+          <mat-button-toggle value="latency">Latenz (ms)</mat-button-toggle>
+          <mat-button-toggle value="errors">Fehler (‰)</mat-button-toggle>
         </mat-button-toggle-group>
 
         <div class="metric-stats-strip">
           <div class="stat-box">
-            <span class="stat-lbl">Valeur Actuelle</span>
+            <span class="stat-lbl">Aktueller Wert</span>
             <span class="stat-val">{{ currentMetricLatest() }} {{ currentMetric().unit }}</span>
           </div>
           <div class="stat-box">

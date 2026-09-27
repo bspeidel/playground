@@ -2,8 +2,8 @@
   <div class="page-header">
     <h1>Angular Signals & Zoneless</h1>
     <p class="subtitle">
-      Démonstration de l'état réactif granulaire, de la détection de changements Zoneless et des
-      nouvelles primitives Angular 22 (<code>linkedSignal</code> et <code>resource</code>).
+      Demonstration des granularen reaktiven Zustands, der Zoneless-Änderungserkennung und der neuen
+      Angular 22 Primitiven (<code>linkedSignal</code> und <code>resource</code>).
     </p>
   </div>
 
@@ -12,19 +12,19 @@
     <mat-card appearance="outlined" class="demo-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">add_circle</mat-icon>
-        <mat-card-title>Compteur Réactif</mat-card-title>
+        <mat-card-title>Reaktiver Zähler</mat-card-title>
         <mat-card-subtitle><code>signal()</code> & <code>computed()</code></mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
         <div class="counter-display">
           <div class="value-block">
-            <span class="value-label">Valeur (signal)</span>
+            <span class="value-label">Wert (Signal)</span>
             <span class="value-number">{{ count() }}</span>
           </div>
           <div class="value-divider"></div>
           <div class="value-block">
-            <span class="value-label">Double (computed)</span>
+            <span class="value-label">Doppelt (computed)</span>
             <span class="value-number highlight">{{ doubleCount() }}</span>
           </div>
         </div>
@@ -32,20 +32,20 @@
         @if (isHighCount()) {
           <div class="badge-alert">
             <mat-icon>warning</mat-icon>
-            <span>Seuil élevé atteint (≥ 10) calculé automatiquement !</span>
+            <span>Hoher Schwellenwert erreicht (≥ 10), automatisch berechnet!</span>
           </div>
         }
 
         <div class="actions-row">
           <button mat-stroked-button (click)="decrement()" [disabled]="count() === 0">
             <mat-icon>remove</mat-icon>
-            Décrémenter
+            Dekrementieren
           </button>
           <button mat-flat-button color="primary" (click)="increment()">
             <mat-icon>add</mat-icon>
-            Incrémenter
+            Inkrementieren
           </button>
-          <button mat-button (click)="reset()">Réinitialiser</button>
+          <button mat-button (click)="reset()">Zurücksetzen</button>
         </div>
       </mat-card-content>
     </mat-card>
@@ -54,19 +54,21 @@
     <mat-card appearance="outlined" class="demo-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">sync</mat-icon>
-        <mat-card-title>Zoneless Async</mat-card-title>
-        <mat-card-subtitle>Mise à jour via <code>setInterval</code> sans Zone.js</mat-card-subtitle>
+        <mat-card-title>Zoneless Asynchron</mat-card-title>
+        <mat-card-subtitle
+          >Aktualisierung via <code>setInterval</code> ohne Zone.js</mat-card-subtitle
+        >
       </mat-card-header>
 
       <mat-card-content>
         <p class="explanation">
-          En mode <strong>Zoneless</strong>, Angular détecte automatiquement les signaux sans
-          interception globale des APIs asynchrones par Zone.js.
+          Im <strong>Zoneless</strong>-Modus erkennt Angular Signale automatisch ohne globales
+          Abfangen asynchroner APIs durch Zone.js.
         </p>
 
         <div class="async-progress-block">
           <div class="progress-info">
-            <span>Progression : {{ asyncCounter() }} / 10</span>
+            <span>Fortschritt : {{ asyncCounter() }} / 10</span>
             <span>{{ asyncCounter() * 10 }}%</span>
           </div>
           <mat-progress-bar mode="determinate" [value]="asyncCounter() * 10"></mat-progress-bar>
@@ -80,11 +82,11 @@
             [disabled]="isRunningAsync() || asyncCounter() >= 10"
           >
             <mat-icon>play_arrow</mat-icon>
-            Lancer le timer asynchrone
+            Asynchronen Timer starten
           </button>
           <button mat-stroked-button (click)="resetAsyncCounter()" [disabled]="isRunningAsync()">
             <mat-icon>refresh</mat-icon>
-            Reset
+            Zurücksetzen
           </button>
         </div>
       </mat-card-content>
@@ -95,13 +97,15 @@
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">link</mat-icon>
         <mat-card-title>Angular 22 <code>linkedSignal()</code></mat-card-title>
-        <mat-card-subtitle>Signal modifiable synchronisé sur un signal source</mat-card-subtitle>
+        <mat-card-subtitle
+          >Modifizierbares Signal synchronisiert mit Quell-Signal</mat-card-subtitle
+        >
       </mat-card-header>
 
       <mat-card-content>
         <p class="explanation">
-          Le signal <code>planQuantity</code> se réinitialise automatiquement au quota par défaut du
-          plan choisi, tout en restant directement modifiable par l'utilisateur.
+          Das Signal <code>planQuantity</code> setzt sich automatisch auf das Standardkontingent des
+          gewählten Tarifs zurück, bleibt aber direkt durch den Benutzer veränderbar.
         </p>
 
         <div class="plan-selector">
@@ -111,14 +115,14 @@
               [class.active-plan]="selectedPlan().id === plan.id"
               (click)="selectPlan(plan)"
             >
-              {{ plan.name }} ({{ plan.pricePerUser }}€/u)
+              {{ plan.name }} ({{ plan.pricePerUser }}€/Benutzer)
             </button>
           }
         </div>
 
         <div class="plan-details-box">
           <div class="plan-qty-row">
-            <span>Licences (linkedSignal) :</span>
+            <span>Lizenzen (linkedSignal) :</span>
             <div class="qty-stepper">
               <button
                 mat-icon-button
@@ -134,7 +138,7 @@
             </div>
           </div>
           <div class="plan-total-row">
-            <span>Total mensuel :</span>
+            <span>Monatliche Gesamtsumme :</span>
             <strong class="highlight">{{
               planTotalPrice() | currency: 'EUR' : 'symbol' : '1.0-0'
             }}</strong>
@@ -148,13 +152,13 @@
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">cloud_download</mat-icon>
         <mat-card-title>Angular 22 <code>resource()</code></mat-card-title>
-        <mat-card-subtitle>Chargement asynchrone déclaratif de données</mat-card-subtitle>
+        <mat-card-subtitle>Deklaratives asynchrones Laden von Daten</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
         <p class="explanation">
-          L'API <code>resource()</code> gère le cycle de vie asynchrone (requête, état de
-          chargement, annulation) de façon réactive.
+          Die API <code>resource()</code> verwaltet den asynchronen Lebenszyklus (Anfrage,
+          Ladezustand, Abbruch) vollständig reaktiv.
         </p>
 
         <div class="category-buttons">
@@ -170,7 +174,7 @@
             [class.active-category]="selectedCategory() === 'tools'"
             (click)="selectedCategory.set('tools')"
           >
-            Outils DX
+            DX-Tools
           </button>
           <button
             mat-stroked-button
@@ -185,7 +189,7 @@
           @if (techResource.isLoading()) {
             <div class="loading-state">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              <span>Chargement des données via resource()...</span>
+              <span>Laden der Daten via resource()...</span>
             </div>
           } @else {
             <div class="chips-list">
@@ -199,7 +203,7 @@
         <div class="actions-row">
           <button mat-button (click)="techResource.reload()" [disabled]="techResource.isLoading()">
             <mat-icon>refresh</mat-icon>
-            Recharger la ressource
+            Ressource neu laden
           </button>
         </div>
       </mat-card-content>
@@ -210,29 +214,29 @@
   <mat-card appearance="outlined" class="cart-card">
     <mat-card-header>
       <mat-icon mat-card-avatar color="primary">shopping_bag</mat-icon>
-      <mat-card-title>Panier Réactif & Filtres en Direct</mat-card-title>
-      <mat-card-subtitle>Gestion d'état granulaire de collection avec Signals</mat-card-subtitle>
+      <mat-card-title>Reaktiver Warenkorb & Live-Filter</mat-card-title>
+      <mat-card-subtitle>Granulare Zustandskontrolle einer Sammlung mit Signals</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
       <div class="cart-toolbar">
         <mat-form-field appearance="outline" class="search-field">
-          <mat-label>Rechercher un article</mat-label>
+          <mat-label>Artikel suchen</mat-label>
           <input
             matInput
             [ngModel]="searchFilter()"
             (ngModelChange)="searchFilter.set($event)"
-            placeholder="Ex: T-Shirt..."
+            placeholder="Z. B.: T-Shirt..."
           />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
         <div class="cart-summary-chips">
           <span class="summary-chip">
-            Articles : <strong>{{ totalItemsCount() }}</strong>
+            Artikel : <strong>{{ totalItemsCount() }}</strong>
           </span>
           <span class="summary-chip highlight">
-            Total : <strong>{{ totalPrice() | currency: 'EUR' : 'symbol' : '1.2-2' }}</strong>
+            Gesamt : <strong>{{ totalPrice() | currency: 'EUR' : 'symbol' : '1.2-2' }}</strong>
           </span>
         </div>
       </div>
@@ -242,7 +246,7 @@
           <div class="cart-item-row">
             <div class="item-info">
               <span class="item-name">{{ item.name }}</span>
-              <span class="item-price">{{ item.price | currency: 'EUR' }} / unité</span>
+              <span class="item-price">{{ item.price | currency: 'EUR' }} / Einheit</span>
             </div>
 
             <div class="quantity-controls">
@@ -250,7 +254,7 @@
                 mat-icon-button
                 (click)="updateQuantity(item.id, -1)"
                 [disabled]="item.quantity <= 1"
-                aria-label="Diminuer la quantité"
+                aria-label="Menge verringern"
               >
                 <mat-icon>remove</mat-icon>
               </button>
@@ -258,7 +262,7 @@
               <button
                 mat-icon-button
                 (click)="updateQuantity(item.id, 1)"
-                aria-label="Augmenter la quantité"
+                aria-label="Menge erhöhen"
               >
                 <mat-icon>add</mat-icon>
               </button>
@@ -272,7 +276,7 @@
               mat-icon-button
               color="warn"
               (click)="removeItem(item.id)"
-              aria-label="Supprimer l'article"
+              aria-label="Artikel entfernen"
             >
               <mat-icon>delete</mat-icon>
             </button>
@@ -280,21 +284,21 @@
         } @empty {
           <div class="empty-state">
             <mat-icon>search_off</mat-icon>
-            <p>Aucun article correspondant au filtre.</p>
+            <p>Kein Artikel entspricht dem Filter.</p>
           </div>
         }
       </div>
 
       <div class="add-item-form">
-        <h3>Ajouter un nouvel article</h3>
+        <h3>Neuen Artikel hinzufügen</h3>
         <div class="form-row">
           <mat-form-field appearance="outline" class="flex-2">
-            <mat-label>Nom de l'article</mat-label>
-            <input matInput #nameInput placeholder="Ex: Casquette Angular" />
+            <mat-label>Artikelname</mat-label>
+            <input matInput #nameInput placeholder="Z. B.: Angular-Kappe" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="flex-1">
-            <mat-label>Prix (€)</mat-label>
+            <mat-label>Preis (€)</mat-label>
             <input matInput #priceInput type="number" min="1" placeholder="20" />
           </mat-form-field>
 
@@ -305,7 +309,7 @@
             (click)="addItem(nameInput, priceInput)"
           >
             <mat-icon>add</mat-icon>
-            Ajouter
+            Hinzufügen
           </button>
         </div>
       </div>
