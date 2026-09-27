@@ -1,19 +1,27 @@
 <div class="material-container">
-  <div class="page-header">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="badge-title">
+      <span class="tech-pill">Angular 22</span>
+      <span class="tech-pill m3">Material Design 3</span>
+      <span class="tech-pill zoneless">Zoneless Reactivity</span>
+    </div>
     <h1>Angular Material 3 Showcase</h1>
     <p class="subtitle">
-      Démonstration des composants Material Design 3 stylisés avec la palette Azure & Blue
-      configurée dans le projet.
+      Vitrine interactive exhaustive des composants Material Design 3 stylisés avec la palette Azure
+      & Blue, enrichis par la réactivité des Signals Angular.
     </p>
-  </div>
+  </header>
 
   <div class="sections-column">
-    <!-- Buttons Section -->
+    <!-- 1. Buttons & Segmented Controls Section -->
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">smart_button</mat-icon>
-        <mat-card-title>Boutons & Actions M3</mat-card-title>
-        <mat-card-subtitle>Différentes variantes et niveaux d'emphase</mat-card-subtitle>
+        <mat-card-title>Boutons, FABs & Boutons à Bascule M3</mat-card-title>
+        <mat-card-subtitle
+          >Différentes variantes d'emphase et sélecteurs de vue segmentés</mat-card-subtitle
+        >
       </mat-card-header>
       <mat-card-content>
         <div class="components-row">
@@ -44,26 +52,61 @@
           </button>
           <span class="hint-text">Cliquez sur la cloche pour incrémenter le badge !</span>
         </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Segmented Button Toggles -->
+        <div class="segmented-row">
+          <div class="toggle-group-wrapper">
+            <span class="control-label"
+              >Bouton à bascule (Vue active : <strong>{{ viewMode() }}</strong
+              >) :</span
+            >
+            <mat-button-toggle-group
+              [ngModel]="viewMode()"
+              (ngModelChange)="viewMode.set($event)"
+              aria-label="Mode d'affichage"
+            >
+              <mat-button-toggle value="grid">
+                <mat-icon>grid_view</mat-icon>
+                Grille
+              </mat-button-toggle>
+              <mat-button-toggle value="list">
+                <mat-icon>view_list</mat-icon>
+                Liste
+              </mat-button-toggle>
+              <mat-button-toggle value="table">
+                <mat-icon>table_rows</mat-icon>
+                Tableau
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
 
-    <!-- Form Controls Section -->
+    <!-- 2. Form Controls, Autocomplete & Datepicker Section -->
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
-        <mat-icon mat-card-avatar color="primary">tune</mat-icon>
-        <mat-card-title>Formulaires & Contrôles Interactifs</mat-card-title>
-        <mat-card-subtitle>Champs de saisie, sélecteurs et commutateurs</mat-card-subtitle>
+        <mat-icon mat-card-avatar color="primary">edit_note</mat-icon>
+        <mat-card-title>Saisie, Autocomplete & Sélecteur de Date</mat-card-title>
+        <mat-card-subtitle
+          >Composants de formulaires avancés avec suggestions filtrées et popup
+          calendrier</mat-card-subtitle
+        >
       </mat-card-header>
       <mat-card-content>
         <div class="form-grid">
+          <!-- Text Input -->
           <mat-form-field appearance="outline">
             <mat-label>Nom d'utilisateur</mat-label>
             <input matInput placeholder="Ex: Benjamin" value="Playground User" />
             <mat-icon matSuffix>person</mat-icon>
           </mat-form-field>
 
+          <!-- Select -->
           <mat-form-field appearance="outline">
-            <mat-label>Palette sélectionnée</mat-label>
+            <mat-label>Palette active</mat-label>
             <mat-select
               [ngModel]="selectedThemeColor()"
               (ngModelChange)="selectedThemeColor.set($event)"
@@ -73,8 +116,52 @@
               <mat-option value="custom">Custom Theme</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
 
+          <!-- Autocomplete -->
+          <mat-form-field appearance="outline">
+            <mat-label>Technologie / Framework (Autocomplete)</mat-label>
+            <input
+              type="text"
+              placeholder="Tapez pour filtrer..."
+              matInput
+              [ngModel]="frameworkSearch()"
+              (ngModelChange)="frameworkSearch.set($event)"
+              [matAutocomplete]="auto"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (item of filteredFrameworks(); track item) {
+                <mat-option [value]="item">{{ item }}</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <!-- Datepicker -->
+          <mat-form-field appearance="outline">
+            <mat-label>Date d'échéance (Datepicker)</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [ngModel]="selectedDate()"
+              (ngModelChange)="selectedDate.set($event)"
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- 3. Toggles, Radio & Checkboxes Section -->
+    <mat-card appearance="outlined" class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">tune</mat-icon>
+        <mat-card-title>Commutateurs, Radios & Cases à Cocher</mat-card-title>
+        <mat-card-subtitle
+          >Sélections uniques, multiples et état partiel indéterminé</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
         <div class="toggles-row">
           <div class="toggle-item">
             <mat-slide-toggle
@@ -99,15 +186,301 @@
             </mat-slider>
           </div>
         </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="selection-grid">
+          <!-- Radio Group -->
+          <div class="selection-box">
+            <h4 class="box-title">Mode de performance (Radio Group) :</h4>
+            <mat-radio-group
+              [ngModel]="selectedSpeed()"
+              (ngModelChange)="selectedSpeed.set($event)"
+              class="radio-group-vertical"
+            >
+              <mat-radio-button value="eco">Éco (Économie d'énergie)</mat-radio-button>
+              <mat-radio-button value="normal">Standard (Usage recommandé)</mat-radio-button>
+              <mat-radio-button value="turbo">Turbo (Vitesse maximale)</mat-radio-button>
+            </mat-radio-group>
+            <div class="selection-result">
+              Option choisie : <strong>{{ selectedSpeed() | uppercase }}</strong>
+            </div>
+          </div>
+
+          <!-- Checkboxes with Indeterminate State -->
+          <div class="selection-box">
+            <h4 class="box-title">Checklist modules (Indeterminate Checkbox) :</h4>
+            <div class="parent-checkbox">
+              <mat-checkbox
+                [checked]="allComplete()"
+                [indeterminate]="someComplete()"
+                (change)="setAllTasks($event.checked)"
+                color="primary"
+              >
+                <strong>Tous les modules du projet</strong>
+              </mat-checkbox>
+            </div>
+            <div class="sub-tasks-list">
+              @for (task of subTasks(); track task.name; let i = $index) {
+                <mat-checkbox
+                  [checked]="task.completed"
+                  (change)="updateTask(i, $event.checked)"
+                  class="sub-checkbox"
+                >
+                  {{ task.name }}
+                </mat-checkbox>
+              }
+            </div>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
 
-    <!-- Chips & Cards Section -->
+    <!-- 4. Progress Bars & Activity Spinners Section -->
+    <mat-card appearance="outlined" class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">hourglass_top</mat-icon>
+        <mat-card-title>Indicateurs de Progression & Spinners</mat-card-title>
+        <mat-card-subtitle
+          >Barres de progression linéaires et spinners d'activité circulaires</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <div class="progress-showcase">
+          <div class="progress-col">
+            <div class="progress-item">
+              <span class="progress-title"
+                >Progression Déterminée (synchronisée avec le slider : {{ sliderValue() }}%) :</span
+              >
+              <mat-progress-bar mode="determinate" [value]="sliderValue()"></mat-progress-bar>
+            </div>
+
+            <div class="progress-item">
+              <span class="progress-title">Progression Indéterminée (chargement en cours) :</span>
+              <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+            </div>
+
+            <div class="progress-item">
+              <span class="progress-title"
+                >Progression Tampon (Buffer : {{ sliderValue() }}% / {{ sliderValue() + 20 }}%)
+                :</span
+              >
+              <mat-progress-bar
+                mode="buffer"
+                [value]="sliderValue()"
+                [bufferValue]="sliderValue() + 20"
+              ></mat-progress-bar>
+            </div>
+          </div>
+
+          <div class="spinner-col">
+            <div class="spinner-wrapper">
+              <mat-progress-spinner
+                [mode]="spinnerMode()"
+                [value]="sliderValue()"
+                color="primary"
+                diameter="64"
+              >
+              </mat-progress-spinner>
+              <span class="spinner-caption">Mode : {{ spinnerMode() }}</span>
+              <button mat-stroked-button (click)="toggleSpinnerMode()">
+                Basculer mode spinner
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- 5. Tabs & Accordion Section -->
+    <mat-card appearance="outlined" class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">tab</mat-icon>
+        <mat-card-title>Onglets & Accordéon d'Expansion</mat-card-title>
+        <mat-card-subtitle
+          >Organisation hiérarchique du contenu avec MatTabs et MatAccordion</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Tabs Group -->
+        <mat-tab-group animationDuration="200ms" class="demo-tabs">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">palette</mat-icon>
+              Tokens & Couleurs
+            </ng-template>
+            <div class="tab-body">
+              <p>
+                Le système Material Design 3 utilise des tokens sémantiques dynamiques pour garantir
+                harmonie et contraste :
+              </p>
+              <div class="color-tokens-grid">
+                <div class="token-pill primary">Primary (Azure)</div>
+                <div class="token-pill secondary">Secondary (Slate)</div>
+                <div class="token-pill tertiary">Tertiary (Blue)</div>
+                <div class="token-pill surface">Surface Container</div>
+                <div class="token-pill error">Error & Warn</div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">format_size</mat-icon>
+              Échelle Typographique
+            </ng-template>
+            <div class="tab-body">
+              <div class="typography-samples">
+                <div class="typo-line display">Display Large (Robuste & Impactant)</div>
+                <div class="typo-line headline">Headline Medium (En-tête de section)</div>
+                <div class="typo-line title">Title Medium (Titres de cartes)</div>
+                <div class="typo-line body">
+                  Body Medium (Texte courant optimisé pour la lecture)
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">auto_awesome</mat-icon>
+              Formes & Mouvement
+            </ng-template>
+            <div class="tab-body">
+              <p>
+                M3 introduit des angles adoucis (border-radius généreux jusqu'à 28px pour les cartes
+                et 12px pour les boutons) et des transitions subtiles et fluides respectant les
+                préférences utilisateurs de réduction des mouvements.
+              </p>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+
+        <mat-divider></mat-divider>
+
+        <!-- Accordion -->
+        <mat-accordion class="demo-accordion">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="panel-icon">speed</mat-icon>
+                Performance Zoneless
+              </mat-panel-title>
+              <mat-panel-description>
+                Absence de Zone.js et déclenchement réactif ciblé
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>
+              Grâce à <code>provideZonelessChangeDetection()</code>, Angular ne patche plus les API
+              du navigateur. Le rafraîchissement est provoqué avec précision par les signaux
+              réactifs <code>signal()</code> et <code>computed()</code>, offrant un temps de
+              démarrage réduit et un framerate stable à 60/120 fps.
+            </p>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="panel-icon">security</mat-icon>
+                Accessibilité & Standards WCAG 2.1
+              </mat-panel-title>
+              <mat-panel-description>
+                Support complet des lecteurs d'écran et navigation clavier
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>
+              Tous les composants Angular Material intègrent nativement les attributs ARIA
+              appropriés, la gestion du focus clavier, et des ratios de contraste de couleurs
+              validés selon les critères WCAG niveau AA/AAA.
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- 6. Feedback: Dialog, SnackBar, Tooltip & Menu Section -->
+    <mat-card appearance="outlined" class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">feedback</mat-icon>
+        <mat-card-title>Feedback UI : Modales, Toasts, Menus & Tooltips</mat-card-title>
+        <mat-card-subtitle
+          >Composants d'interaction et de notification utilisateur</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <div class="feedback-grid">
+          <!-- Dialog Trigger -->
+          <div class="feedback-col">
+            <h4 class="box-title">Boîtes de Dialogue (MatDialog) :</h4>
+            <button mat-flat-button color="primary" (click)="openDemoDialog()">
+              <mat-icon>open_in_new</mat-icon>
+              Ouvrir Dialogue M3
+            </button>
+          </div>
+
+          <!-- SnackBars -->
+          <div class="feedback-col">
+            <h4 class="box-title">Notifications Toasts (MatSnackBar) :</h4>
+            <div class="button-wrap">
+              <button
+                mat-stroked-button
+                (click)="showSnackBar('Action réussie avec succès !', 'Super')"
+              >
+                <mat-icon color="primary">check_circle</mat-icon>
+                Toast Succès
+              </button>
+              <button
+                mat-stroked-button
+                (click)="showSnackBar('Attention : élément en cours de révision', 'Compris')"
+              >
+                <mat-icon>warning</mat-icon>
+                Toast Info
+              </button>
+            </div>
+          </div>
+
+          <!-- Tooltips & Menu -->
+          <div class="feedback-col">
+            <h4 class="box-title">Menus contextuels & Infobulles :</h4>
+            <div class="button-wrap">
+              <button mat-icon-button [matMenuTriggerFor]="demoMenu" aria-label="Menu d'options">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #demoMenu="matMenu">
+                <button mat-menu-item (click)="showSnackBar('Profil sélectionné')">
+                  <mat-icon>account_circle</mat-icon>
+                  <span>Mon Profil</span>
+                </button>
+                <button mat-menu-item (click)="showSnackBar('Paramètres ouverts')">
+                  <mat-icon>settings</mat-icon>
+                  <span>Paramètres</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-menu-item (click)="showSnackBar('Déconnexion simulée')">
+                  <mat-icon color="warn">logout</mat-icon>
+                  <span>Déconnexion</span>
+                </button>
+              </mat-menu>
+
+              <button
+                mat-stroked-button
+                matTooltip="Infobulle au-dessus avec Material 3"
+                matTooltipPosition="above"
+              >
+                Hover (Tooltip Top)
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- 7. Chips & Badges Section -->
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">label</mat-icon>
-        <mat-card-title>Chips & Badges</mat-card-title>
-        <mat-card-subtitle>Étiquettes interactives Material 3</mat-card-subtitle>
+        <mat-card-title>Chips & Badges Interactifs</mat-card-title>
+        <mat-card-subtitle>Étiquettes avec avatars, sélection et suppression</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <mat-chip-set aria-label="Technologies du projet">
@@ -131,8 +504,41 @@
             <mat-icon matChipAvatar>terminal</mat-icon>
             TypeScript 6
           </mat-chip>
+          <mat-chip>
+            <mat-icon matChipAvatar>verified</mat-icon>
+            Jest Testing
+          </mat-chip>
         </mat-chip-set>
       </mat-card-content>
     </mat-card>
   </div>
 </div>
+
+<!-- Template for MatDialog -->
+<ng-template #demoDialog let-dialogRef>
+  <h2 mat-dialog-title>
+    <mat-icon class="dialog-icon">stars</mat-icon>
+    Modal Material Design 3
+  </h2>
+  <mat-dialog-content>
+    <p>
+      Ceci est une boîte de dialogue modale native créée avec <code>MatDialog</code>. Elle respecte
+      les tokens de thème M3, piège le focus pour l'accessibilité et peut contenir n'importe quel
+      composant ou formulaire interactif.
+    </p>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Saisie rapide dans la boîte de dialogue</mat-label>
+      <input matInput placeholder="Ex: Commentaire ou note" />
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="dialogRef.close()">Fermer</button>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="dialogRef.close(); showSnackBar('Action validée depuis le dialogue !')"
+    >
+      Confirmer
+    </button>
+  </mat-dialog-actions>
+</ng-template>
