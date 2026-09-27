@@ -360,3 +360,126 @@
   width: 100%;
   margin-top: 12px;
 }
+
+/* DateTime Section */
+.time-presets-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  .interval-selector,
+  .preset-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .toolbar-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+}
+
+.datetime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+
+  .col-span-range {
+    grid-column: span 1;
+  }
+}
+
+.event-summary-card {
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: var(--mat-sys-surface-container-low);
+  border: 1px solid var(--mat-sys-primary);
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .event-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    .event-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--mat-sys-primary-container);
+      color: var(--mat-sys-on-primary-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .event-details {
+      .event-meta-label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--mat-sys-primary);
+        font-weight: 700;
+      }
+      .event-title-text {
+        margin: 2px 0 6px;
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+      .event-badges-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .event-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 2px 8px;
+          border-radius: 6px;
+          background: var(--mat-sys-surface-container-high);
+
+          mat-icon {
+            font-size: 14px;
+            width: 14px;
+            height: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .event-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .status-live-chip {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #059669;
+    }
+  }
+}

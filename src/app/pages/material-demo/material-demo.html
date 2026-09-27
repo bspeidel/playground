@@ -148,6 +148,19 @@
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+
+          <!-- Quick Timepicker -->
+          <mat-form-field appearance="outline">
+            <mat-label>Heure de rappel (Timepicker)</mat-label>
+            <input
+              matInput
+              [matTimepicker]="quickTimePicker"
+              [ngModel]="selectedTime()"
+              (ngModelChange)="selectedTime.set($event)"
+            />
+            <mat-timepicker-toggle matIconSuffix [for]="quickTimePicker"></mat-timepicker-toggle>
+            <mat-timepicker #quickTimePicker interval="30m"></mat-timepicker>
+          </mat-form-field>
         </div>
       </mat-card-content>
     </mat-card>
@@ -509,6 +522,148 @@
             Jest Testing
           </mat-chip>
         </mat-chip-set>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- 8. Date & Time Pickers Section -->
+    <mat-card appearance="outlined" class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">schedule</mat-icon>
+        <mat-card-title
+          >Sélecteurs Temporels M3 (Datepicker, Plage de Dates & Timepicker)</mat-card-title
+        >
+        <mat-card-subtitle>
+          Calendrier natif, sélection d'intervalles de dates et nouveau composant Timepicker
+          officiel
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Timepicker configuration & presets toolbar -->
+        <div class="time-presets-bar">
+          <div class="interval-selector">
+            <span class="toolbar-label">Intervalle Timepicker :</span>
+            <mat-button-toggle-group
+              [value]="timeInterval()"
+              (change)="timeInterval.set($event.value)"
+              aria-label="Intervalle du timepicker"
+            >
+              <mat-button-toggle value="15m">15 min</mat-button-toggle>
+              <mat-button-toggle value="30m">30 min</mat-button-toggle>
+              <mat-button-toggle value="1h">1 heure</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <div class="preset-buttons">
+            <span class="toolbar-label">Raccourcis :</span>
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="setDatePreset(0); setTimePreset(9, 0)"
+            >
+              <mat-icon>wb_sunny</mat-icon>
+              Matin 09:00
+            </button>
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="setDatePreset(0); setTimePreset(14, 30)"
+            >
+              <mat-icon>brightness_5</mat-icon>
+              Après-midi 14:30
+            </button>
+            <button mat-stroked-button type="button" (click)="setDatePreset(1)">
+              <mat-icon>event_repeat</mat-icon>
+              Demain (+1j)
+            </button>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Form fields grid -->
+        <div class="datetime-grid">
+          <!-- Single Datepicker -->
+          <mat-form-field appearance="outline">
+            <mat-label>Date de l'événement</mat-label>
+            <input
+              matInput
+              [matDatepicker]="eventDatePicker"
+              [ngModel]="selectedDate()"
+              (ngModelChange)="selectedDate.set($event)"
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="eventDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #eventDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Official Material Timepicker -->
+          <mat-form-field appearance="outline">
+            <mat-label>Heure de rendez-vous (Timepicker)</mat-label>
+            <input
+              matInput
+              [matTimepicker]="eventTimePicker"
+              [ngModel]="selectedTime()"
+              (ngModelChange)="selectedTime.set($event)"
+            />
+            <mat-timepicker-toggle matIconSuffix [for]="eventTimePicker"></mat-timepicker-toggle>
+            <mat-timepicker #eventTimePicker [interval]="timeInterval()"></mat-timepicker>
+          </mat-form-field>
+
+          <!-- Date Range Picker -->
+          <mat-form-field appearance="outline" class="col-span-range">
+            <mat-label>Plage du Sprint (Date Range)</mat-label>
+            <mat-date-range-input [rangePicker]="sprintRangePicker">
+              <input
+                matStartDate
+                placeholder="Date de début"
+                [ngModel]="selectedRangeStart()"
+                (ngModelChange)="selectedRangeStart.set($event)"
+              />
+              <input
+                matEndDate
+                placeholder="Date de fin"
+                [ngModel]="selectedRangeEnd()"
+                (ngModelChange)="selectedRangeEnd.set($event)"
+              />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="sprintRangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #sprintRangePicker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+
+        <!-- Live Scheduled Event Card -->
+        <div class="event-summary-card">
+          <div class="event-left">
+            <div class="event-icon-box">
+              <mat-icon color="primary">event_available</mat-icon>
+            </div>
+            <div class="event-details">
+              <span class="event-meta-label">Événement Planifié M3</span>
+              <h4 class="event-title-text">{{ eventTitle() }}</h4>
+              <div class="event-badges-row">
+                <span class="event-chip date-chip">
+                  <mat-icon>calendar_today</mat-icon>
+                  {{ selectedDate() | date: 'EEEE d MMMM y' }}
+                </span>
+                <span class="event-chip time-chip">
+                  <mat-icon>schedule</mat-icon>
+                  {{ selectedTime() | date: 'HH:mm' }} (pas de {{ timeInterval() }})
+                </span>
+                <span class="event-chip range-chip">
+                  <mat-icon>date_range</mat-icon>
+                  Sprint : {{ selectedRangeStart() | date: 'dd/MM' }} ➔
+                  {{ selectedRangeEnd() | date: 'dd/MM/yyyy' }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="event-right">
+            <span class="status-live-chip">PLANIFIÉ 🟢</span>
+            <button mat-flat-button color="primary" type="button" (click)="copyScheduleSummary()">
+              <mat-icon>content_copy</mat-icon>
+              Copier l'invitation
+            </button>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

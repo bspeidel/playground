@@ -32,6 +32,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
@@ -68,6 +69,7 @@ export interface TaskItem {
     MatRadioModule,
     MatCheckboxModule,
     MatDatepickerModule,
+    MatTimepickerModule,
     MatAutocompleteModule,
   ],
   providers: [provideNativeDateAdapter()],
@@ -91,6 +93,11 @@ export class MaterialDemoPage {
   readonly selectedSpeed = signal<'eco' | 'normal' | 'turbo'>('turbo');
   readonly spinnerMode = signal<'determinate' | 'indeterminate'>('determinate');
   readonly selectedDate = signal<Date | null>(new Date());
+  readonly selectedTime = signal<Date | null>(new Date());
+  readonly selectedRangeStart = signal<Date | null>(new Date());
+  readonly selectedRangeEnd = signal<Date | null>(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000));
+  readonly timeInterval = signal<'15m' | '30m' | '1h'>('15m');
+  readonly eventTitle = signal("Revue d'Architecture Sprint 42");
   readonly frameworkSearch = signal('');
 
   // Autocomplete data
@@ -154,5 +161,41 @@ export class MaterialDemoPage {
     this.snackBar.open(message, action, {
       duration: 3500,
     });
+  }
+
+  setTimePreset(hours: number, minutes: number): void {
+    const d = new Date();
+    d.setHours(hours, minutes, 0, 0);
+    this.selectedTime.set(d);
+    this.showSnackBar(
+      `Heure réglée à ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`,
+    );
+  }
+
+  setDatePreset(daysOffset: number): void {
+    const d = new Date();
+    d.setDate(d.getDate() + daysOffset);
+    this.selectedDate.set(d);
+    this.showSnackBar(
+      daysOffset === 0 ? "Date réglée à aujourd'hui" : `Date réglée à J+${daysOffset}`,
+    );
+  }
+
+  copyScheduleSummary(): void {
+    const dateStr = this.selectedDate()?.toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    const timeStr = this.selectedTime()?.toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    const summary = `📅 ${this.eventTitle()} : ${dateStr} à ${timeStr}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(summary);
+      this.showSnackBar('Événement copié dans le presse-papiers !');
+    }
   }
 }

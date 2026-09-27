@@ -86,4 +86,28 @@ describe('MaterialDemoPage', () => {
     component.selectedSpeed.set('eco');
     expect(component.selectedSpeed()).toBe('eco');
   });
+
+  it('should manage date and time pickers with presets', () => {
+    const fixture = TestBed.createComponent(MaterialDemoPage);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.selectedDate()).toBeTruthy();
+    expect(component.selectedTime()).toBeTruthy();
+    expect(component.timeInterval()).toBe('15m');
+
+    component.setTimePreset(10, 45);
+    fixture.detectChanges();
+    expect(component.selectedTime()?.getHours()).toBe(10);
+    expect(component.selectedTime()?.getMinutes()).toBe(45);
+
+    component.setDatePreset(3);
+    fixture.detectChanges();
+    expect(component.selectedDate()).toBeTruthy();
+
+    component.timeInterval.set('30m');
+    expect(component.timeInterval()).toBe('30m');
+
+    expect(() => component.copyScheduleSummary()).not.toThrow();
+  });
 });
