@@ -137,10 +137,12 @@
           </mat-form-field>
 
           <!-- Datepicker -->
+          <!-- Datepicker (Format Allemand : TT.MM.JJJJ) -->
           <mat-form-field appearance="outline">
-            <mat-label>Date d'échéance (Datepicker)</mat-label>
+            <mat-label>Fälligkeitsdatum (TT.MM.JJJJ)</mat-label>
             <input
               matInput
+              placeholder="TT.MM.JJJJ"
               [matDatepicker]="picker"
               [ngModel]="selectedDate()"
               (ngModelChange)="selectedDate.set($event)"
@@ -540,6 +542,25 @@
       <mat-card-content>
         <!-- Timepicker configuration & presets toolbar -->
         <div class="time-presets-bar">
+          <div class="locale-selector">
+            <span class="toolbar-label">Format / Locale :</span>
+            <mat-button-toggle-group
+              [value]="activeLocale()"
+              (change)="setLocale($event.value)"
+              aria-label="Format linguistique du datepicker"
+            >
+              <mat-button-toggle value="de-DE">
+                <span>🇩🇪 Deutsch (TT.MM.JJJJ)</span>
+              </mat-button-toggle>
+              <mat-button-toggle value="fr-FR">
+                <span>🇫🇷 Français (JJ/MM/AAAA)</span>
+              </mat-button-toggle>
+              <mat-button-toggle value="en-US">
+                <span>🇺🇸 English (MM/DD/YYYY)</span>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
           <div class="interval-selector">
             <span class="toolbar-label">Intervalle Timepicker :</span>
             <mat-button-toggle-group
@@ -582,11 +603,14 @@
 
         <!-- Form fields grid -->
         <div class="datetime-grid">
-          <!-- Single Datepicker -->
+          <!-- Single Datepicker (German format TT.MM.JJJJ) -->
           <mat-form-field appearance="outline">
-            <mat-label>Date de l'événement</mat-label>
+            <mat-label>{{
+              activeLocale() === 'de-DE' ? 'Datum des Termins (TT.MM.JJJJ)' : "Date de l'événement"
+            }}</mat-label>
             <input
               matInput
+              [placeholder]="activeLocale() === 'de-DE' ? 'TT.MM.JJJJ' : 'JJ/MM/AAAA'"
               [matDatepicker]="eventDatePicker"
               [ngModel]="selectedDate()"
               (ngModelChange)="selectedDate.set($event)"
@@ -597,9 +621,12 @@
 
           <!-- Official Material Timepicker -->
           <mat-form-field appearance="outline">
-            <mat-label>Heure de rendez-vous (Timepicker)</mat-label>
+            <mat-label>{{
+              activeLocale() === 'de-DE' ? 'Uhrzeit (Timepicker)' : 'Heure de rendez-vous'
+            }}</mat-label>
             <input
               matInput
+              placeholder="HH:mm"
               [matTimepicker]="eventTimePicker"
               [ngModel]="selectedTime()"
               (ngModelChange)="selectedTime.set($event)"
@@ -610,17 +637,21 @@
 
           <!-- Date Range Picker -->
           <mat-form-field appearance="outline" class="col-span-range">
-            <mat-label>Plage du Sprint (Date Range)</mat-label>
+            <mat-label>{{
+              activeLocale() === 'de-DE'
+                ? 'Sprint-Zeitraum (Datumsbereich)'
+                : 'Plage du Sprint (Date Range)'
+            }}</mat-label>
             <mat-date-range-input [rangePicker]="sprintRangePicker">
               <input
                 matStartDate
-                placeholder="Date de début"
+                [placeholder]="activeLocale() === 'de-DE' ? 'Startdatum' : 'Date de début'"
                 [ngModel]="selectedRangeStart()"
                 (ngModelChange)="selectedRangeStart.set($event)"
               />
               <input
                 matEndDate
-                placeholder="Date de fin"
+                [placeholder]="activeLocale() === 'de-DE' ? 'Enddatum' : 'Date de fin'"
                 [ngModel]="selectedRangeEnd()"
                 (ngModelChange)="selectedRangeEnd.set($event)"
               />
@@ -637,30 +668,47 @@
               <mat-icon color="primary">event_available</mat-icon>
             </div>
             <div class="event-details">
-              <span class="event-meta-label">Événement Planifié M3</span>
+              <span class="event-meta-label">{{
+                activeLocale() === 'de-DE' ? 'Geplanter M3-Termin (de-DE)' : 'Événement Planifié M3'
+              }}</span>
               <h4 class="event-title-text">{{ eventTitle() }}</h4>
               <div class="event-badges-row">
                 <span class="event-chip date-chip">
                   <mat-icon>calendar_today</mat-icon>
-                  {{ selectedDate() | date: 'EEEE d MMMM y' }}
+                  {{ selectedDate() | date: 'EEEE, d. MMMM y' : '' : activeLocale() }}
                 </span>
                 <span class="event-chip time-chip">
                   <mat-icon>schedule</mat-icon>
-                  {{ selectedTime() | date: 'HH:mm' }} (pas de {{ timeInterval() }})
+                  {{ selectedTime() | date: 'HH:mm' }}
+                  {{ activeLocale() === 'de-DE' ? 'Uhr' : '' }} ({{
+                    activeLocale() === 'de-DE'
+                      ? 'Schritt: ' + timeInterval()
+                      : 'pas de ' + timeInterval()
+                  }})
                 </span>
                 <span class="event-chip range-chip">
                   <mat-icon>date_range</mat-icon>
-                  Sprint : {{ selectedRangeStart() | date: 'dd/MM' }} ➔
-                  {{ selectedRangeEnd() | date: 'dd/MM/yyyy' }}
+                  Sprint :
+                  {{
+                    selectedRangeStart()
+                      | date: (activeLocale() === 'de-DE' ? 'dd.MM.yyyy' : 'dd/MM/yyyy')
+                  }}
+                  {{ activeLocale() === 'de-DE' ? 'bis' : '➔' }}
+                  {{
+                    selectedRangeEnd()
+                      | date: (activeLocale() === 'de-DE' ? 'dd.MM.yyyy' : 'dd/MM/yyyy')
+                  }}
                 </span>
               </div>
             </div>
           </div>
           <div class="event-right">
-            <span class="status-live-chip">PLANIFIÉ 🟢</span>
+            <span class="status-live-chip">{{
+              activeLocale() === 'de-DE' ? 'GEPLANT 🟢' : 'PLANIFIÉ 🟢'
+            }}</span>
             <button mat-flat-button color="primary" type="button" (click)="copyScheduleSummary()">
               <mat-icon>content_copy</mat-icon>
-              Copier l'invitation
+              {{ activeLocale() === 'de-DE' ? 'Termin kopieren' : "Copier l'invitation" }}
             </button>
           </div>
         </div>

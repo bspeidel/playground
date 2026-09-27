@@ -110,4 +110,25 @@ describe('MaterialDemoPage', () => {
 
     expect(() => component.copyScheduleSummary()).not.toThrow();
   });
+
+  it('should initialize datepicker in German format and allow locale switching', () => {
+    const fixture = TestBed.createComponent(MaterialDemoPage);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    // Default locale should be German (de-DE)
+    expect(component.activeLocale()).toBe('de-DE');
+    expect(component.dateAdapter.getFirstDayOfWeek()).toBe(1); // Monday / Montag in Germany
+    expect(component.dateAdapter.getMonthNames('long')[0]).toBe('Januar'); // German month name
+
+    // Switch to French
+    component.setLocale('fr-FR');
+    fixture.detectChanges();
+    expect(component.activeLocale()).toBe('fr-FR');
+
+    // Switch back to German
+    component.setLocale('de-DE');
+    fixture.detectChanges();
+    expect(component.activeLocale()).toBe('de-DE');
+  });
 });

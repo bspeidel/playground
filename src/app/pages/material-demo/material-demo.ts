@@ -33,8 +33,14 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter, DateAdapter } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import localeDe from '@angular/common/locales/de';
+import localeFr from '@angular/common/locales/fr';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeDe);
+registerLocaleData(localeFr);
 
 export interface TaskItem {
   name: string;
@@ -72,7 +78,7 @@ export interface TaskItem {
     MatTimepickerModule,
     MatAutocompleteModule,
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'de-DE' }],
   templateUrl: './material-demo.html',
   styleUrl: './material-demo.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,9 +86,13 @@ export interface TaskItem {
 export class MaterialDemoPage {
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
+  readonly dateAdapter = inject<DateAdapter<Date>>(DateAdapter);
 
   // Queries
   readonly demoDialog = viewChild<TemplateRef<unknown>>('demoDialog');
+
+  // Locale state (Default: German de-DE)
+  readonly activeLocale = signal<string>('de-DE');
 
   // Reactive state signals
   readonly sliderValue = signal(65);
@@ -181,21 +191,33 @@ export class MaterialDemoPage {
     );
   }
 
+  setLocale(locale: string): void {
+    this.activeLocale.set(locale);
+    this.dateAdapter.setLocale(locale);
+    this.showSnackBar(
+      locale === 'de-DE'
+        ? 'Datepicker configuré au format Allemand (de-DE · TT.MM.JJJJ) 🇩🇪'
+        : `Datepicker configuré au format ${locale}`,
+    );
+  }
+
   copyScheduleSummary(): void {
-    const dateStr = this.selectedDate()?.toLocaleDateString('fr-FR', {
+    const loc = this.activeLocale();
+    const dateStr = this.selectedDate()?.toLocaleDateString(loc, {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
-    const timeStr = this.selectedTime()?.toLocaleTimeString('fr-FR', {
+    const timeStr = this.selectedTime()?.toLocaleTimeString(loc, {
       hour: '2-digit',
       minute: '2-digit',
     });
-    const summary = `📅 ${this.eventTitle()} : ${dateStr} à ${timeStr}`;
+    const suffix = loc === 'de-DE' ? ' Uhr' : '';
+    const summary = `📅 ${this.eventTitle()} : ${dateStr} um ${timeStr}${suffix}`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(summary);
-      this.showSnackBar('Événement copié dans le presse-papiers !');
+      this.showSnackBar('Termin / Événement copié dans le presse-papiers !');
     }
   }
 }
