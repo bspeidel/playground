@@ -1,6 +1,15 @@
 <div class="app-layout">
   <!-- Top Navigation Toolbar -->
   <mat-toolbar color="primary" class="main-toolbar">
+    <button
+      mat-icon-button
+      (click)="sidenav.toggle()"
+      aria-label="Basculer le menu de navigation"
+      class="menu-toggle-btn"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+
     <div class="brand">
       <a routerLink="/overview" class="brand-link">
         <mat-icon class="brand-icon">science</mat-icon>
@@ -11,34 +20,60 @@
 
     <div class="spacer"></div>
 
-    <nav class="nav-links">
-      @for (link of navLinks; track link.path) {
-        <a mat-button [routerLink]="link.path" routerLinkActive="active-link" class="nav-button">
-          <mat-icon>{{ link.icon }}</mat-icon>
-          <span>{{ link.label }}</span>
-        </a>
-      }
-
-      <button
-        mat-icon-button
-        (click)="themeService.toggleTheme()"
-        [attr.aria-label]="themeService.isDark() ? 'Passer en mode clair' : 'Passer en mode sombre'"
-        class="theme-toggle-btn"
-      >
-        <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-      </button>
-    </nav>
+    <button
+      mat-icon-button
+      (click)="themeService.toggleTheme()"
+      [attr.aria-label]="themeService.isDark() ? 'Passer en mode clair' : 'Passer en mode sombre'"
+      class="theme-toggle-btn"
+    >
+      <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
   </mat-toolbar>
 
-  <!-- Router Outlet Container -->
-  <main class="main-content">
-    <router-outlet />
-  </main>
+  <!-- Sidenav Container -->
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #sidenav
+      [mode]="isMobile() ? 'over' : 'side'"
+      [opened]="isSidenavOpen()"
+      (openedChange)="isSidenavOpen.set($event)"
+      class="main-sidenav"
+    >
+      <mat-nav-list class="sidenav-list">
+        @for (category of navCategories; track category.name) {
+          <div mat-subheader class="category-header">{{ category.name }}</div>
+          @for (item of category.items; track item.path) {
+            <a
+              mat-list-item
+              [routerLink]="item.path"
+              routerLinkActive="active-nav-item"
+              (click)="onNavLinkClick(sidenav)"
+              class="nav-item"
+            >
+              <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+              <span matListItemTitle>{{ item.label }}</span>
+            </a>
+          }
+          @if (!$last) {
+            <mat-divider class="category-divider" />
+          }
+        }
+      </mat-nav-list>
+    </mat-sidenav>
 
-  <!-- Footer -->
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p>Playground interactif Angular 22 • Zoneless Change Detection • Angular Material 3</p>
-    </div>
-  </footer>
+    <!-- Content & Footer -->
+    <mat-sidenav-content class="sidenav-content">
+      <!-- Router Outlet Container -->
+      <main class="main-content">
+        <router-outlet />
+      </main>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <div class="footer-content">
+          <p>Playground interactif Angular 22 • Zoneless Change Detection • Angular Material 3</p>
+        </div>
+      </footer>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

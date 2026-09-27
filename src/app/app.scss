@@ -1,17 +1,21 @@
 .app-layout {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .main-toolbar {
-  position: sticky;
-  top: 0;
+  flex-shrink: 0;
   z-index: 1000;
   display: flex;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .menu-toggle-btn {
+    margin-right: 12px;
+  }
 
   .brand {
     display: flex;
@@ -51,25 +55,78 @@
     flex: 1;
   }
 
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .theme-toggle-btn {
+    transition: transform 0.2s ease;
 
-    .nav-button {
-      border-radius: 8px;
-      transition: background-color 0.2s ease;
+    &:hover {
+      transform: rotate(15deg);
+    }
+  }
+}
+
+.sidenav-container {
+  flex: 1;
+  background-color: var(--mat-sys-surface);
+}
+
+.main-sidenav {
+  width: 280px;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  background-color: var(--mat-sys-surface-container-low);
+  box-sizing: border-box;
+
+  .sidenav-list {
+    padding-top: 8px;
+    padding-bottom: 16px;
+
+    .category-header {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--mat-sys-primary);
+      height: 36px;
+      padding: 0 16px;
+      opacity: 0.9;
+    }
+
+    .category-divider {
+      margin: 8px 16px;
+      border-top-color: var(--mat-sys-outline-variant);
+    }
+
+    .nav-item {
+      margin: 2px 12px;
+      border-radius: 28px;
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 
       mat-icon {
-        margin-right: 6px;
+        color: var(--mat-sys-on-surface-variant);
       }
 
-      &.active-link {
-        background-color: rgba(255, 255, 255, 0.25);
+      &.active-nav-item {
+        background-color: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-on-secondary-container);
         font-weight: 600;
+
+        mat-icon {
+          color: var(--mat-sys-on-secondary-container);
+        }
+      }
+
+      &:hover:not(.active-nav-item) {
+        background-color: var(--mat-sys-surface-container-high);
       }
     }
   }
+}
+
+.sidenav-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 .main-content {
@@ -94,18 +151,16 @@
 
 @media (max-width: 768px) {
   .main-toolbar {
-    padding: 0 12px;
+    padding: 0 8px;
 
-    .nav-links {
-      .nav-button {
-        padding: 0 8px;
-        span {
-          display: none;
-        }
-        mat-icon {
-          margin: 0;
-        }
+    .brand {
+      .version-badge {
+        display: none;
       }
     }
+  }
+
+  .main-sidenav {
+    width: 260px;
   }
 }
