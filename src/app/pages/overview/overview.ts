@@ -86,5 +86,13 @@ export class OverviewPage {
       link: '/charts',
       tag: 'Visualisation',
     },
+    {
+      title: 'Assistant Déploiement Cloud (Stepper)',
+      icon: 'rocket_launch',
+      description:
+        'Workflow multi-étapes MatStepper M3 : dimensionnement, calcul de coûts réactif en direct, gestion de secrets et logs CI/CD.',
+      link: '/stepper',
+      tag: 'Workflow',
+    },
   ];
 }

@@ -27,7 +27,7 @@ describe('App', () => {
   it('should have navigation links configured', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
-    expect(app.navLinks.length).toBe(10);
+    expect(app.navLinks.length).toBe(11);
   });
 
   it('should have theme service available', () => {

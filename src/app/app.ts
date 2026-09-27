@@ -34,5 +34,6 @@ export class App {
     { path: '/forms', label: 'Formulaires Typés', icon: 'dynamic_form' },
     { path: '/virtual-scroll', label: 'Virtual Scroll & Perf', icon: 'speed' },
     { path: '/charts', label: 'Analytics & Graphiques', icon: 'insights' },
+    { path: '/stepper', label: 'Assistant Déploiement', icon: 'rocket_launch' },
   ];
 }

@@ -35,7 +35,8 @@ src/
 │   │   ├── kanban-demo/     # Interactive CDK Drag & Drop Kanban board with connected lists
 │   │   ├── forms-demo/      # Typed Reactive Forms, async validation & dynamic FormArray
 │   │   ├── virtual-scroll-demo/ # CDK Virtual Scrolling 50k+ items & benchmark metrics
-│   │   └── charts-demo/     # Native reactive SVG charts (Donut, Bar chart, Sparklines)
+│   │   ├── charts-demo/     # Native reactive SVG charts (Donut, Bar chart, Sparklines)
+│   │   └── stepper-demo/    # Cloud deployment wizard & MatStepper M3 with live cost calculator
 │   ├── services/
 │   │   └── theme.service.ts # Reactive Material 3 Dark/Light mode manager
 │   ├── app.config.ts        # Application configuration (zoneless, router, error listeners)

@@ -61,6 +61,11 @@ export const routes: Routes = [
     title: 'Visualisation SVG & Analytics | Playground',
   },
   {
+    path: 'stepper',
+    loadComponent: () => import('./pages/stepper-demo/stepper-demo').then((m) => m.StepperDemoPage),
+    title: 'Assistant Déploiement Cloud (Stepper) | Playground',
+  },
+  {
     path: '**',
     redirectTo: 'overview',
   },
