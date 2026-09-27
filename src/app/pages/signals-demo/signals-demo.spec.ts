@@ -38,6 +38,22 @@ describe('SignalsDemoPage', () => {
     expect(component.doubleCount()).toBe(0);
   });
 
+  it('should reset planQuantity with linkedSignal when selectedPlan changes', () => {
+    const fixture = TestBed.createComponent(SignalsDemoPage);
+    const component = fixture.componentInstance;
+
+    expect(component.selectedPlan().id).toBe('starter');
+    expect(component.planQuantity()).toBe(1);
+
+    component.updatePlanQuantity(3);
+    expect(component.planQuantity()).toBe(4);
+
+    const proPlan = component.plans.find((p) => p.id === 'pro')!;
+    component.selectPlan(proPlan);
+    expect(component.selectedPlan().id).toBe('pro');
+    expect(component.planQuantity()).toBe(5);
+  });
+
   it('should compute cart totals and update quantity', () => {
     const fixture = TestBed.createComponent(SignalsDemoPage);
     const component = fixture.componentInstance;

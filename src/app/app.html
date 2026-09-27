@@ -18,6 +18,15 @@
           <span>{{ link.label }}</span>
         </a>
       }
+
+      <button
+        mat-icon-button
+        (click)="themeService.toggleTheme()"
+        [attr.aria-label]="themeService.isDark() ? 'Passer en mode clair' : 'Passer en mode sombre'"
+        class="theme-toggle-btn"
+      >
+        <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
     </nav>
   </mat-toolbar>
 

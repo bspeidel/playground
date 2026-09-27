@@ -2,8 +2,8 @@
   <div class="page-header">
     <h1>Angular Signals & Zoneless</h1>
     <p class="subtitle">
-      Démonstration de l'état réactif granulaire et de la détection de changements Zoneless sans
-      `zone.js`.
+      Démonstration de l'état réactif granulaire, de la détection de changements Zoneless et des
+      nouvelles primitives Angular 22 (<code>linkedSignal</code> et <code>resource</code>).
     </p>
   </div>
 
@@ -60,9 +60,8 @@
 
       <mat-card-content>
         <p class="explanation">
-          En mode <strong>Zoneless</strong>, Angular détecte automatiquement les notifications de
-          signaux sans avoir besoin de monkey-patcher les APIs natives (timers, fetch, events) par
-          Zone.js.
+          En mode <strong>Zoneless</strong>, Angular détecte automatiquement les signaux sans
+          interception globale des APIs asynchrones par Zone.js.
         </p>
 
         <div class="async-progress-block">
@@ -90,9 +89,124 @@
         </div>
       </mat-card-content>
     </mat-card>
+
+    <!-- Card 3: Angular 22 linkedSignal() -->
+    <mat-card appearance="outlined" class="demo-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">link</mat-icon>
+        <mat-card-title>Angular 22 <code>linkedSignal()</code></mat-card-title>
+        <mat-card-subtitle>Signal modifiable synchronisé sur un signal source</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="explanation">
+          Le signal <code>planQuantity</code> se réinitialise automatiquement au quota par défaut du
+          plan choisi, tout en restant directement modifiable par l'utilisateur.
+        </p>
+
+        <div class="plan-selector">
+          @for (plan of plans; track plan.id) {
+            <button
+              mat-stroked-button
+              [class.active-plan]="selectedPlan().id === plan.id"
+              (click)="selectPlan(plan)"
+            >
+              {{ plan.name }} ({{ plan.pricePerUser }}€/u)
+            </button>
+          }
+        </div>
+
+        <div class="plan-details-box">
+          <div class="plan-qty-row">
+            <span>Licences (linkedSignal) :</span>
+            <div class="qty-stepper">
+              <button
+                mat-icon-button
+                (click)="updatePlanQuantity(-1)"
+                [disabled]="planQuantity() <= 1"
+              >
+                <mat-icon>remove</mat-icon>
+              </button>
+              <strong>{{ planQuantity() }}</strong>
+              <button mat-icon-button (click)="updatePlanQuantity(1)">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="plan-total-row">
+            <span>Total mensuel :</span>
+            <strong class="highlight">{{
+              planTotalPrice() | currency: 'EUR' : 'symbol' : '1.0-0'
+            }}</strong>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Card 4: Angular 22 resource() -->
+    <mat-card appearance="outlined" class="demo-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">cloud_download</mat-icon>
+        <mat-card-title>Angular 22 <code>resource()</code></mat-card-title>
+        <mat-card-subtitle>Chargement asynchrone déclaratif de données</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="explanation">
+          L'API <code>resource()</code> gère le cycle de vie asynchrone (requête, état de
+          chargement, annulation) de façon réactive.
+        </p>
+
+        <div class="category-buttons">
+          <button
+            mat-stroked-button
+            [class.active-category]="selectedCategory() === 'frameworks'"
+            (click)="selectedCategory.set('frameworks')"
+          >
+            Frameworks
+          </button>
+          <button
+            mat-stroked-button
+            [class.active-category]="selectedCategory() === 'tools'"
+            (click)="selectedCategory.set('tools')"
+          >
+            Outils DX
+          </button>
+          <button
+            mat-stroked-button
+            [class.active-category]="selectedCategory() === 'patterns'"
+            (click)="selectedCategory.set('patterns')"
+          >
+            Patterns
+          </button>
+        </div>
+
+        <div class="resource-display">
+          @if (techResource.isLoading()) {
+            <div class="loading-state">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              <span>Chargement des données via resource()...</span>
+            </div>
+          } @else {
+            <div class="chips-list">
+              @for (item of techResource.value(); track item) {
+                <span class="tech-chip">{{ item }}</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="actions-row">
+          <button mat-button (click)="techResource.reload()" [disabled]="techResource.isLoading()">
+            <mat-icon>refresh</mat-icon>
+            Recharger la ressource
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
-  <!-- Card 3: Dynamic Store / Cart demo with Signals -->
+  <!-- Card 5: Dynamic Store / Cart demo with Signals -->
   <mat-card appearance="outlined" class="cart-card">
     <mat-card-header>
       <mat-icon mat-card-avatar color="primary">shopping_bag</mat-icon>

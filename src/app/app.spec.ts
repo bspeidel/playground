@@ -29,4 +29,10 @@ describe('App', () => {
     const app = fixture.componentInstance;
     expect(app.navLinks.length).toBe(4);
   });
+
+  it('should have theme service available', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    expect(app.themeService).toBeTruthy();
+  });
 });

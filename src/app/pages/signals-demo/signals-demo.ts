@@ -1,4 +1,11 @@
-import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  signal,
+  computed,
+  linkedSignal,
+  resource,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +21,13 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
+}
+
+export interface PlanOption {
+  id: 'starter' | 'pro' | 'enterprise';
+  name: string;
+  defaultQty: number;
+  pricePerUser: number;
 }
 
 @Component({
@@ -43,7 +57,43 @@ export class SignalsDemoPage {
   readonly asyncCounter = signal(0);
   readonly isRunningAsync = signal(false);
 
-  // 3. Reactive Cart demo
+  // 3. Angular 22 linkedSignal() demo
+  readonly plans: readonly PlanOption[] = [
+    { id: 'starter', name: 'Starter', defaultQty: 1, pricePerUser: 12 },
+    { id: 'pro', name: 'Pro', defaultQty: 5, pricePerUser: 29 },
+    { id: 'enterprise', name: 'Enterprise', defaultQty: 25, pricePerUser: 79 },
+  ];
+
+  readonly selectedPlan = signal<PlanOption>(this.plans[0]);
+
+  // linkedSignal automatically syncs/resets when selectedPlan changes, but remains locally writable!
+  readonly planQuantity = linkedSignal({
+    source: this.selectedPlan,
+    computation: (plan) => plan.defaultQty,
+  });
+
+  readonly planTotalPrice = computed(() => this.planQuantity() * this.selectedPlan().pricePerUser);
+
+  // 4. Angular 22 resource() demo (declarative async data loader)
+  readonly selectedCategory = signal<'frameworks' | 'tools' | 'patterns'>('frameworks');
+
+  readonly techResource = resource({
+    params: () => ({ category: this.selectedCategory() }),
+    defaultValue: [] as string[],
+    loader: async ({ params, abortSignal }) => {
+      await new Promise((res) => setTimeout(res, 300));
+      if (abortSignal.aborted) return [];
+
+      const techDb: Record<string, string[]> = {
+        frameworks: ['Angular 22.2', 'Angular Material 3', 'RxJS 7.8', 'TypeScript 6.0'],
+        tools: ['Vite & esbuild', 'Jest & jsdom', 'ESLint 10', 'Prettier 3', 'Husky & lint-staged'],
+        patterns: ['Zoneless CD', 'Signals', 'LinkedSignal', 'Resource API', 'Deferrable Views'],
+      };
+      return techDb[params.category] || [];
+    },
+  });
+
+  // 5. Reactive Cart demo
   readonly searchFilter = signal('');
   readonly items = signal<CartItem[]>([
     { id: 1, name: 'Angular 22 T-Shirt', price: 25, quantity: 1 },
@@ -95,6 +145,15 @@ export class SignalsDemoPage {
   resetAsyncCounter() {
     this.asyncCounter.set(0);
     this.isRunningAsync.set(false);
+  }
+
+  // linkedSignal actions
+  selectPlan(plan: PlanOption) {
+    this.selectedPlan.set(plan);
+  }
+
+  updatePlanQuantity(delta: number) {
+    this.planQuantity.update((qty) => Math.max(1, qty + delta));
   }
 
   // Cart actions

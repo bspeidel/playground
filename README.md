@@ -7,11 +7,12 @@ A modern Angular sandbox application built with **Angular 22**, **Angular Materi
 ## 🚀 Features & Tech Stack
 
 - **Angular 22 (`^22.2.0`)**: Modern standalone architecture powered by `@angular/build` (Vite/esbuild application builder).
-- **Zoneless Change Detection**: Configured using `provideZonelessChangeDetection()` and `ChangeDetectionStrategy.Eager` for high-performance reactivity without Zone.js.
-- **Angular Material 3 (`^22.2.0`)**: Styled with Material Design 3 using `@angular/material` theming mixins, Azure/Blue palettes, and system CSS tokens.
-- **Signals**: Reactive state management with Angular Signals (`signal()`).
+- **Zoneless Change Detection**: Configured using `provideZonelessChangeDetection()` and `ChangeDetectionStrategy.OnPush` for optimal reactivity without Zone.js.
+- **Angular Material 3 (`^22.2.0`)**: Material Design 3 theming with Azure/Blue palettes and dynamic Dark/Light theme switching.
+- **Signals & Advanced Reactivity**: Reactive state management with `signal()`, `computed()`, and Angular 22 `linkedSignal()` and `resource()` APIs.
 - **TypeScript 6 (`~6.0.3`)**: Strong typing and modern ECMAScript compilation.
 - **Jest & jest-preset-angular**: Fast, modern headless unit test execution with Zoneless testing support (`setupZonelessTestEnv`).
+- **CI/CD & DX**: Pre-commit validation via Husky & lint-staged, ESLint (@angular-eslint), Prettier, and GitHub Actions CI workflow.
 
 ---
 
@@ -25,6 +26,8 @@ src/
 │   │   ├── signals-demo/    # Signals, computed, async zoneless demo & reactive cart
 │   │   ├── material-demo/   # Material Design 3 interactive showcase
 │   │   └── defer-demo/      # Deferrable views (@defer) interactive demo
+│   ├── services/
+│   │   └── theme.service.ts # Reactive Material 3 Dark/Light mode manager
 │   ├── app.config.ts        # Application configuration (zoneless, router, error listeners)
 │   ├── app.routes.ts        # Application route definitions (lazy-loaded pages)
 │   ├── app.ts               # App shell component (navigation & layout)
