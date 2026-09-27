@@ -1,0 +1,385 @@
+<div class="tree-page-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="badge-title">
+        <span class="tech-pill">Angular 22</span>
+        <span class="tech-pill m3">MatTree M3</span>
+        <span class="tech-pill zoneless">childrenAccessor</span>
+        <span class="tech-pill tree-badge">Zéro Dépendance Externe</span>
+      </div>
+      <h1 class="page-title">Explorateur de Fichiers & Arborescence MatTree</h1>
+      <p class="page-subtitle">
+        Gestionnaire hiérarchique réactif propulsé par <code>MatTree</code> et l'API moderne
+        <code>childrenAccessor</code> d'Angular Material 3. Navigation par fil d'Ariane, filtrage en
+        temps réel, gestion dynamique des nœuds et visionneuse de code intégrée.
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Explorer Grid -->
+  <div class="explorer-grid">
+    <!-- Left: File Tree Sidebar -->
+    <mat-card appearance="outlined" class="tree-sidebar-card">
+      <div class="sidebar-header">
+        <div class="sidebar-title-row">
+          <div class="title-with-icon">
+            <mat-icon color="primary">account_tree</mat-icon>
+            <span class="sidebar-title">Explorateur du Projet</span>
+          </div>
+          <div class="tree-action-buttons">
+            <button
+              mat-icon-button
+              type="button"
+              (click)="expandAll()"
+              matTooltip="Déplier toute l'arborescence"
+              aria-label="Déplier tout"
+            >
+              <mat-icon>unfold_more</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              type="button"
+              (click)="collapseAll()"
+              matTooltip="Replier toute l'arborescence"
+              aria-label="Replier tout"
+            >
+              <mat-icon>unfold_less</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              type="button"
+              color="primary"
+              (click)="openCreateNode('file')"
+              matTooltip="Nouveau fichier"
+              aria-label="Nouveau fichier"
+            >
+              <mat-icon>note_add</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              type="button"
+              color="primary"
+              (click)="openCreateNode('folder')"
+              matTooltip="Nouveau dossier"
+              aria-label="Nouveau dossier"
+            >
+              <mat-icon>create_new_folder</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              type="button"
+              (click)="resetWorkspace()"
+              matTooltip="Réinitialiser l'arborescence"
+              aria-label="Réinitialiser"
+            >
+              <mat-icon>restart_alt</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            matInput
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"
+            placeholder="Rechercher fichier ou extension (ts, json...)"
+          />
+          @if (searchQuery()) {
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="searchQuery.set('')"
+              aria-label="Effacer recherche"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+      </div>
+
+      <!-- Inline Creation Bar -->
+      @if (isCreatingNode()) {
+        <div class="creation-banner">
+          <div class="banner-top">
+            <mat-icon color="primary">{{
+              newNodeType() === 'file' ? 'note_add' : 'create_new_folder'
+            }}</mat-icon>
+            <span class="banner-label">
+              Créer un {{ newNodeType() === 'file' ? 'fichier' : 'dossier' }} :
+            </span>
+          </div>
+          <div class="banner-inputs">
+            <input
+              type="text"
+              class="banner-input"
+              [ngModel]="newNodeName()"
+              (ngModelChange)="newNodeName.set($event)"
+              placeholder="Nom du nœud..."
+              (keydown.enter)="confirmCreateNode()"
+              (keydown.escape)="cancelCreateNode()"
+            />
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              class="btn-confirm"
+              (click)="confirmCreateNode()"
+            >
+              Créer
+            </button>
+            <button mat-stroked-button type="button" (click)="cancelCreateNode()">Annuler</button>
+          </div>
+        </div>
+      }
+
+      <!-- Material Tree Component -->
+      <div class="tree-viewport">
+        <mat-tree
+          #tree="matTree"
+          [dataSource]="filteredTreeData()"
+          [childrenAccessor]="childrenAccessor"
+          class="custom-mat-tree"
+        >
+          <!-- Leaf Node: Files -->
+          <mat-tree-node
+            *matTreeNodeDef="let node"
+            matTreeNodePadding
+            class="tree-node-row file-row"
+            [class.selected-row]="selectedNode()?.id === node.id"
+            (click)="selectNode(node)"
+          >
+            <button
+              mat-icon-button
+              type="button"
+              disabled
+              class="btn-node-bullet"
+              tabindex="-1"
+              aria-hidden="true"
+            >
+              <mat-icon [style.color]="getFileIconColor(node)" class="node-type-icon">
+                {{ getFileIcon(node) }}
+              </mat-icon>
+            </button>
+
+            <span class="node-label">{{ node.name }}</span>
+            <span class="node-meta-size">{{ node.size }}</span>
+          </mat-tree-node>
+
+          <!-- Expandable Node: Folders -->
+          <mat-tree-node
+            *matTreeNodeDef="let node; when: hasChild"
+            matTreeNodePadding
+            class="tree-node-row folder-row"
+            [class.selected-row]="selectedNode()?.id === node.id"
+            (click)="selectNode(node)"
+          >
+            <button
+              mat-icon-button
+              type="button"
+              matTreeNodeToggle
+              [attr.aria-label]="'Bascule ' + node.name"
+              (click)="$event.stopPropagation()"
+              class="btn-toggle"
+            >
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+              </mat-icon>
+            </button>
+
+            <mat-icon class="folder-icon" color="primary">
+              {{ tree.isExpanded(node) ? 'folder_open' : 'folder' }}
+            </mat-icon>
+
+            <span class="node-label folder-label">{{ node.name }}</span>
+            <span class="folder-items-count">{{ node.children?.length }}</span>
+          </mat-tree-node>
+        </mat-tree>
+
+        @if (filteredTreeData().length === 0) {
+          <div class="tree-empty-state">
+            <mat-icon class="empty-icon">search_off</mat-icon>
+            <p>Aucun fichier ne correspond à "{{ searchQuery() }}"</p>
+            <button mat-stroked-button type="button" (click)="searchQuery.set('')">
+              Effacer le filtre
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- Tree Footer Stats -->
+      <div class="sidebar-footer">
+        <div class="stat-item">
+          <mat-icon class="footer-icon">insert_drive_file</mat-icon>
+          <span>{{ workspaceStats().fileCount }} fichiers</span>
+        </div>
+        <div class="stat-item">
+          <mat-icon class="footer-icon">folder</mat-icon>
+          <span>{{ workspaceStats().folderCount }} dossiers</span>
+        </div>
+        <div class="stat-item">
+          <mat-icon class="footer-icon">code</mat-icon>
+          <span>{{ workspaceStats().totalLines }} lignes</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Right: File & Code Previewer -->
+    <mat-card appearance="outlined" class="preview-card">
+      <!-- Breadcrumb Bar -->
+      <div class="breadcrumb-bar">
+        <mat-icon class="crumb-root-icon">laptop_mac</mat-icon>
+        <div class="crumbs-trail">
+          @for (crumb of breadcrumbs(); track crumb.id; let last = $last) {
+            <span class="crumb-link" [class.current-crumb]="last">
+              {{ crumb.name }}
+            </span>
+            @if (!last) {
+              <mat-icon class="crumb-separator">chevron_right</mat-icon>
+            }
+          }
+        </div>
+
+        @if (selectedNode()) {
+          <div class="crumb-actions">
+            <button
+              mat-icon-button
+              type="button"
+              color="warn"
+              matTooltip="Supprimer ce nœud"
+              aria-label="Supprimer nœud"
+              (click)="deleteSelectedNode()"
+            >
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- Preview Content -->
+      @if (selectedNode(); as node) {
+        @if (node.type === 'file') {
+          <!-- File Viewer View -->
+          <div class="file-viewer-wrapper">
+            <!-- File Header Info -->
+            <div class="file-header-bar">
+              <div class="file-badge-group">
+                <div class="file-icon-box" [style.backgroundColor]="getFileIconColor(node) + '20'">
+                  <mat-icon [style.color]="getFileIconColor(node)">
+                    {{ getFileIcon(node) }}
+                  </mat-icon>
+                </div>
+                <div class="file-title-meta">
+                  <h2 class="file-name">{{ node.name }}</h2>
+                  <span class="file-path">{{ node.path }}</span>
+                </div>
+              </div>
+
+              <div class="file-header-actions">
+                <mat-chip-set class="meta-chips">
+                  @if (node.extension) {
+                    <mat-chip class="ext-chip">{{ node.extension.toUpperCase() }}</mat-chip>
+                  }
+                  <mat-chip>{{ node.size }}</mat-chip>
+                  <mat-chip>{{ node.lines }} lignes</mat-chip>
+                  <mat-chip>{{ node.lastModified }}</mat-chip>
+                </mat-chip-set>
+
+                <div class="action-buttons-group">
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    (click)="copyFileContent()"
+                    matTooltip="Copier le code dans le presse-papiers"
+                  >
+                    <mat-icon>content_copy</mat-icon>
+                    Copier
+                  </button>
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    type="button"
+                    (click)="downloadFile()"
+                    matTooltip="Télécharger ce fichier"
+                  >
+                    <mat-icon>download</mat-icon>
+                    Télécharger
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Code Lines Viewer -->
+            <div class="code-viewport">
+              <div class="code-editor-layout">
+                <div class="line-gutter">
+                  @for (line of selectedFileLines(); track $index) {
+                    <span class="gutter-num">{{ $index + 1 }}</span>
+                  }
+                </div>
+                <div class="code-lines-content">
+                  @for (line of selectedFileLines(); track $index) {
+                    <div class="code-line">{{ line || ' ' }}</div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <!-- Folder Viewer View -->
+          <div class="folder-viewer-wrapper">
+            <div class="folder-header-bar">
+              <div class="folder-icon-circle">
+                <mat-icon color="primary">folder_open</mat-icon>
+              </div>
+              <div>
+                <h2 class="folder-title">{{ node.name }} /</h2>
+                <p class="folder-subtitle">
+                  {{ node.path }} &bull; {{ node.children?.length || 0 }} éléments contenus
+                </p>
+              </div>
+            </div>
+
+            <div class="folder-contents-section">
+              <h3 class="section-title">Contenu du répertoire :</h3>
+              <div class="folder-items-grid">
+                @for (child of node.children || []; track child.id) {
+                  <button type="button" class="folder-child-card" (click)="selectNode(child)">
+                    <div class="card-icon-area">
+                      <mat-icon [style.color]="getFileIconColor(child)">
+                        {{ getFileIcon(child) }}
+                      </mat-icon>
+                    </div>
+                    <div class="card-info-area">
+                      <span class="child-name">{{ child.name }}</span>
+                      <span class="child-meta">
+                        {{
+                          child.type === 'folder'
+                            ? (child.children?.length || 0) + ' éléments'
+                            : child.size
+                        }}
+                      </span>
+                    </div>
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      } @else {
+        <!-- Empty State -->
+        <div class="no-selection-placeholder">
+          <mat-icon class="placeholder-icon">touch_app</mat-icon>
+          <h3>Aucun élément sélectionné</h3>
+          <p>
+            Sélectionnez un fichier ou un dossier dans l'arborescence à gauche pour en inspecter le
+            contenu.
+          </p>
+        </div>
+      }
+    </mat-card>
+  </div>
+</div>

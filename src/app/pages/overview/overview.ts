@@ -94,5 +94,13 @@ export class OverviewPage {
       link: '/stepper',
       tag: 'Workflow',
     },
+    {
+      title: 'Explorateur de Fichiers (MatTree)',
+      icon: 'folder_open',
+      description:
+        'Arborescence de projet MatTree M3 avec childrenAccessor : filtrage instantané, breadcrumbs, gestion de nœuds et visionneuse de code.',
+      link: '/tree',
+      tag: 'Hiérarchie',
+    },
   ];
 }

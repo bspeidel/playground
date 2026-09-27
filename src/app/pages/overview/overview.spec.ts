@@ -19,6 +19,6 @@ describe('OverviewPage', () => {
   it('should display feature cards', () => {
     const fixture = TestBed.createComponent(OverviewPage);
     const component = fixture.componentInstance;
-    expect(component.features.length).toBe(10);
+    expect(component.features.length).toBe(11);
   });
 });

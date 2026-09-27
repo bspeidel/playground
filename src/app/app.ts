@@ -35,5 +35,6 @@ export class App {
     { path: '/virtual-scroll', label: 'Virtual Scroll & Perf', icon: 'speed' },
     { path: '/charts', label: 'Analytics & Graphiques', icon: 'insights' },
     { path: '/stepper', label: 'Assistant Déploiement', icon: 'rocket_launch' },
+    { path: '/tree', label: 'Explorateur Fichiers', icon: 'folder_open' },
   ];
 }

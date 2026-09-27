@@ -66,6 +66,11 @@ export const routes: Routes = [
     title: 'Assistant Déploiement Cloud (Stepper) | Playground',
   },
   {
+    path: 'tree',
+    loadComponent: () => import('./pages/tree-demo/tree-demo').then((m) => m.TreeDemoPage),
+    title: 'Explorateur de Fichiers (MatTree) | Playground',
+  },
+  {
     path: '**',
     redirectTo: 'overview',
   },
