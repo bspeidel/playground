@@ -1,0 +1,282 @@
+<div class="charts-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="badge-title">
+        <span class="tech-pill">Angular 22</span>
+        <span class="tech-pill m3">SVG Natif Pur</span>
+        <span class="tech-pill zoneless">Zero Lib Externe</span>
+      </div>
+      <h1 class="page-title">Visualisation Graphique & Analytics SVG</h1>
+      <p class="page-subtitle">
+        Graphiques vectoriels interactifs 100% autonomes propulsés par les signaux
+        <code>computed()</code> d'Angular 22. Zéro kilo-octet superflu, performance maximale et
+        adaptation automatique au thème sombre / clair Material 3.
+      </p>
+    </div>
+    <div class="header-actions">
+      <button mat-flat-button color="primary" (click)="randomizeData()">
+        <mat-icon>shuffle</mat-icon>
+        Régénérer les données
+      </button>
+    </div>
+  </header>
+
+  <!-- Top Charts Row -->
+  <div class="charts-grid-top">
+    <!-- Donut Chart Card -->
+    <mat-card appearance="outlined" class="chart-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">pie_chart</mat-icon>
+        <mat-card-title>Répartition Budgétaire par Pôle</mat-card-title>
+        <mat-card-subtitle
+          >Donut SVG avec trigonométrie réactive stroke-dashoffset</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content class="donut-card-content">
+        <div class="donut-wrapper">
+          <svg viewBox="0 0 240 240" class="donut-svg">
+            <!-- Background circle -->
+            <circle cx="120" cy="120" r="80" class="donut-bg" />
+
+            <!-- Reactive SVG segments -->
+            @for (seg of donutSegmentsWithAngles(); track seg.label; let i = $index) {
+              <circle
+                cx="120"
+                cy="120"
+                r="80"
+                class="donut-segment"
+                [attr.stroke]="seg.color"
+                [attr.stroke-dasharray]="seg.strokeDasharray"
+                [attr.stroke-dashoffset]="seg.strokeDashoffset"
+                [class.active-segment]="activeDonutIndex() === i"
+                (mouseenter)="setDonutHover(i)"
+                (mouseleave)="setDonutHover(null)"
+              />
+            }
+
+            <!-- Center text indicator -->
+            <g class="donut-center">
+              @if (activeDonutSegment(); as activeSeg) {
+                <text x="120" y="108" class="center-label" text-anchor="middle">
+                  {{ activeSeg.label }}
+                </text>
+                <text x="120" y="132" class="center-value" text-anchor="middle">
+                  {{ activeSeg.value | currency: 'EUR' : 'symbol' : '1.0-0' }}
+                </text>
+                <text x="120" y="152" class="center-pct" text-anchor="middle">
+                  {{ activeSeg.percentage }}% du total
+                </text>
+              } @else {
+                <text x="120" y="112" class="center-label" text-anchor="middle">Budget Total</text>
+                <text x="120" y="138" class="center-value" text-anchor="middle">
+                  {{ donutTotal() | currency: 'EUR' : 'symbol' : '1.0-0' }}
+                </text>
+                <text x="120" y="154" class="center-pct" text-anchor="middle">100% alloué</text>
+              }
+            </g>
+          </svg>
+        </div>
+
+        <!-- Interactive Legend -->
+        <div class="donut-legend">
+          @for (seg of donutSegmentsWithAngles(); track seg.label; let i = $index) {
+            <div
+              class="legend-item"
+              [class.highlighted]="activeDonutIndex() === i"
+              (mouseenter)="setDonutHover(i)"
+              (mouseleave)="setDonutHover(null)"
+            >
+              <span class="legend-color-dot" [style.backgroundColor]="seg.color"></span>
+              <span class="legend-name">{{ seg.label }}</span>
+              <span class="legend-val">{{ seg.value | currency: 'EUR' : 'symbol' : '1.0-0' }}</span>
+              <span class="legend-badge">{{ seg.percentage }}%</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Velocity Bar Chart Card -->
+    <mat-card appearance="outlined" class="chart-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">bar_chart</mat-icon>
+        <mat-card-title>Vélocité des Sprints Récents</mat-card-title>
+        <mat-card-subtitle
+          >Story Points planifiés vs réalisés (Moyenne :
+          {{ avgCompletedStoryPoints() }} SP)</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content class="bar-chart-content">
+        <div class="bar-chart-wrapper">
+          <svg viewBox="0 0 540 230" class="bar-chart-svg">
+            <!-- Grid lines -->
+            <line x1="40" y1="30" x2="520" y2="30" class="chart-grid-line" />
+            <line x1="40" y1="80" x2="520" y2="80" class="chart-grid-line" />
+            <line x1="40" y1="130" x2="520" y2="130" class="chart-grid-line" />
+            <line x1="40" y1="180" x2="520" y2="180" class="chart-base-line" />
+
+            <!-- Y-Axis labels -->
+            <text x="32" y="34" class="axis-label" text-anchor="end">60</text>
+            <text x="32" y="84" class="axis-label" text-anchor="end">40</text>
+            <text x="32" y="134" class="axis-label" text-anchor="end">20</text>
+            <text x="32" y="184" class="axis-label" text-anchor="end">0</text>
+
+            <!-- Bars -->
+            @for (item of velocityData(); track item.sprint; let i = $index) {
+              <!-- Bar Planned -->
+              <rect
+                [attr.x]="60 + i * 58"
+                [attr.y]="180 - (item.planned / maxSprintValue()) * 150"
+                width="18"
+                [attr.height]="(item.planned / maxSprintValue()) * 150"
+                class="bar-rect planned"
+                (mouseenter)="setSprintHover(i)"
+                (mouseleave)="setSprintHover(null)"
+              />
+
+              <!-- Bar Completed -->
+              <rect
+                [attr.x]="60 + i * 58 + 22"
+                [attr.y]="180 - (item.completed / maxSprintValue()) * 150"
+                width="18"
+                [attr.height]="(item.completed / maxSprintValue()) * 150"
+                class="bar-rect completed"
+                [class.active-bar]="activeSprintIndex() === i"
+                (mouseenter)="setSprintHover(i)"
+                (mouseleave)="setSprintHover(null)"
+              />
+
+              <!-- X-Axis label -->
+              <text
+                [attr.x]="60 + i * 58 + 20"
+                y="204"
+                class="axis-label-sprint"
+                text-anchor="middle"
+              >
+                S{{ i + 21 }}
+              </text>
+            }
+
+            <!-- Average dashed target line -->
+            <line
+              x1="40"
+              [attr.y1]="180 - (avgCompletedStoryPoints() / maxSprintValue()) * 150"
+              x2="520"
+              [attr.y2]="180 - (avgCompletedStoryPoints() / maxSprintValue()) * 150"
+              class="target-avg-line"
+            />
+          </svg>
+        </div>
+
+        <!-- Bar Legend & Hover Indicator -->
+        <div class="bar-legend-footer">
+          <div class="legend-series">
+            <span class="series-tag">
+              <span class="color-sample planned"></span>
+              Planifié (SP)
+            </span>
+            <span class="series-tag">
+              <span class="color-sample completed"></span>
+              Réalisé (SP)
+            </span>
+            <span class="series-tag">
+              <span class="color-sample target"></span>
+              Moyenne
+            </span>
+          </div>
+
+          <div class="sprint-hover-info">
+            @if (activeSprintIndex() !== null) {
+              @let currentSprint = velocityData()[activeSprintIndex()!];
+              <strong>{{ currentSprint.sprint }} :</strong>
+              <span>{{ currentSprint.completed }} / {{ currentSprint.planned }} SP</span>
+            } @else {
+              <span class="hint-text">Survolez une barre pour voir le détail</span>
+            }
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Bottom Sparkline & Trend Section -->
+  <mat-card appearance="outlined" class="chart-card sparkline-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar color="primary">show_chart</mat-icon>
+      <mat-card-title>Courbe de Tendance & Métriques en Temps Réel</mat-card-title>
+      <mat-card-subtitle
+        >Interpolation spline de Bézier en SVG avec dégradé d'aire réactif</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Top controls & metric selector -->
+      <div class="sparkline-header-bar">
+        <mat-button-toggle-group
+          [ngModel]="selectedMetricId()"
+          (ngModelChange)="selectedMetricId.set($event)"
+          aria-label="Métrique active"
+        >
+          <mat-button-toggle value="traffic">Trafic (req/s)</mat-button-toggle>
+          <mat-button-toggle value="latency">Latence (ms)</mat-button-toggle>
+          <mat-button-toggle value="errors">Erreurs (‰)</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <div class="metric-stats-strip">
+          <div class="stat-box">
+            <span class="stat-lbl">Valeur Actuelle</span>
+            <span class="stat-val">{{ currentMetricLatest() }} {{ currentMetric().unit }}</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Minimum</span>
+            <span class="stat-val">{{ currentMetricMin() }} {{ currentMetric().unit }}</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Maximum</span>
+            <span class="stat-val">{{ currentMetricMax() }} {{ currentMetric().unit }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sparkline SVG -->
+      <div class="sparkline-svg-wrapper">
+        <svg viewBox="0 0 600 180" class="sparkline-svg">
+          <defs>
+            <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" [attr.stop-color]="currentMetric().color" stop-opacity="0.35" />
+              <stop offset="100%" [attr.stop-color]="currentMetric().color" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+
+          <!-- Gradient Area -->
+          <path
+            [attr.d]="sparklinePoints().areaPath"
+            fill="url(#areaGradient)"
+            class="sparkline-area"
+          />
+
+          <!-- Spline Line -->
+          <path
+            [attr.d]="sparklinePoints().path"
+            fill="none"
+            [attr.stroke]="currentMetric().color"
+            stroke-width="3"
+            class="sparkline-line"
+          />
+
+          <!-- Data Points Circles -->
+          @for (pt of sparklinePoints().points; track pt.x; let i = $index) {
+            <circle
+              [attr.cx]="pt.x"
+              [attr.cy]="pt.y"
+              r="4.5"
+              [attr.fill]="currentMetric().color"
+              class="sparkline-dot"
+              [matTooltip]="'T' + (i + 1) + ' : ' + pt.value + ' ' + currentMetric().unit"
+            />
+          }
+        </svg>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

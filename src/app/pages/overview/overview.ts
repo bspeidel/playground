@@ -78,5 +78,13 @@ export class OverviewPage {
       link: '/virtual-scroll',
       tag: 'Performance',
     },
+    {
+      title: 'Visualisation SVG & Analytics',
+      icon: 'insights',
+      description:
+        'Donut chart interactif, bar chart de vélocité et courbes sparklines en SVG natif réactif 100% sans bibliothèque tierce.',
+      link: '/charts',
+      tag: 'Visualisation',
+    },
   ];
 }

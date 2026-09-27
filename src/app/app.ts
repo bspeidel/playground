@@ -33,5 +33,6 @@ export class App {
     { path: '/kanban', label: 'Kanban Board', icon: 'view_kanban' },
     { path: '/forms', label: 'Formulaires Typés', icon: 'dynamic_form' },
     { path: '/virtual-scroll', label: 'Virtual Scroll & Perf', icon: 'speed' },
+    { path: '/charts', label: 'Analytics & Graphiques', icon: 'insights' },
   ];
 }

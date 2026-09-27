@@ -1,0 +1,368 @@
+.charts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .header-content {
+    max-width: 800px;
+  }
+}
+
+.badge-title {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.tech-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+
+  &.m3 {
+    background: var(--mat-sys-tertiary-container);
+    color: var(--mat-sys-on-tertiary-container);
+  }
+  &.zoneless {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+  }
+}
+
+.page-title {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--mat-sys-on-surface);
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--mat-sys-on-surface-variant);
+  line-height: 1.5;
+
+  code {
+    font-family: monospace;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--mat-sys-surface-container);
+    color: var(--mat-sys-primary);
+  }
+}
+
+/* Charts Top Grid */
+.charts-grid-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 1.1fr;
+  }
+}
+
+.chart-card {
+  border-radius: 12px;
+  padding: 8px;
+}
+
+/* Donut Chart */
+.donut-card-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 12px 8px;
+}
+
+.donut-wrapper {
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+
+  .donut-bg {
+    fill: none;
+    stroke: var(--mat-sys-surface-container-high);
+    stroke-width: 24;
+  }
+
+  .donut-segment {
+    fill: none;
+    stroke-width: 24;
+    cursor: pointer;
+    transition:
+      stroke-width 0.2s ease,
+      opacity 0.2s ease;
+
+    &:hover,
+    &.active-segment {
+      stroke-width: 28;
+      opacity: 0.95;
+    }
+  }
+
+  .donut-center {
+    transform: rotate(90deg);
+    transform-origin: 120px 120px;
+
+    .center-label {
+      font-size: 12px;
+      font-weight: 500;
+      fill: var(--mat-sys-on-surface-variant);
+    }
+    .center-value {
+      font-size: 18px;
+      font-weight: 700;
+      fill: var(--mat-sys-on-surface);
+    }
+    .center-pct {
+      font-size: 11px;
+      font-weight: 600;
+      fill: var(--mat-sys-primary);
+    }
+  }
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.15s ease;
+
+    &:hover,
+    &.highlighted {
+      background: var(--mat-sys-surface-container-high);
+    }
+
+    .legend-color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-name {
+      flex: 1;
+      color: var(--mat-sys-on-surface);
+    }
+
+    .legend-val {
+      font-weight: 600;
+      color: var(--mat-sys-on-surface);
+    }
+
+    .legend-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--mat-sys-primary);
+      min-width: 38px;
+      text-align: right;
+    }
+  }
+}
+
+/* Velocity Bar Chart */
+.bar-chart-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px 8px;
+}
+
+.bar-chart-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.bar-chart-svg {
+  width: 100%;
+  height: 220px;
+
+  .chart-grid-line {
+    stroke: var(--mat-sys-outline-variant);
+    stroke-dasharray: 4 4;
+    stroke-width: 1;
+  }
+
+  .chart-base-line {
+    stroke: var(--mat-sys-outline);
+    stroke-width: 1.5;
+  }
+
+  .axis-label {
+    font-size: 11px;
+    fill: var(--mat-sys-on-surface-variant);
+  }
+
+  .axis-label-sprint {
+    font-size: 11px;
+    font-weight: 600;
+    fill: var(--mat-sys-on-surface-variant);
+  }
+
+  .bar-rect {
+    rx: 4;
+    ry: 4;
+    cursor: pointer;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+
+    &.planned {
+      fill: var(--mat-sys-surface-container-highest);
+    }
+
+    &.completed {
+      fill: var(--mat-sys-primary);
+    }
+
+    &:hover,
+    &.active-bar {
+      opacity: 0.85;
+    }
+  }
+
+  .target-avg-line {
+    stroke: #ea580c;
+    stroke-width: 2;
+    stroke-dasharray: 6 4;
+  }
+}
+
+.bar-legend-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+
+  .legend-series {
+    display: flex;
+    gap: 16px;
+
+    .series-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--mat-sys-on-surface-variant);
+
+      .color-sample {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+
+        &.planned {
+          background: var(--mat-sys-surface-container-highest);
+        }
+        &.completed {
+          background: var(--mat-sys-primary);
+        }
+        &.target {
+          background: #ea580c;
+        }
+      }
+    }
+  }
+
+  .sprint-hover-info {
+    font-size: 0.85rem;
+    color: var(--mat-sys-on-surface);
+
+    .hint-text {
+      color: var(--mat-sys-on-surface-variant);
+      font-style: italic;
+    }
+  }
+}
+
+/* Sparkline Card */
+.sparkline-card {
+  .sparkline-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .metric-stats-strip {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      padding: 6px 12px;
+      background: var(--mat-sys-surface-container-low);
+      border-radius: 8px;
+
+      .stat-lbl {
+        font-size: 0.75rem;
+        color: var(--mat-sys-on-surface-variant);
+        text-transform: uppercase;
+      }
+      .stat-val {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--mat-sys-on-surface);
+      }
+    }
+  }
+
+  .sparkline-svg-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .sparkline-svg {
+    width: 100%;
+    height: 180px;
+
+    .sparkline-dot {
+      cursor: pointer;
+      transition: r 0.2s ease;
+
+      &:hover {
+        r: 7;
+      }
+    }
+  }
+}

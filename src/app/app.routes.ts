@@ -56,6 +56,11 @@ export const routes: Routes = [
     title: 'Virtual Scrolling & Benchmark | Playground',
   },
   {
+    path: 'charts',
+    loadComponent: () => import('./pages/charts-demo/charts-demo').then((m) => m.ChartsDemoPage),
+    title: 'Visualisation SVG & Analytics | Playground',
+  },
+  {
     path: '**',
     redirectTo: 'overview',
   },
