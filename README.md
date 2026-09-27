@@ -33,7 +33,8 @@ src/
 │   │   ├── api-explorer/    # Modern HTTP resource(), fetch & AbortSignal showcase
 │   │   ├── table-demo/      # Interactive Material 3 Data Table, KPIs, sorting & export
 │   │   ├── kanban-demo/     # Interactive CDK Drag & Drop Kanban board with connected lists
-│   │   └── forms-demo/      # Typed Reactive Forms, async validation & dynamic FormArray
+│   │   ├── forms-demo/      # Typed Reactive Forms, async validation & dynamic FormArray
+│   │   └── virtual-scroll-demo/ # CDK Virtual Scrolling 50k+ items & benchmark metrics
 │   ├── services/
 │   │   └── theme.service.ts # Reactive Material 3 Dark/Light mode manager
 │   ├── app.config.ts        # Application configuration (zoneless, router, error listeners)

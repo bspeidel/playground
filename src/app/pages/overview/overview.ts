@@ -70,5 +70,13 @@ export class OverviewPage {
       link: '/forms',
       tag: 'Formulaires',
     },
+    {
+      title: 'Virtual Scrolling & Benchmark',
+      icon: 'speed',
+      description:
+        'Rendu instantané de 50 000+ logs avec @angular/cdk/scrolling, 99.9% de réduction DOM et 60 FPS en Zoneless.',
+      link: '/virtual-scroll',
+      tag: 'Performance',
+    },
   ];
 }

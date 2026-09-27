@@ -48,6 +48,14 @@ export const routes: Routes = [
     title: 'Formulaires Réactifs | Playground',
   },
   {
+    path: 'virtual-scroll',
+    loadComponent: () =>
+      import('./pages/virtual-scroll-demo/virtual-scroll-demo').then(
+        (m) => m.VirtualScrollDemoPage,
+      ),
+    title: 'Virtual Scrolling & Benchmark | Playground',
+  },
+  {
     path: '**',
     redirectTo: 'overview',
   },
