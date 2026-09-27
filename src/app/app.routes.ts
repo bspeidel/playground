@@ -38,6 +38,11 @@ export const routes: Routes = [
     title: 'Data Table & KPIs | Playground',
   },
   {
+    path: 'kanban',
+    loadComponent: () => import('./pages/kanban-demo/kanban-demo').then((m) => m.KanbanDemoPage),
+    title: 'Kanban Drag & Drop | Playground',
+  },
+  {
     path: '**',
     redirectTo: 'overview',
   },

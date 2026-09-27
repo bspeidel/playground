@@ -54,5 +54,13 @@ export class OverviewPage {
       link: '/table',
       tag: 'Données',
     },
+    {
+      title: 'Kanban Board Drag & Drop',
+      icon: 'view_kanban',
+      description:
+        'Gestion de tâches agile avec @angular/cdk/drag-drop, colonnes connectées, prévisualisation fluide et réactivité Signals.',
+      link: '/kanban',
+      tag: 'Productivité',
+    },
   ];
 }

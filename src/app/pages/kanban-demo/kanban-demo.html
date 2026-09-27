@@ -1,0 +1,236 @@
+<div class="kanban-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="badge-title">
+        <span class="tech-pill">Angular 22</span>
+        <span class="tech-pill m3">CDK Drag & Drop</span>
+        <span class="tech-pill zoneless">Zoneless Signals</span>
+      </div>
+      <h1 class="page-title">Tableau Kanban Interactif</h1>
+      <p class="page-subtitle">
+        Gestion de flux agile avec <code>&#64;angular/cdk/drag-drop</code>. Glissez-déposez les
+        cartes entre les colonnes connectées (<code>cdkDropListGroup</code>), avec prévisualisations
+        fluides et réactivité instantanée par Signals.
+      </p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="resetBoard()" matTooltip="Réinitialiser l'état initial">
+        <mat-icon>refresh</mat-icon>
+        Réinitialiser
+      </button>
+      <button mat-flat-button color="primary" (click)="openCreateTaskDialog()">
+        <mat-icon>add</mat-icon>
+        Nouvelle tâche
+      </button>
+    </div>
+  </header>
+
+  <!-- KPI Grid -->
+  <section class="kpi-grid" aria-label="Indicateurs Kanban">
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper primary">
+          <mat-icon>format_list_bulleted</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">Total Tâches</div>
+          <div class="kpi-value">{{ totalTasksCount() }}</div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <span>Réparties sur 4 colonnes</span>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper warning">
+          <mat-icon>pending_actions</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">En Cours</div>
+          <div class="kpi-value">{{ inProgressCount() }}</div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <span>En cours de développement</span>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper success">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">Terminées</div>
+          <div class="kpi-value">{{ completedTasksCount() }}</div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <span>Validées en production</span>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper info">
+          <mat-icon>donut_large</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">Taux d'Achèvement</div>
+          <div class="kpi-value">{{ completionRate() }}%</div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <span>Ratio tâches accomplies</span>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- Filter Toolbar -->
+  <mat-card class="controls-card" appearance="outlined">
+    <div class="filters-bar">
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-label>Filtrer les cartes (titre, tag, identifiant)...</mat-label>
+        <input
+          matInput
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          placeholder="Ex: WebGPU, CDK, Refacto, TSK-105..."
+        />
+        <mat-icon matPrefix>search</mat-icon>
+        @if (searchQuery()) {
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="searchQuery.set('')"
+            aria-label="Effacer recherche"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
+        <mat-label>Priorité</mat-label>
+        <mat-select [ngModel]="priorityFilter()" (ngModelChange)="priorityFilter.set($event)">
+          <mat-option value="all">Toutes les priorités</mat-option>
+          <mat-option value="Critique">Critique</mat-option>
+          <mat-option value="Haute">Haute</mat-option>
+          <mat-option value="Moyenne">Moyenne</mat-option>
+          <mat-option value="Basse">Basse</mat-option>
+        </mat-select>
+        <mat-icon matPrefix>flag</mat-icon>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <!-- Kanban Columns Grid with Connected Drop Lists -->
+  <div class="kanban-board" cdkDropListGroup>
+    @for (column of columns(); track column.id) {
+      <div class="kanban-column" [id]="'col-' + column.id">
+        <!-- Column Header -->
+        <div class="column-header">
+          <div class="column-title-wrap">
+            <mat-icon class="column-icon" [style.color]="column.color">{{ column.icon }}</mat-icon>
+            <span class="column-title">{{ column.title }}</span>
+            <span class="column-badge">{{ column.tasks.length }}</span>
+          </div>
+          <button
+            mat-icon-button
+            (click)="openCreateTaskDialog(column.id)"
+            [matTooltip]="'Ajouter une tâche dans ' + column.title"
+            aria-label="Ajouter tâche"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <!-- Task Drop List -->
+        <div
+          class="task-drop-list"
+          cdkDropList
+          [cdkDropListData]="column.tasks"
+          (cdkDropListDropped)="drop($event)"
+          [id]="column.id"
+        >
+          @for (task of column.tasks; track task.id) {
+            <div class="kanban-card" cdkDrag [class.dimmed]="isTaskDimmed(task)">
+              <!-- Card Drag Placeholder -->
+              <div class="card-placeholder" *cdkDragPlaceholder></div>
+
+              <!-- Card Header -->
+              <div class="card-header">
+                <span class="card-id">{{ task.id }}</span>
+                <span class="priority-pill" [ngClass]="getPriorityClass(task.priority)">
+                  {{ task.priority }}
+                </span>
+                <button
+                  mat-icon-button
+                  [matMenuTriggerFor]="cardMenu"
+                  class="card-menu-btn"
+                  aria-label="Options tâche"
+                >
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #cardMenu="matMenu">
+                  <button mat-menu-item (click)="openEditTaskDialog(task, column.id)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Modifier</span>
+                  </button>
+                  <mat-divider></mat-divider>
+                  <div class="menu-sub-title">Déplacer vers :</div>
+                  @for (targetCol of columns(); track targetCol.id) {
+                    @if (targetCol.id !== column.id) {
+                      <button
+                        mat-menu-item
+                        (click)="moveTaskToColumn(task, column.id, targetCol.id)"
+                      >
+                        <mat-icon>{{ targetCol.icon }}</mat-icon>
+                        <span>{{ targetCol.title }}</span>
+                      </button>
+                    }
+                  }
+                  <mat-divider></mat-divider>
+                  <button mat-menu-item (click)="deleteTask(task.id, column.id)">
+                    <mat-icon color="warn">delete</mat-icon>
+                    <span class="text-warn">Supprimer</span>
+                  </button>
+                </mat-menu>
+              </div>
+
+              <!-- Card Body -->
+              <h3 class="card-title">{{ task.title }}</h3>
+              <p class="card-desc">{{ task.description }}</p>
+
+              <!-- Tags -->
+              <div class="card-tags">
+                @for (tag of task.tags; track tag) {
+                  <span class="tag-pill">{{ tag }}</span>
+                }
+              </div>
+
+              <!-- Card Footer -->
+              <div class="card-footer">
+                <div class="assignee-wrap" [matTooltip]="task.assignee.name">
+                  <span class="assignee-avatar" [style.backgroundColor]="task.assignee.color">
+                    {{ task.assignee.initials }}
+                  </span>
+                  <span class="assignee-name">{{ task.assignee.name }}</span>
+                </div>
+                <span class="card-date">{{ task.createdAt | date: 'dd MMM' }}</span>
+              </div>
+            </div>
+          } @empty {
+            <div class="empty-column-msg">
+              <mat-icon class="empty-icon">drag_indicator</mat-icon>
+              <span>Déposez une tâche ici</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
