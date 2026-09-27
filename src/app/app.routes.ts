@@ -33,6 +33,11 @@ export const routes: Routes = [
     title: 'API & Réseau (GitHub) | Playground',
   },
   {
+    path: 'table',
+    loadComponent: () => import('./pages/table-demo/table-demo').then((m) => m.TableDemo),
+    title: 'Data Table & KPIs | Playground',
+  },
+  {
     path: '**',
     redirectTo: 'overview',
   },

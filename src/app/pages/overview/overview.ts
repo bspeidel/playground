@@ -46,5 +46,13 @@ export class OverviewPage {
       link: '/api-explorer',
       tag: 'Réseau',
     },
+    {
+      title: 'Data Table & Dashboard KPIs',
+      icon: 'table_chart',
+      description:
+        'Tableau interactif MatTable avec tri, pagination, filtres réactifs Signals, sélection multiple et export CSV/JSON.',
+      link: '/table',
+      tag: 'Données',
+    },
   ];
 }

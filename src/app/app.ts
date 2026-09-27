@@ -29,5 +29,6 @@ export class App {
     { path: '/material', label: 'Material 3', icon: 'palette' },
     { path: '/defer', label: 'Defer (@defer)', icon: 'hourglass_empty' },
     { path: '/api-explorer', label: 'API & Réseau', icon: 'public' },
+    { path: '/table', label: 'Data Table & KPIs', icon: 'table_chart' },
   ];
 }

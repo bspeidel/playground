@@ -30,7 +30,8 @@ src/
 │   │   ├── signals-demo/    # Signals, computed, async zoneless demo & reactive cart
 │   │   ├── material-demo/   # Material Design 3 interactive showcase
 │   │   ├── defer-demo/      # Deferrable views (@defer) interactive demo
-│   │   └── api-explorer/    # Modern HTTP resource(), fetch & AbortSignal showcase
+│   │   ├── api-explorer/    # Modern HTTP resource(), fetch & AbortSignal showcase
+│   │   └── table-demo/      # Interactive Material 3 Data Table, KPIs, sorting & export
 │   ├── services/
 │   │   └── theme.service.ts # Reactive Material 3 Dark/Light mode manager
 │   ├── app.config.ts        # Application configuration (zoneless, router, error listeners)

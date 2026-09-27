@@ -1,0 +1,370 @@
+<div class="dashboard-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="badge-title">
+        <span class="tech-pill">Angular 22</span>
+        <span class="tech-pill m3">Material 3 Table</span>
+        <span class="tech-pill zoneless">Zoneless Computed Signals</span>
+      </div>
+      <h1 class="page-title">Tableau de Bord & Data Table</h1>
+      <p class="page-subtitle">
+        Gestion de portefeuille de projets haute performance combinant
+        <code>MatTable</code>, <code>MatSort</code>, <code>MatPaginator</code>,
+        <code>SelectionModel</code> et réactivité sans zone avec Angular Signals.
+      </p>
+    </div>
+    <div class="header-actions">
+      <button mat-flat-button color="primary" (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        Nouveau projet
+      </button>
+    </div>
+  </header>
+
+  <!-- KPI Cards Grid -->
+  <section class="kpi-grid" aria-label="Indicateurs clés de performance">
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper primary">
+          <mat-icon>business_center</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">Projets Filtrés</div>
+          <div class="kpi-value">
+            {{ filteredProjectsCount() }}
+            <span class="kpi-sub">/ {{ totalProjectsCount() }}</span>
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <span>{{ activeProjectsCount() }} actifs en production</span>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper success">
+          <mat-icon>euro</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">Budget Global</div>
+          <div class="kpi-value">
+            {{ totalBudget() | currency: 'EUR' : 'symbol' : '1.0-0' }}
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <span>Cumul sur la sélection actuelle</span>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper info">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">Progression Moyenne</div>
+          <div class="kpi-value">{{ avgProgress() }}%</div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <mat-progress-bar mode="determinate" [value]="avgProgress()"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper warning">
+          <mat-icon>checklist</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">Sélection Active</div>
+          <div class="kpi-value">
+            {{ selectedCount() }}
+            <span class="kpi-sub">coché(s)</span>
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <span>{{ selectedBudget() | currency: 'EUR' : 'symbol' : '1.0-0' }} engagés</span>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- Filter & Controls Toolbar -->
+  <mat-card class="controls-card" appearance="outlined">
+    <div class="filters-bar">
+      <!-- Search Input -->
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-label>Rechercher un projet, un client ou un identifiant...</mat-label>
+        <input
+          matInput
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+          placeholder="Ex: Refonte, FinTech, PRJ-1025..."
+        />
+        <mat-icon matPrefix>search</mat-icon>
+        @if (searchTerm()) {
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="searchTerm.set('')"
+            aria-label="Effacer recherche"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <!-- Category Filter -->
+      <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
+        <mat-label>Catégorie</mat-label>
+        <mat-select [ngModel]="categoryFilter()" (ngModelChange)="categoryFilter.set($event)">
+          <mat-option value="all">Toutes les catégories</mat-option>
+          <mat-option value="Web App">Web App</mat-option>
+          <mat-option value="Mobile App">Mobile App</mat-option>
+          <mat-option value="Cloud / DevOps">Cloud / DevOps</mat-option>
+          <mat-option value="Design System">Design System</mat-option>
+          <mat-option value="Audit AI">Audit AI</mat-option>
+        </mat-select>
+        <mat-icon matPrefix>category</mat-icon>
+      </mat-form-field>
+
+      <!-- Status Filter -->
+      <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
+        <mat-label>Statut</mat-label>
+        <mat-select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+          <mat-option value="all">Tous les statuts</mat-option>
+          <mat-option value="Actif">Actif</mat-option>
+          <mat-option value="En attente">En attente</mat-option>
+          <mat-option value="Terminé">Terminé</mat-option>
+          <mat-option value="Bloqué">Bloqué</mat-option>
+        </mat-select>
+        <mat-icon matPrefix>flag</mat-icon>
+      </mat-form-field>
+
+      <!-- Controls Action Buttons -->
+      <div class="actions-group">
+        @if (searchTerm() || statusFilter() !== 'all' || categoryFilter() !== 'all') {
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="resetFilters()"
+            matTooltip="Réinitialiser les filtres"
+          >
+            <mat-icon>filter_alt_off</mat-icon>
+            Réinitialiser
+          </button>
+        }
+
+        <button
+          mat-stroked-button
+          (click)="exportFilteredCsv()"
+          matTooltip="Exporter au format CSV"
+        >
+          <mat-icon>download</mat-icon>
+          CSV
+        </button>
+
+        <button
+          mat-stroked-button
+          (click)="exportFilteredJson()"
+          matTooltip="Exporter au format JSON"
+        >
+          <mat-icon>data_object</mat-icon>
+          JSON
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Batch Action Bar (Appears when items are selected) -->
+  @if (selectedCount() > 0) {
+    <div class="batch-bar animate-slide-in">
+      <div class="batch-info">
+        <mat-icon class="batch-icon">check_circle</mat-icon>
+        <span class="batch-count">{{ selectedCount() }} projet(s) sélectionné(s)</span>
+        <span class="batch-budget"
+          >({{ selectedBudget() | currency: 'EUR' : 'symbol' : '1.0-0' }})</span
+        >
+      </div>
+
+      <div class="batch-actions">
+        <button mat-stroked-button (click)="updateSelectedStatus('Actif')">
+          <mat-icon>play_arrow</mat-icon>
+          Passer en Actif
+        </button>
+        <button mat-stroked-button (click)="updateSelectedStatus('Terminé')">
+          <mat-icon>task_alt</mat-icon>
+          Marquer Terminé
+        </button>
+        <button mat-flat-button color="warn" (click)="deleteSelected()">
+          <mat-icon>delete</mat-icon>
+          Supprimer la sélection
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Main Material Table Card -->
+  <mat-card class="table-card" appearance="outlined">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort class="projects-table">
+        <!-- Select Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef class="col-select">
+            <mat-checkbox
+              (change)="$event ? toggleAllRows() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && isPartiallySelected()"
+              [aria-label]="checkboxLabel()"
+            >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row" class="col-select">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? toggleRow(row) : null"
+              [checked]="selection.isSelected(row)"
+              [aria-label]="checkboxLabel(row)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="id-badge">{{ row.id }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Project & Client Column -->
+        <ng-container matColumnDef="project">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Projet & Client</th>
+          <td mat-cell *matCellDef="let row" class="col-project">
+            <div class="project-title">{{ row.name }}</div>
+            <div class="project-client">{{ row.client }}</div>
+          </td>
+        </ng-container>
+
+        <!-- Category Column -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Catégorie</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="category-badge">
+              <mat-icon class="cat-icon">{{ getCategoryIcon(row.category) }}</mat-icon>
+              <span>{{ row.category }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="status-pill" [ngClass]="getStatusClass(row.status)">
+              <span class="status-dot"></span>
+              {{ row.status }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Priority Column -->
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Priorité</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="priority-badge" [ngClass]="getPriorityClass(row.priority)">
+              {{ row.priority }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Budget Column -->
+        <ng-container matColumnDef="budget">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Budget</th>
+          <td mat-cell *matCellDef="let row" class="budget-cell">
+            {{ row.budget | currency: 'EUR' : 'symbol' : '1.0-0' }}
+          </td>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="progress">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Progression</th>
+          <td mat-cell *matCellDef="let row" class="col-progress">
+            <div class="progress-wrapper">
+              <mat-progress-bar mode="determinate" [value]="row.progress"></mat-progress-bar>
+              <span class="progress-text">{{ row.progress }}%</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Due Date Column -->
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Échéance</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.dueDate | date: 'dd/MM/yyyy' }}
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="col-actions">Actions</th>
+          <td mat-cell *matCellDef="let row" class="col-actions">
+            <button mat-icon-button [matMenuTriggerFor]="rowMenu" aria-label="Options du projet">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #rowMenu="matMenu">
+              <button mat-menu-item (click)="openEditDialog(row)">
+                <mat-icon>edit</mat-icon>
+                <span>Modifier</span>
+              </button>
+              <button mat-menu-item (click)="deleteProject(row)">
+                <mat-icon color="warn">delete</mat-icon>
+                <span class="text-warn">Supprimer</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class.selected-row]="selection.isSelected(row)"
+          (click)="toggleRow(row)"
+          class="clickable-row"
+        ></tr>
+
+        <!-- Empty State Row -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-table-cell" [attr.colspan]="displayedColumns.length">
+            <div class="empty-state">
+              <mat-icon class="empty-icon">search_off</mat-icon>
+              <h3 class="empty-title">Aucun projet ne correspond à vos critères</h3>
+              <p class="empty-subtitle">Modifiez vos filtres de recherche ou réinitialisez-les.</p>
+              <button mat-stroked-button color="primary" (click)="resetFilters()">
+                <mat-icon>refresh</mat-icon>
+                Réinitialiser les filtres
+              </button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Paginator -->
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="10"
+      showFirstLastButtons
+      aria-label="Sélectionner la page des projets"
+      class="paginator"
+    >
+    </mat-paginator>
+  </mat-card>
+</div>
