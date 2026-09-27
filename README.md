@@ -1,6 +1,10 @@
 # Playground
 
+[![CI/CD](https://github.com/bspeidel/playground/actions/workflows/ci.yml/badge.svg)](https://github.com/bspeidel/playground/actions/workflows/ci.yml)
+
 A modern Angular sandbox application built with **Angular 22**, **Angular Material 3**, and **Zoneless Change Detection**.
+
+🌐 **Live Demo**: [https://bspeidel.github.io/playground/](https://bspeidel.github.io/playground/)
 
 ---
 
@@ -77,9 +81,13 @@ Navigate to `http://localhost:4200/`. The application will automatically reload 
 Compile the application for production:
 
 ```bash
+# Production build
 npm run build
 # or
 ng build
+
+# Build configured for GitHub Pages (base-href /playground/)
+npm run build:gh-pages
 ```
 
 Build artifacts will be stored in the `dist/playground` directory, optimized for performance and speed.

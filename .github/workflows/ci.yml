@@ -1,10 +1,19 @@
-name: CI
+name: CI/CD
 
 on:
   push:
     branches: [master, main]
   pull_request:
     branches: [master, main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
 
 jobs:
   build-and-test:
@@ -36,5 +45,27 @@ jobs:
       - name: Execute unit tests (Jest)
         run: npm run test:coverage
 
-      - name: Build application for production
-        run: npm run build
+      - name: Build for GitHub Pages
+        run: npm run build:gh-pages
+
+      - name: Generate 404.html for SPA routing on GitHub Pages
+        run: cp dist/playground/browser/index.html dist/playground/browser/404.html
+
+      - name: Upload GitHub Pages artifact
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist/playground/browser'
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build-and-test
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
