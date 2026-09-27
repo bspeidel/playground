@@ -56,6 +56,10 @@ main {
   padding: 32px;
 }
 
+.mat-drawer.mat-drawer-opened.mat-drawer-opened {
+  border-radius: 0;
+}
+
 .mat-drawer-inner-container {
   overflow-x: hidden !important;
 }
