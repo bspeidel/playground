@@ -31,5 +31,6 @@ export class App {
     { path: '/api-explorer', label: 'API & Réseau', icon: 'public' },
     { path: '/table', label: 'Data Table & KPIs', icon: 'table_chart' },
     { path: '/kanban', label: 'Kanban Board', icon: 'view_kanban' },
+    { path: '/forms', label: 'Formulaires Typés', icon: 'dynamic_form' },
   ];
 }

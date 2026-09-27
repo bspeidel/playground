@@ -62,5 +62,13 @@ export class OverviewPage {
       link: '/kanban',
       tag: 'Productivité',
     },
+    {
+      title: 'Formulaires Réactifs & Typed Forms',
+      icon: 'dynamic_form',
+      description:
+        'Validation asynchrone debouncée, collections FormArray extensibles, validations croisées et jauge de mot de passe.',
+      link: '/forms',
+      tag: 'Formulaires',
+    },
   ];
 }

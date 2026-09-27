@@ -43,6 +43,11 @@ export const routes: Routes = [
     title: 'Kanban Drag & Drop | Playground',
   },
   {
+    path: 'forms',
+    loadComponent: () => import('./pages/forms-demo/forms-demo').then((m) => m.FormsDemoPage),
+    title: 'Formulaires Réactifs | Playground',
+  },
+  {
     path: '**',
     redirectTo: 'overview',
   },
