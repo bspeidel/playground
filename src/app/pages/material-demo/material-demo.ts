@@ -7,7 +7,7 @@ import {
   TemplateRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,22 +35,22 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter, DateAdapter } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import localeDe from '@angular/common/locales/de';
-import localeFr from '@angular/common/locales/fr';
-import { registerLocaleData } from '@angular/common';
-
-registerLocaleData(localeDe);
-registerLocaleData(localeFr);
+import { AppDatePipe, TranslateHtmlPipe, TranslatePipe, TranslateService } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 
 export interface TaskItem {
-  name: string;
+  /** Sub-task names are display-only, so the template holds keys. */
+  nameKey: TranslationKey;
   completed: boolean;
 }
 
 @Component({
   selector: 'app-material-demo',
   imports: [
-    CommonModule,
+    AppDatePipe,
+    UpperCasePipe,
+    TranslatePipe,
+    TranslateHtmlPipe,
     FormsModule,
     MatCardModule,
     MatButtonModule,
@@ -86,13 +86,20 @@ export interface TaskItem {
 export class MaterialDemoPage {
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
   readonly dateAdapter = inject<DateAdapter<Date>>(DateAdapter);
 
   // Queries
   readonly demoDialog = viewChild<TemplateRef<unknown>>('demoDialog');
 
-  // Locale state (Default: German de-DE)
-  readonly activeLocale = signal<string>('de-DE');
+  /**
+   * Datepicker locale for the `DateAdapter.setLocale()` demo.
+   *
+   * Seeded from the app locale instead of a hardcoded `de-DE`: locale data is
+   * registered once in `app.config.ts`, so `translate.localeTag()` is a valid
+   * tag. The user can still flip it from the toolbar to demo the adapter.
+   */
+  readonly activeLocale = signal<string>(this.translate.localeTag());
 
   // Reactive state signals
   readonly sliderValue = signal(65);
@@ -107,7 +114,11 @@ export class MaterialDemoPage {
   readonly selectedRangeStart = signal<Date | null>(new Date());
   readonly selectedRangeEnd = signal<Date | null>(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000));
   readonly timeInterval = signal<'15m' | '30m' | '1h'>('15m');
-  readonly eventTitle = signal('Architektur-Review Sprint 42');
+  /**
+   * Free-text demo value the user could edit, so it is seeded from the active
+   * locale once rather than re-translated on every language switch.
+   */
+  readonly eventTitle = signal(this.translate.text('material.datetime.defaultTitle'));
   readonly frameworkSearch = signal('');
 
   // Autocomplete data
@@ -131,11 +142,25 @@ export class MaterialDemoPage {
 
   // Checkbox parent / children state
   readonly subTasks = signal<TaskItem[]>([
-    { name: 'Standalone- & Zoneless-Architektur', completed: true },
-    { name: 'Material 3 Palette Azure & Blue', completed: true },
-    { name: 'Jest- & E2E-Testvalidierung', completed: false },
-    { name: 'Interaktive Dokumentation & Leitfaden', completed: false },
+    { nameKey: 'material.task.standalone', completed: true },
+    { nameKey: 'material.task.palettes', completed: true },
+    { nameKey: 'material.task.jest', completed: false },
+    { nameKey: 'material.task.docs', completed: false },
   ]);
+
+  /**
+   * `DatePipe` format for the long event date. Angular's own format strings
+   * (`d. MMMM`) are German-specific, so the `de-DE` branch keeps the original
+   * wording and the other locales get a neutral pattern.
+   */
+  readonly longDateFormat = computed(() =>
+    this.activeLocale() === 'de-DE' ? 'EEEE, d. MMMM y' : 'EEEE, d MMMM y',
+  );
+
+  /** Short numeric pattern for the sprint range chips. */
+  readonly rangeDateFormat = computed(() =>
+    this.activeLocale() === 'de-DE' ? 'dd.MM.yyyy' : 'dd/MM/yyyy',
+  );
 
   readonly allComplete = computed(() => this.subTasks().every((t) => t.completed));
   readonly someComplete = computed(
@@ -167,8 +192,16 @@ export class MaterialDemoPage {
     }
   }
 
-  showSnackBar(message: string, action = 'OK'): void {
-    this.snackBar.open(message, action, {
+  /**
+   * SnackBar helper. `messageKey` and `actionKey` are resolved in the active
+   * locale, so callers (including the template) pass keys, never literal text.
+   */
+  showSnackBar(
+    messageKey: TranslationKey,
+    actionKey: TranslationKey = 'material.action.ok',
+    params?: Record<string, unknown>,
+  ): void {
+    this.snackBar.open(this.translate.text(messageKey, params), this.translate.text(actionKey), {
       duration: 3500,
     });
   }
@@ -177,29 +210,28 @@ export class MaterialDemoPage {
     const d = new Date();
     d.setHours(hours, minutes, 0, 0);
     this.selectedTime.set(d);
-    this.showSnackBar(
-      `Uhrzeit eingestellt auf ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} Uhr`,
-    );
+    const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    this.showSnackBar('material.snack.timeSet', 'material.action.ok', { time });
   }
 
   setDatePreset(daysOffset: number): void {
     const d = new Date();
     d.setDate(d.getDate() + daysOffset);
     this.selectedDate.set(d);
-    this.showSnackBar(
-      daysOffset === 0
-        ? 'Datum auf heute eingestellt'
-        : `Datum auf +${daysOffset} Tag(e) eingestellt`,
-    );
+    if (daysOffset === 0) {
+      this.showSnackBar('material.snack.dateToday');
+    } else {
+      this.showSnackBar('material.snack.dateOffset', 'material.action.ok', { days: daysOffset });
+    }
   }
 
   setLocale(locale: string): void {
     this.activeLocale.set(locale);
     this.dateAdapter.setLocale(locale);
     this.showSnackBar(
-      locale === 'de-DE'
-        ? 'Datepicker auf deutsches Format eingestellt (de-DE · TT.MM.JJJJ) 🇩🇪'
-        : `Datepicker auf Format ${locale} eingestellt`,
+      locale === 'de-DE' ? 'material.snack.localeDe' : 'material.snack.localeOther',
+      'material.action.ok',
+      { locale },
     );
   }
 
@@ -215,11 +247,14 @@ export class MaterialDemoPage {
       hour: '2-digit',
       minute: '2-digit',
     });
-    const suffix = loc === 'de-DE' ? ' Uhr' : '';
-    const summary = `📅 ${this.eventTitle()} : ${dateStr} um ${timeStr}${suffix}`;
+    const summary = this.translate.text('material.copy.summary', {
+      title: this.eventTitle(),
+      date: dateStr,
+      time: timeStr,
+    });
     if (navigator.clipboard) {
       navigator.clipboard.writeText(summary);
-      this.showSnackBar('Termin in die Zwischenablage kopiert!');
+      this.showSnackBar('material.snack.copied');
     }
   }
 }

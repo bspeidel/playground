@@ -1,5 +1,5 @@
 import { Component, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   CdkDragDrop,
@@ -20,20 +20,34 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
+import { AppDatePipe, TranslateHtmlPipe, TranslatePipe, TranslateService } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 import { KanbanDialog, KanbanTask } from './kanban-dialog';
 
 export interface KanbanColumn {
   id: string;
-  title: string;
+  titleKey: TranslationKey;
   icon: string;
   color: string;
   tasks: KanbanTask[];
 }
 
+/**
+ * Display-layer translation keys for the raw priority values. The stored
+ * values stay untouched because they double as filter keys, so the map is
+ * exhaustive and TypeScript rejects a new variant without a translation.
+ */
+const PRIORITY_LABEL_KEY: Record<KanbanTask['priority'], TranslationKey> = {
+  Basse: 'kanban.priority.low',
+  Moyenne: 'kanban.priority.medium',
+  Haute: 'kanban.priority.high',
+  Critique: 'kanban.priority.critical',
+};
+
 const INITIAL_COLUMNS: KanbanColumn[] = [
   {
     id: 'backlog',
-    title: 'Backlog-Ideen',
+    titleKey: 'kanban.column.backlog',
     icon: 'lightbulb',
     color: '#64748b',
     tasks: [
@@ -59,7 +73,7 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
   },
   {
     id: 'todo',
-    title: 'Zu erledigen',
+    titleKey: 'kanban.column.todo',
     icon: 'assignment',
     color: '#2563eb',
     tasks: [
@@ -85,7 +99,7 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
   },
   {
     id: 'in_progress',
-    title: 'In Bearbeitung',
+    titleKey: 'kanban.column.inProgress',
     icon: 'pending',
     color: '#ea580c',
     tasks: [
@@ -111,7 +125,7 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
   },
   {
     id: 'done',
-    title: 'Abgeschlossen',
+    titleKey: 'kanban.column.done',
     icon: 'task_alt',
     color: '#059669',
     tasks: [
@@ -149,8 +163,10 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
 @Component({
   selector: 'app-kanban-demo',
   imports: [
-    CommonModule,
-    DatePipe,
+    NgClass,
+    AppDatePipe,
+    TranslatePipe,
+    TranslateHtmlPipe,
     FormsModule,
     DragDropModule,
     MatCardModule,
@@ -172,6 +188,7 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanDemoPage {
+  private readonly translate = inject(TranslateService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
 
@@ -216,7 +233,11 @@ export class KanbanDemoPage {
 
     // Trigger immutable signal update so zoneless change detection propagates seamlessly
     this.columns.update((cols) => cols.map((col) => ({ ...col, tasks: [...col.tasks] })));
-    this.snackBar.open('Aufgabe erfolgreich verschoben!', 'OK', { duration: 2000 });
+    this.snackBar.open(
+      this.translate.text('kanban.snack.moved'),
+      this.translate.text('kanban.action.ok'),
+      { duration: 2000 },
+    );
   }
 
   // Filter check helper
@@ -250,7 +271,11 @@ export class KanbanDemoPage {
             col.id === columnId ? { ...col, tasks: [result, ...col.tasks] } : col,
           ),
         );
-        this.snackBar.open(`Aufgabe "${result.title}" erstellt`, 'Schließen', { duration: 3000 });
+        this.snackBar.open(
+          this.translate.text('kanban.snack.taskCreated', { title: result.title }),
+          this.translate.text('kanban.action.close'),
+          { duration: 3000 },
+        );
       }
     });
   }
@@ -270,9 +295,13 @@ export class KanbanDemoPage {
               : col,
           ),
         );
-        this.snackBar.open(`Aufgabe "${result.title}" aktualisiert`, 'Schließen', {
-          duration: 3000,
-        });
+        this.snackBar.open(
+          this.translate.text('kanban.snack.taskUpdated', { title: result.title }),
+          this.translate.text('kanban.action.close'),
+          {
+            duration: 3000,
+          },
+        );
       }
     });
   }
@@ -283,7 +312,11 @@ export class KanbanDemoPage {
         col.id === columnId ? { ...col, tasks: col.tasks.filter((t) => t.id !== taskId) } : col,
       ),
     );
-    this.snackBar.open('Aufgabe gelöscht', 'Schließen', { duration: 2500 });
+    this.snackBar.open(
+      this.translate.text('kanban.snack.taskDeleted'),
+      this.translate.text('kanban.action.close'),
+      { duration: 2500 },
+    );
   }
 
   moveTaskToColumn(task: KanbanTask, sourceColId: string, targetColId: string): void {
@@ -307,8 +340,13 @@ export class KanbanDemoPage {
       return updatedCols;
     });
 
-    const targetTitle = this.columns().find((c) => c.id === targetColId)?.title ?? targetColId;
-    this.snackBar.open(`Aufgabe verschoben nach "${targetTitle}"`, 'Schließen', { duration: 2500 });
+    const target = this.columns().find((c) => c.id === targetColId);
+    const targetTitle = target ? this.translate.text(target.titleKey) : targetColId;
+    this.snackBar.open(
+      this.translate.text('kanban.snack.taskMovedTo', { column: targetTitle }),
+      this.translate.text('kanban.action.close'),
+      { duration: 2500 },
+    );
   }
 
   resetBoard(): void {
@@ -320,7 +358,11 @@ export class KanbanDemoPage {
     );
     this.searchQuery.set('');
     this.priorityFilter.set('all');
-    this.snackBar.open('Board auf Ausgangszustand zurückgesetzt', 'OK', { duration: 2500 });
+    this.snackBar.open(
+      this.translate.text('kanban.snack.boardReset'),
+      this.translate.text('kanban.action.ok'),
+      { duration: 2500 },
+    );
   }
 
   getPriorityClass(priority: KanbanTask['priority']): string {
@@ -336,16 +378,13 @@ export class KanbanDemoPage {
     }
   }
 
+  /** Display-layer translation of the raw priority value (see PRIORITY_LABEL_KEY). */
   getPriorityLabel(priority: KanbanTask['priority']): string {
-    switch (priority) {
-      case 'Critique':
-        return 'Kritisch';
-      case 'Haute':
-        return 'Hoch';
-      case 'Moyenne':
-        return 'Mittel';
-      case 'Basse':
-        return 'Niedrig';
-    }
+    return this.translate.text(PRIORITY_LABEL_KEY[priority]);
+  }
+
+  /** Display-layer translation of a column title. */
+  columnTitle(column: KanbanColumn): string {
+    return this.translate.text(column.titleKey);
   }
 }

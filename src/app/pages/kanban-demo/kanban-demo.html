@@ -4,46 +4,44 @@
     <div class="header-content">
       <div class="badge-title">
         <span class="tech-pill">Angular 22</span>
-        <span class="tech-pill m3">CDK Drag & Drop</span>
-        <span class="tech-pill zoneless">Zoneless Signals</span>
+        <span class="tech-pill m3">{{ 'kanban.pill.dragDrop' | t }}</span>
+        <span class="tech-pill zoneless">{{ 'kanban.pill.zoneless' | t }}</span>
       </div>
-      <h1 class="page-title">Interaktives Kanban-Board</h1>
+      <h1 class="page-title">{{ 'kanban.title' | t }}</h1>
       <p class="page-subtitle">
-        Agiles Workflow-Management mit <code>&#64;angular/cdk/drag-drop</code>. Ziehen und Ablegen
-        von Karten zwischen verbundenen Spalten (<code>cdkDropListGroup</code>), mit flüssigen
-        Vorschauen und sofortiger Reaktivität durch Signals.
+        <span [innerHTML]="'kanban.subtitle' | tHtml"></span>
       </p>
     </div>
     <div class="header-actions">
       <button
         mat-stroked-button
         (click)="resetBoard()"
-        matTooltip="Ausgangszustand wiederherstellen"
+        [matTooltip]="'kanban.action.resetTooltip' | t"
       >
         <mat-icon>refresh</mat-icon>
-        Zurücksetzen
+        {{ 'kanban.action.reset' | t }}
       </button>
       <button mat-flat-button color="primary" (click)="openCreateTaskDialog()">
         <mat-icon>add</mat-icon>
-        Neue Aufgabe
+        {{ 'kanban.action.newTask' | t }}
       </button>
     </div>
   </header>
 
   <!-- KPI Grid -->
-  <section class="kpi-grid" aria-label="Kanban-Kennzahlen">
+  <section class="kpi-grid" [attr.aria-label]="'kanban.a11y.kpis' | t">
     <mat-card class="kpi-card" appearance="outlined">
       <mat-card-header>
         <div class="kpi-icon-wrapper primary">
           <mat-icon>format_list_bulleted</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Aufgaben insgesamt</div>
+          <div class="kpi-label">{{ 'kanban.kpi.total.label' | t }}</div>
           <div class="kpi-value">{{ totalTasksCount() }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Aufgeteilt auf 4 Spalten</span>
+        <span>{{ 'kanban.kpi.total.footer' | t }}</span>
       </mat-card-content>
     </mat-card>
 
@@ -53,12 +51,12 @@
           <mat-icon>pending_actions</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">In Bearbeitung</div>
+          <div class="kpi-label">{{ 'kanban.kpi.inProgress.label' | t }}</div>
           <div class="kpi-value">{{ inProgressCount() }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>In der Entwicklung</span>
+        <span>{{ 'kanban.kpi.inProgress.footer' | t }}</span>
       </mat-card-content>
     </mat-card>
 
@@ -68,12 +66,12 @@
           <mat-icon>check_circle</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Abgeschlossen</div>
+          <div class="kpi-label">{{ 'kanban.kpi.done.label' | t }}</div>
           <div class="kpi-value">{{ completedTasksCount() }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>In Produktion validiert</span>
+        <span>{{ 'kanban.kpi.done.footer' | t }}</span>
       </mat-card-content>
     </mat-card>
 
@@ -83,12 +81,12 @@
           <mat-icon>donut_large</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Abschlussrate</div>
+          <div class="kpi-label">{{ 'kanban.kpi.rate.label' | t }}</div>
           <div class="kpi-value">{{ completionRate() }}%</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Anteil erledigter Aufgaben</span>
+        <span>{{ 'kanban.kpi.rate.footer' | t }}</span>
       </mat-card-content>
     </mat-card>
   </section>
@@ -97,12 +95,12 @@
   <mat-card class="controls-card" appearance="outlined">
     <div class="filters-bar">
       <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
-        <mat-label>Karten filtern (Titel, Tag, Kennung)...</mat-label>
+        <mat-label>{{ 'kanban.filter.searchLabel' | t }}</mat-label>
         <input
           matInput
           [ngModel]="searchQuery()"
           (ngModelChange)="searchQuery.set($event)"
-          placeholder="Z. B.: WebGPU, CDK, Refacto, TSK-105..."
+          [placeholder]="'kanban.filter.searchPlaceholder' | t"
         />
         <mat-icon matPrefix>search</mat-icon>
         @if (searchQuery()) {
@@ -110,7 +108,7 @@
             mat-icon-button
             matSuffix
             (click)="searchQuery.set('')"
-            aria-label="Suche löschen"
+            [attr.aria-label]="'kanban.a11y.clearSearch' | t"
           >
             <mat-icon>close</mat-icon>
           </button>
@@ -118,13 +116,13 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
-        <mat-label>Priorität</mat-label>
+        <mat-label>{{ 'kanban.priority.label' | t }}</mat-label>
         <mat-select [ngModel]="priorityFilter()" (ngModelChange)="priorityFilter.set($event)">
-          <mat-option value="all">Alle Prioritäten</mat-option>
-          <mat-option value="Critique">Kritisch</mat-option>
-          <mat-option value="Haute">Hoch</mat-option>
-          <mat-option value="Moyenne">Mittel</mat-option>
-          <mat-option value="Basse">Niedrig</mat-option>
+          <mat-option value="all">{{ 'kanban.filter.priorityAll' | t }}</mat-option>
+          <mat-option value="Critique">{{ 'kanban.priority.critical' | t }}</mat-option>
+          <mat-option value="Haute">{{ 'kanban.priority.high' | t }}</mat-option>
+          <mat-option value="Moyenne">{{ 'kanban.priority.medium' | t }}</mat-option>
+          <mat-option value="Basse">{{ 'kanban.priority.low' | t }}</mat-option>
         </mat-select>
         <mat-icon matPrefix>flag</mat-icon>
       </mat-form-field>
@@ -139,14 +137,14 @@
         <div class="column-header">
           <div class="column-title-wrap">
             <mat-icon class="column-icon" [style.color]="column.color">{{ column.icon }}</mat-icon>
-            <span class="column-title">{{ column.title }}</span>
+            <span class="column-title">{{ column.titleKey | t }}</span>
             <span class="column-badge">{{ column.tasks.length }}</span>
           </div>
           <button
             mat-icon-button
             (click)="openCreateTaskDialog(column.id)"
-            [matTooltip]="'Aufgabe hinzufügen in ' + column.title"
-            aria-label="Aufgabe hinzufügen"
+            [matTooltip]="'kanban.a11y.addToColumn' | t: { column: columnTitle(column) }"
+            [attr.aria-label]="'kanban.a11y.addTask' | t"
           >
             <mat-icon>add</mat-icon>
           </button>
@@ -175,17 +173,17 @@
                   mat-icon-button
                   [matMenuTriggerFor]="cardMenu"
                   class="card-menu-btn"
-                  aria-label="Aufgabenoptionen"
+                  [attr.aria-label]="'kanban.a11y.taskOptions' | t"
                 >
                   <mat-icon>more_horiz</mat-icon>
                 </button>
                 <mat-menu #cardMenu="matMenu">
                   <button mat-menu-item (click)="openEditTaskDialog(task, column.id)">
                     <mat-icon>edit</mat-icon>
-                    <span>Bearbeiten</span>
+                    <span>{{ 'kanban.action.edit' | t }}</span>
                   </button>
                   <mat-divider></mat-divider>
-                  <div class="menu-sub-title">Verschieben nach:</div>
+                  <div class="menu-sub-title">{{ 'kanban.action.moveTo' | t }}</div>
                   @for (targetCol of columns(); track targetCol.id) {
                     @if (targetCol.id !== column.id) {
                       <button
@@ -193,14 +191,14 @@
                         (click)="moveTaskToColumn(task, column.id, targetCol.id)"
                       >
                         <mat-icon>{{ targetCol.icon }}</mat-icon>
-                        <span>{{ targetCol.title }}</span>
+                        <span>{{ targetCol.titleKey | t }}</span>
                       </button>
                     }
                   }
                   <mat-divider></mat-divider>
                   <button mat-menu-item (click)="deleteTask(task.id, column.id)">
                     <mat-icon color="warn">delete</mat-icon>
-                    <span class="text-warn">Löschen</span>
+                    <span class="text-warn">{{ 'kanban.action.delete' | t }}</span>
                   </button>
                 </mat-menu>
               </div>
@@ -230,7 +228,7 @@
           } @empty {
             <div class="empty-column-msg">
               <mat-icon class="empty-icon">drag_indicator</mat-icon>
-              <span>Aufgabe hier ablegen</span>
+              <span>{{ 'kanban.empty.dropHere' | t }}</span>
             </div>
           }
         </div>

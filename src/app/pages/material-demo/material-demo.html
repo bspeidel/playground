@@ -4,13 +4,10 @@
     <div class="badge-title">
       <span class="tech-pill">Angular 22</span>
       <span class="tech-pill m3">Material Design 3</span>
-      <span class="tech-pill zoneless">Zoneless Reactivity</span>
+      <span class="tech-pill zoneless">{{ 'material.pill.zoneless' | t }}</span>
     </div>
-    <h1>Angular Material 3 Showcase</h1>
-    <p class="subtitle">
-      Umfassende interaktive Schau der Material Design 3 Komponenten im Azure- & Blue-Design,
-      erweitert durch reaktive Angular Signals.
-    </p>
+    <h1>{{ 'material.title' | t }}</h1>
+    <p class="subtitle">{{ 'material.subtitle' | t }}</p>
   </header>
 
   <div class="sections-column">
@@ -18,39 +15,39 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">smart_button</mat-icon>
-        <mat-card-title>Schaltflächen, FABs & M3-Umschalter</mat-card-title>
-        <mat-card-subtitle
-          >Verschiedene Betonungsstufen und segmentierte Ansichtsauswahlen</mat-card-subtitle
-        >
+        <mat-card-title>{{ 'material.buttons.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'material.buttons.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="components-row">
-          <button mat-flat-button color="primary">Filled (Primary)</button>
-          <button mat-flat-button color="accent">Filled (Accent)</button>
-          <button mat-stroked-button>Outlined</button>
-          <button mat-button>Text Button</button>
-          <button mat-flat-button disabled>Disabled</button>
+          <button mat-flat-button color="primary">
+            {{ 'material.buttons.filledPrimary' | t }}
+          </button>
+          <button mat-flat-button color="accent">{{ 'material.buttons.filledAccent' | t }}</button>
+          <button mat-stroked-button>{{ 'material.buttons.outlined' | t }}</button>
+          <button mat-button>{{ 'material.buttons.text' | t }}</button>
+          <button mat-flat-button disabled>{{ 'material.buttons.disabled' | t }}</button>
         </div>
 
         <mat-divider></mat-divider>
 
         <div class="components-row">
-          <button mat-fab color="primary" aria-label="Hauptaktion FAB">
+          <button mat-fab color="primary" [attr.aria-label]="'material.a11y.fabPrimary' | t">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-mini-fab color="accent" aria-label="Sekundäraktion Mini-FAB">
+          <button mat-mini-fab color="accent" [attr.aria-label]="'material.a11y.fabSecondary' | t">
             <mat-icon>favorite</mat-icon>
           </button>
           <button
             mat-icon-button
             (click)="incrementBadge()"
-            aria-label="Benachrichtigungen"
+            [attr.aria-label]="'material.a11y.notifications' | t"
             [matBadge]="badgeCount()"
             matBadgeColor="warn"
           >
             <mat-icon>notifications</mat-icon>
           </button>
-          <span class="hint-text">Klicken Sie auf die Glocke, um das Badge zu erhöhen!</span>
+          <span class="hint-text">{{ 'material.buttons.badgeHint' | t }}</span>
         </div>
 
         <mat-divider></mat-divider>
@@ -58,26 +55,26 @@
         <!-- Segmented Button Toggles -->
         <div class="segmented-row">
           <div class="toggle-group-wrapper">
-            <span class="control-label"
-              >Umschalt-Schaltfläche (Aktive Ansicht : <strong>{{ viewMode() }}</strong
-              >) :</span
-            >
+            <span
+              class="control-label"
+              [innerHTML]="'material.buttons.viewToggle' | tHtml: { view: viewMode() }"
+            ></span>
             <mat-button-toggle-group
               [ngModel]="viewMode()"
               (ngModelChange)="viewMode.set($event)"
-              aria-label="Anzeigemodus"
+              [attr.aria-label]="'material.a11y.viewMode' | t"
             >
               <mat-button-toggle value="grid">
                 <mat-icon>grid_view</mat-icon>
-                Raster
+                {{ 'material.viewMode.grid' | t }}
               </mat-button-toggle>
               <mat-button-toggle value="list">
                 <mat-icon>view_list</mat-icon>
-                Liste
+                {{ 'material.viewMode.list' | t }}
               </mat-button-toggle>
               <mat-button-toggle value="table">
                 <mat-icon>table_rows</mat-icon>
-                Tabelle
+                {{ 'material.viewMode.table' | t }}
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
@@ -89,40 +86,41 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">edit_note</mat-icon>
-        <mat-card-title>Eingaben, Autocomplete & Datumsauswahl</mat-card-title>
-        <mat-card-subtitle
-          >Erweiterte Formularkomponenten mit gefilterten Vorschlägen und
-          Kalender-Popup</mat-card-subtitle
-        >
+        <mat-card-title>{{ 'material.inputs.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'material.inputs.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="form-grid">
           <!-- Text Input -->
           <mat-form-field appearance="outline">
-            <mat-label>Benutzername</mat-label>
-            <input matInput placeholder="Z. B.: Benjamin" value="Playground User" />
+            <mat-label>{{ 'material.inputs.usernameLabel' | t }}</mat-label>
+            <input
+              matInput
+              [placeholder]="'material.inputs.usernamePlaceholder' | t"
+              [value]="'material.inputs.demoValue' | t"
+            />
             <mat-icon matSuffix>person</mat-icon>
           </mat-form-field>
 
           <!-- Select -->
           <mat-form-field appearance="outline">
-            <mat-label>Aktive Palette</mat-label>
+            <mat-label>{{ 'material.inputs.paletteLabel' | t }}</mat-label>
             <mat-select
               [ngModel]="selectedThemeColor()"
               (ngModelChange)="selectedThemeColor.set($event)"
             >
-              <mat-option value="azure">Azure (Primary)</mat-option>
-              <mat-option value="blue">Blue (Tertiary)</mat-option>
-              <mat-option value="custom">Benutzerdefiniertes Design</mat-option>
+              <mat-option value="azure">{{ 'material.palette.azure' | t }}</mat-option>
+              <mat-option value="blue">{{ 'material.palette.blue' | t }}</mat-option>
+              <mat-option value="custom">{{ 'material.palette.custom' | t }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <!-- Autocomplete -->
           <mat-form-field appearance="outline">
-            <mat-label>Technologie / Framework (Autocomplete)</mat-label>
+            <mat-label>{{ 'material.inputs.frameworkLabel' | t }}</mat-label>
             <input
               type="text"
-              placeholder="Tippen zum Filtern..."
+              [placeholder]="'material.inputs.frameworkPlaceholder' | t"
               matInput
               [ngModel]="frameworkSearch()"
               (ngModelChange)="frameworkSearch.set($event)"
@@ -136,12 +134,12 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <!-- Datepicker (Format Allemand : TT.MM.JJJJ) -->
+          <!-- Datepicker -->
           <mat-form-field appearance="outline">
-            <mat-label>Fälligkeitsdatum (TT.MM.JJJJ)</mat-label>
+            <mat-label>{{ 'material.inputs.dueDateLabel' | t }}</mat-label>
             <input
               matInput
-              placeholder="TT.MM.JJJJ"
+              [placeholder]="'material.inputs.dueDatePlaceholder' | t"
               [matDatepicker]="picker"
               [ngModel]="selectedDate()"
               (ngModelChange)="selectedDate.set($event)"
@@ -152,7 +150,7 @@
 
           <!-- Quick Timepicker -->
           <mat-form-field appearance="outline">
-            <mat-label>Erinnerungszeit (Timepicker)</mat-label>
+            <mat-label>{{ 'material.inputs.reminderLabel' | t }}</mat-label>
             <input
               matInput
               [matTimepicker]="quickTimePicker"
@@ -170,10 +168,8 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">tune</mat-icon>
-        <mat-card-title>Schalter, Radio-Buttons & Kontrollkästchen</mat-card-title>
-        <mat-card-subtitle
-          >Einfach-, Mehrfachauswahl und unbestimmter Teilzustand</mat-card-subtitle
-        >
+        <mat-card-title>{{ 'material.toggles.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'material.toggles.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="toggles-row">
@@ -183,14 +179,20 @@
               (ngModelChange)="toggleActive.set($event)"
               color="primary"
             >
-              Interaktiver Modus aktiv : <strong>{{ toggleActive() ? 'JA' : 'NEIN' }}</strong>
+              <span
+                [innerHTML]="
+                  'material.toggles.interactiveMode'
+                    | t: { value: toggleActive() ? ('material.yes' | t) : ('material.no' | t) }
+                "
+              ></span>
             </mat-slide-toggle>
           </div>
 
           <div class="slider-item">
-            <span class="slider-label"
-              >Reaktiver Slider : <strong>{{ sliderValue() }}%</strong></span
-            >
+            <span
+              class="slider-label"
+              [innerHTML]="'material.toggles.sliderLabel' | tHtml: { value: sliderValue() }"
+            ></span>
             <mat-slider min="0" max="100" step="1">
               <input
                 matSliderThumb
@@ -206,24 +208,27 @@
         <div class="selection-grid">
           <!-- Radio Group -->
           <div class="selection-box">
-            <h4 class="box-title">Leistungsmodus (Radio Group) :</h4>
+            <h4 class="box-title">{{ 'material.toggles.performanceTitle' | t }}</h4>
             <mat-radio-group
               [ngModel]="selectedSpeed()"
               (ngModelChange)="selectedSpeed.set($event)"
               class="radio-group-vertical"
             >
-              <mat-radio-button value="eco">Öko (Energiesparmodus)</mat-radio-button>
-              <mat-radio-button value="normal">Standard (Empfohlene Nutzung)</mat-radio-button>
-              <mat-radio-button value="turbo">Turbo (Maximale Geschwindigkeit)</mat-radio-button>
+              <mat-radio-button value="eco">{{ 'material.speed.eco' | t }}</mat-radio-button>
+              <mat-radio-button value="normal">{{ 'material.speed.normal' | t }}</mat-radio-button>
+              <mat-radio-button value="turbo">{{ 'material.speed.turbo' | t }}</mat-radio-button>
             </mat-radio-group>
-            <div class="selection-result">
-              Gewählte Option : <strong>{{ selectedSpeed() | uppercase }}</strong>
-            </div>
+            <div
+              class="selection-result"
+              [innerHTML]="
+                'material.toggles.chosenOption' | tHtml: { value: selectedSpeed() | uppercase }
+              "
+            ></div>
           </div>
 
           <!-- Checkboxes with Indeterminate State -->
           <div class="selection-box">
-            <h4 class="box-title">Modul-Checkliste (Unbestimmtes Kontrollkästchen) :</h4>
+            <h4 class="box-title">{{ 'material.toggles.moduleChecklist' | t }}</h4>
             <div class="parent-checkbox">
               <mat-checkbox
                 [checked]="allComplete()"
@@ -231,17 +236,17 @@
                 (change)="setAllTasks($event.checked)"
                 color="primary"
               >
-                <strong>Alle Projektmodule</strong>
+                <strong>{{ 'material.toggles.allModules' | t }}</strong>
               </mat-checkbox>
             </div>
             <div class="sub-tasks-list">
-              @for (task of subTasks(); track task.name; let i = $index) {
+              @for (task of subTasks(); track task.nameKey; let i = $index) {
                 <mat-checkbox
                   [checked]="task.completed"
                   (change)="updateTask(i, $event.checked)"
                   class="sub-checkbox"
                 >
-                  {{ task.name }}
+                  {{ task.nameKey | t }}
                 </mat-checkbox>
               }
             </div>
@@ -254,31 +259,28 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">hourglass_top</mat-icon>
-        <mat-card-title>Fortschrittsanzeigen & Spinner</mat-card-title>
-        <mat-card-subtitle
-          >Lineare Fortschrittsbalken und kreisförmige Aktivitäts-Spinner</mat-card-subtitle
-        >
+        <mat-card-title>{{ 'material.progress.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'material.progress.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="progress-showcase">
           <div class="progress-col">
             <div class="progress-item">
-              <span class="progress-title"
-                >Bestimmter Fortschritt (synchronisiert mit Slider : {{ sliderValue() }}%) :</span
-              >
+              <span class="progress-title">{{
+                'material.progress.determinate' | t: { value: sliderValue() }
+              }}</span>
               <mat-progress-bar mode="determinate" [value]="sliderValue()"></mat-progress-bar>
             </div>
 
             <div class="progress-item">
-              <span class="progress-title">Unbestimmter Fortschritt (Ladevorgang läuft) :</span>
+              <span class="progress-title">{{ 'material.progress.indeterminate' | t }}</span>
               <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
             </div>
 
             <div class="progress-item">
-              <span class="progress-title"
-                >Puffer-Fortschritt (Buffer : {{ sliderValue() }}% / {{ sliderValue() + 20 }}%)
-                :</span
-              >
+              <span class="progress-title">{{
+                'material.progress.buffer' | t: { value: sliderValue(), buffer: sliderValue() + 20 }
+              }}</span>
               <mat-progress-bar
                 mode="buffer"
                 [value]="sliderValue()"
@@ -296,9 +298,11 @@
                 diameter="64"
               >
               </mat-progress-spinner>
-              <span class="spinner-caption">Modus : {{ spinnerMode() }}</span>
+              <span class="spinner-caption">{{
+                'material.progress.mode' | t: { mode: spinnerMode() }
+              }}</span>
               <button mat-stroked-button (click)="toggleSpinnerMode()">
-                Spinner-Modus umschalten
+                {{ 'material.progress.toggleMode' | t }}
               </button>
             </div>
           </div>
@@ -310,10 +314,8 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">tab</mat-icon>
-        <mat-card-title>Tabs & Erweiterungs-Akkordeon</mat-card-title>
-        <mat-card-subtitle
-          >Hierarchische Inhaltsorganisation mit MatTabs und MatAccordion</mat-card-subtitle
-        >
+        <mat-card-title>{{ 'material.tabs.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'material.tabs.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <!-- Tabs Group -->
@@ -321,19 +323,16 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">palette</mat-icon>
-              Tokens & Farben
+              {{ 'material.tabs.tokens' | t }}
             </ng-template>
             <div class="tab-body">
-              <p>
-                Das Material Design 3 System verwendet dynamische semantische Tokens für Harmonie
-                und Kontrast:
-              </p>
+              <p>{{ 'material.tabs.tokensBody' | t }}</p>
               <div class="color-tokens-grid">
-                <div class="token-pill primary">Primary (Azure)</div>
-                <div class="token-pill secondary">Secondary (Slate)</div>
-                <div class="token-pill tertiary">Tertiary (Blue)</div>
-                <div class="token-pill surface">Surface Container</div>
-                <div class="token-pill error">Error & Warn</div>
+                <div class="token-pill primary">{{ 'material.token.primary' | t }}</div>
+                <div class="token-pill secondary">{{ 'material.token.secondary' | t }}</div>
+                <div class="token-pill tertiary">{{ 'material.token.tertiary' | t }}</div>
+                <div class="token-pill surface">{{ 'material.token.surface' | t }}</div>
+                <div class="token-pill error">{{ 'material.token.error' | t }}</div>
               </div>
             </div>
           </mat-tab>
@@ -341,14 +340,14 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">format_size</mat-icon>
-              Typografische Skala
+              {{ 'material.tabs.typography' | t }}
             </ng-template>
             <div class="tab-body">
               <div class="typography-samples">
-                <div class="typo-line display">Display Large (Robust & Ausdrucksstark)</div>
-                <div class="typo-line headline">Headline Medium (Abschnittsüberschrift)</div>
-                <div class="typo-line title">Title Medium (Kartentitel)</div>
-                <div class="typo-line body">Body Medium (Fließtext, optimiert für Lesbarkeit)</div>
+                <div class="typo-line display">{{ 'material.type.display' | t }}</div>
+                <div class="typo-line headline">{{ 'material.type.headline' | t }}</div>
+                <div class="typo-line title">{{ 'material.type.title' | t }}</div>
+                <div class="typo-line body">{{ 'material.type.body' | t }}</div>
               </div>
             </div>
           </mat-tab>
@@ -356,14 +355,10 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">auto_awesome</mat-icon>
-              Formen & Bewegung
+              {{ 'material.tabs.motion' | t }}
             </ng-template>
             <div class="tab-body">
-              <p>
-                M3 führt weichere Ecken ein (großzügige Radien bis zu 28px für Karten und 12px für
-                Schaltflächen) sowie flüssige Übergänge, die Benutzereinstellungen zur
-                Bewegungsreduzierung berücksichtigen.
-              </p>
+              <p>{{ 'material.tabs.motionBody' | t }}</p>
             </div>
           </mat-tab>
         </mat-tab-group>
@@ -376,34 +371,26 @@
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <mat-icon class="panel-icon">speed</mat-icon>
-                Zoneless-Performance
+                {{ 'material.accordion.zonelessTitle' | t }}
               </mat-panel-title>
               <mat-panel-description>
-                Kein Zone.js und gezielte reaktive Aktualisierung
+                {{ 'material.accordion.zonelessDescription' | t }}
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p>
-              Dank <code>provideZonelessChangeDetection()</code> patcht Angular keine Browser-APIs
-              mehr. Die Aktualisierung wird präzise durch die reaktiven Signale
-              <code>signal()</code> und <code>computed()</code> ausgelöst, was eine verkürzte
-              Startzeit und ein stabiles Bildratenverhalten bei 60/120 FPS bietet.
-            </p>
+            <p [innerHTML]="'material.accordion.zonelessBody' | tHtml"></p>
           </mat-expansion-panel>
 
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <mat-icon class="panel-icon">security</mat-icon>
-                Barrierefreiheit & WCAG 2.1 Standards
+                {{ 'material.accordion.a11yTitle' | t }}
               </mat-panel-title>
               <mat-panel-description>
-                Vollständige Unterstützung für Screenreader und Tastaturnavigation
+                {{ 'material.accordion.a11yDescription' | t }}
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p>
-              Alle Angular Material Komponenten enthalten von Haus aus geeignete ARIA-Attribute,
-              Tastaturfokus-Verwaltung und Farbkontrastverhältnisse gemäß WCAG Stufe AA/AAA.
-            </p>
+            <p>{{ 'material.accordion.a11yBody' | t }}</p>
           </mat-expansion-panel>
         </mat-accordion>
       </mat-card-content>
@@ -413,72 +400,76 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">feedback</mat-icon>
-        <mat-card-title>UI-Feedback : Modale Dialoge, Toasts, Menüs & Tooltips</mat-card-title>
-        <mat-card-subtitle
-          >Interaktions- und Benachrichtigungskomponenten für Benutzer</mat-card-subtitle
-        >
+        <mat-card-title>{{ 'material.feedback.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'material.feedback.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="feedback-grid">
           <!-- Dialog Trigger -->
           <div class="feedback-col">
-            <h4 class="box-title">Dialogfenster (MatDialog) :</h4>
+            <h4 class="box-title">{{ 'material.feedback.dialogTitle' | t }}</h4>
             <button mat-flat-button color="primary" (click)="openDemoDialog()">
               <mat-icon>open_in_new</mat-icon>
-              M3-Dialog öffnen
+              {{ 'material.feedback.openDialog' | t }}
             </button>
           </div>
 
           <!-- SnackBars -->
           <div class="feedback-col">
-            <h4 class="box-title">Toast-Benachrichtigungen (MatSnackBar) :</h4>
+            <h4 class="box-title">{{ 'material.feedback.toastTitle' | t }}</h4>
             <div class="button-wrap">
               <button
                 mat-stroked-button
-                (click)="showSnackBar('Aktion erfolgreich abgeschlossen!', 'Super')"
+                (click)="showSnackBar('material.snack.actionSuccess', 'material.action.super')"
               >
                 <mat-icon color="primary">check_circle</mat-icon>
-                Toast Erfolg
+                {{ 'material.feedback.toastSuccess' | t }}
               </button>
               <button
                 mat-stroked-button
-                (click)="showSnackBar('Achtung: Element wird derzeit überprüft', 'Verstanden')"
+                (click)="
+                  showSnackBar('material.snack.elementChecking', 'material.action.understood')
+                "
               >
                 <mat-icon>warning</mat-icon>
-                Toast Info
+                {{ 'material.feedback.toastInfo' | t }}
               </button>
             </div>
           </div>
 
           <!-- Tooltips & Menu -->
           <div class="feedback-col">
-            <h4 class="box-title">Kontextmenüs & Tooltips :</h4>
+            <h4 class="box-title">{{ 'material.feedback.menuTitle' | t }}</h4>
             <div class="button-wrap">
-              <button mat-icon-button [matMenuTriggerFor]="demoMenu" aria-label="Optionsmenü">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="demoMenu"
+                [attr.aria-label]="'material.a11y.optionsMenu' | t"
+              >
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #demoMenu="matMenu">
-                <button mat-menu-item (click)="showSnackBar('Profil ausgewählt')">
+                <button mat-menu-item (click)="showSnackBar('material.snack.profileSelected')">
                   <mat-icon>account_circle</mat-icon>
-                  <span>Mein Profil</span>
+                  <span>{{ 'material.menu.profile' | t }}</span>
                 </button>
-                <button mat-menu-item (click)="showSnackBar('Einstellungen geöffnet')">
+                <button mat-menu-item (click)="showSnackBar('material.snack.settingsOpened')">
                   <mat-icon>settings</mat-icon>
-                  <span>Einstellungen</span>
+                  <span>{{ 'material.menu.settings' | t }}</span>
                 </button>
                 <mat-divider></mat-divider>
-                <button mat-menu-item (click)="showSnackBar('Abmeldung simuliert')">
+                <button mat-menu-item (click)="showSnackBar('material.snack.logoutSimulated')">
                   <mat-icon color="warn">logout</mat-icon>
-                  <span>Abmelden</span>
+                  <span>{{ 'material.menu.logout' | t }}</span>
                 </button>
               </mat-menu>
 
               <button
                 mat-stroked-button
-                matTooltip="Tooltip oben mit Material 3"
+                [matTooltip]="'material.feedback.tooltipText' | t"
                 matTooltipPosition="above"
               >
-                Hover (Tooltip Top)
+                {{ 'material.feedback.tooltipButton' | t }}
               </button>
             </div>
           </div>
@@ -490,11 +481,11 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">label</mat-icon>
-        <mat-card-title>Interaktive Chips & Badges</mat-card-title>
-        <mat-card-subtitle>Tags mit Avataren, Auswahl und Löschung</mat-card-subtitle>
+        <mat-card-title>{{ 'material.chips.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'material.chips.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <mat-chip-set aria-label="Projekt-Technologien">
+        <mat-chip-set [attr.aria-label]="'material.a11y.projectTech' | t">
           <mat-chip highlighted color="primary">
             <mat-icon matChipAvatar>code</mat-icon>
             Angular 22
@@ -527,22 +518,18 @@
     <mat-card appearance="outlined" class="section-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">schedule</mat-icon>
-        <mat-card-title
-          >M3 Zeit- & Datumsauswahl (Datepicker, Datumsbereich & Timepicker)</mat-card-title
-        >
-        <mat-card-subtitle>
-          Nativer Kalender, Datumsbereichsauswahl und offizielle neue Timepicker-Komponente
-        </mat-card-subtitle>
+        <mat-card-title>{{ 'material.datetime.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'material.datetime.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <!-- Timepicker configuration & presets toolbar -->
         <div class="time-presets-bar">
           <div class="locale-selector">
-            <span class="toolbar-label">Format / Locale :</span>
+            <span class="toolbar-label">{{ 'material.datetime.formatLabel' | t }}</span>
             <mat-button-toggle-group
               [value]="activeLocale()"
               (change)="setLocale($event.value)"
-              aria-label="Sprachformat des Datepickers"
+              [attr.aria-label]="'material.a11y.datepickerLocale' | t"
             >
               <mat-button-toggle value="de-DE">
                 <span>🇩🇪 Deutsch (TT.MM.JJJJ)</span>
@@ -557,27 +544,27 @@
           </div>
 
           <div class="interval-selector">
-            <span class="toolbar-label">Timepicker-Intervall :</span>
+            <span class="toolbar-label">{{ 'material.datetime.intervalLabel' | t }}</span>
             <mat-button-toggle-group
               [value]="timeInterval()"
               (change)="timeInterval.set($event.value)"
-              aria-label="Timepicker-Intervall"
+              [attr.aria-label]="'material.a11y.timepickerInterval' | t"
             >
-              <mat-button-toggle value="15m">15 Min</mat-button-toggle>
-              <mat-button-toggle value="30m">30 Min</mat-button-toggle>
-              <mat-button-toggle value="1h">1 Stunde</mat-button-toggle>
+              <mat-button-toggle value="15m">{{ 'material.interval.15m' | t }}</mat-button-toggle>
+              <mat-button-toggle value="30m">{{ 'material.interval.30m' | t }}</mat-button-toggle>
+              <mat-button-toggle value="1h">{{ 'material.interval.1h' | t }}</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
 
           <div class="preset-buttons">
-            <span class="toolbar-label">Schnellzugriff :</span>
+            <span class="toolbar-label">{{ 'material.datetime.quickAccess' | t }}</span>
             <button
               mat-stroked-button
               type="button"
               (click)="setDatePreset(0); setTimePreset(9, 0)"
             >
               <mat-icon>wb_sunny</mat-icon>
-              Morgen 09:00
+              {{ 'material.preset.morning' | t }}
             </button>
             <button
               mat-stroked-button
@@ -585,11 +572,11 @@
               (click)="setDatePreset(0); setTimePreset(14, 30)"
             >
               <mat-icon>brightness_5</mat-icon>
-              Nachmittag 14:30
+              {{ 'material.preset.afternoon' | t }}
             </button>
             <button mat-stroked-button type="button" (click)="setDatePreset(1)">
               <mat-icon>event_repeat</mat-icon>
-              Morgen (+1T)
+              {{ 'material.preset.tomorrow' | t }}
             </button>
           </div>
         </div>
@@ -598,14 +585,12 @@
 
         <!-- Form fields grid -->
         <div class="datetime-grid">
-          <!-- Single Datepicker (German format TT.MM.JJJJ) -->
+          <!-- Single Datepicker -->
           <mat-form-field appearance="outline">
-            <mat-label>{{
-              activeLocale() === 'de-DE' ? 'Datum des Termins (TT.MM.JJJJ)' : "Date de l'événement"
-            }}</mat-label>
+            <mat-label>{{ 'material.datetime.eventDate' | t }}</mat-label>
             <input
               matInput
-              [placeholder]="activeLocale() === 'de-DE' ? 'TT.MM.JJJJ' : 'JJ/MM/AAAA'"
+              [placeholder]="'material.datetime.datePlaceholder' | t"
               [matDatepicker]="eventDatePicker"
               [ngModel]="selectedDate()"
               (ngModelChange)="selectedDate.set($event)"
@@ -616,9 +601,7 @@
 
           <!-- Official Material Timepicker -->
           <mat-form-field appearance="outline">
-            <mat-label>{{
-              activeLocale() === 'de-DE' ? 'Uhrzeit (Timepicker)' : 'Heure de rendez-vous'
-            }}</mat-label>
+            <mat-label>{{ 'material.datetime.eventTime' | t }}</mat-label>
             <input
               matInput
               placeholder="HH:mm"
@@ -632,21 +615,17 @@
 
           <!-- Date Range Picker -->
           <mat-form-field appearance="outline" class="col-span-range">
-            <mat-label>{{
-              activeLocale() === 'de-DE'
-                ? 'Sprint-Zeitraum (Datumsbereich)'
-                : 'Plage du Sprint (Date Range)'
-            }}</mat-label>
+            <mat-label>{{ 'material.datetime.sprintRange' | t }}</mat-label>
             <mat-date-range-input [rangePicker]="sprintRangePicker">
               <input
                 matStartDate
-                [placeholder]="activeLocale() === 'de-DE' ? 'Startdatum' : 'Date de début'"
+                [placeholder]="'material.datetime.rangeStart' | t"
                 [ngModel]="selectedRangeStart()"
                 (ngModelChange)="selectedRangeStart.set($event)"
               />
               <input
                 matEndDate
-                [placeholder]="activeLocale() === 'de-DE' ? 'Enddatum' : 'Date de fin'"
+                [placeholder]="'material.datetime.rangeEnd' | t"
                 [ngModel]="selectedRangeEnd()"
                 (ngModelChange)="selectedRangeEnd.set($event)"
               />
@@ -663,47 +642,35 @@
               <mat-icon color="primary">event_available</mat-icon>
             </div>
             <div class="event-details">
-              <span class="event-meta-label">{{
-                activeLocale() === 'de-DE' ? 'Geplanter M3-Termin (de-DE)' : 'Événement Planifié M3'
-              }}</span>
+              <span class="event-meta-label">{{ 'material.datetime.plannedEvent' | t }}</span>
               <h4 class="event-title-text">{{ eventTitle() }}</h4>
               <div class="event-badges-row">
+                <!-- `AppDatePipe` does not accept null; these are seeded with a
+                     Date and only cleared by a range reset, which hides the row. -->
                 <span class="event-chip date-chip">
                   <mat-icon>calendar_today</mat-icon>
-                  {{ selectedDate() | date: 'EEEE, d. MMMM y' : '' : activeLocale() }}
+                  {{ selectedDate()! | date: longDateFormat() : '' : activeLocale() }}
                 </span>
                 <span class="event-chip time-chip">
                   <mat-icon>schedule</mat-icon>
-                  {{ selectedTime() | date: 'HH:mm' }}
-                  {{ activeLocale() === 'de-DE' ? 'Uhr' : '' }} ({{
-                    activeLocale() === 'de-DE'
-                      ? 'Schritt: ' + timeInterval()
-                      : 'pas de ' + timeInterval()
-                  }})
+                  {{ selectedTime()! | date: 'HH:mm' }}
+                  {{ 'material.datetime.timeStep' | t: { value: timeInterval() } }}
                 </span>
                 <span class="event-chip range-chip">
                   <mat-icon>date_range</mat-icon>
-                  Sprint :
-                  {{
-                    selectedRangeStart()
-                      | date: (activeLocale() === 'de-DE' ? 'dd.MM.yyyy' : 'dd/MM/yyyy')
-                  }}
-                  {{ activeLocale() === 'de-DE' ? 'bis' : '➔' }}
-                  {{
-                    selectedRangeEnd()
-                      | date: (activeLocale() === 'de-DE' ? 'dd.MM.yyyy' : 'dd/MM/yyyy')
-                  }}
+                  {{ 'material.datetime.sprint' | t }}
+                  {{ selectedRangeStart()! | date: rangeDateFormat() }}
+                  {{ 'material.datetime.to' | t }}
+                  {{ selectedRangeEnd()! | date: rangeDateFormat() }}
                 </span>
               </div>
             </div>
           </div>
           <div class="event-right">
-            <span class="status-live-chip">{{
-              activeLocale() === 'de-DE' ? 'GEPLANT 🟢' : 'PLANIFIÉ 🟢'
-            }}</span>
+            <span class="status-live-chip">{{ 'material.datetime.status' | t }}</span>
             <button mat-flat-button color="primary" type="button" (click)="copyScheduleSummary()">
               <mat-icon>content_copy</mat-icon>
-              {{ activeLocale() === 'de-DE' ? 'Termin kopieren' : "Copier l'invitation" }}
+              {{ 'material.datetime.copy' | t }}
             </button>
           </div>
         </div>
@@ -716,27 +683,23 @@
 <ng-template #demoDialog let-dialogRef>
   <h2 mat-dialog-title>
     <mat-icon class="dialog-icon">stars</mat-icon>
-    Modal Material Design 3
+    {{ 'material.dialog.title' | t }}
   </h2>
   <mat-dialog-content>
-    <p>
-      Dies ist ein nativer modaler Dialog, der mit <code>MatDialog</code> erstellt wurde. Er
-      beachtet die M3-Designtokens, fängt den Fokus für Barrierefreiheit ein und kann beliebige
-      interaktive Komponenten oder Formulare enthalten.
-    </p>
+    <p [innerHTML]="'material.dialog.body' | tHtml"></p>
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Schnelleingabe im Dialogfenster</mat-label>
-      <input matInput placeholder="Z. B.: Kommentar oder Notiz" />
+      <mat-label>{{ 'material.dialog.inputLabel' | t }}</mat-label>
+      <input matInput [placeholder]="'material.dialog.inputPlaceholder' | t" />
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button (click)="dialogRef.close()">Schließen</button>
+    <button mat-button (click)="dialogRef.close()">{{ 'material.dialog.close' | t }}</button>
     <button
       mat-flat-button
       color="primary"
-      (click)="dialogRef.close(); showSnackBar('Aktion über den Dialog bestätigt!')"
+      (click)="dialogRef.close(); showSnackBar('material.snack.dialogConfirmed')"
     >
-      Bestätigen
+      {{ 'material.dialog.confirm' | t }}
     </button>
   </mat-dialog-actions>
 </ng-template>

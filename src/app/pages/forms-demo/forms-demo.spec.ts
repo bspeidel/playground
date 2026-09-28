@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { FormsDemoPage } from './forms-demo';
+import { TranslateService } from '../../i18n';
 
 describe('FormsDemoPage', () => {
   beforeEach(async () => {
@@ -62,7 +63,12 @@ describe('FormsDemoPage', () => {
     expect(component.passwordScore()).toBe(100);
     expect(component.passwordCriteria().hasUpper).toBe(true);
     expect(component.passwordCriteria().hasSpecial).toBe(true);
-    expect(component.passwordStrengthLabel()).toContain('Ausgezeichnet');
+    // The strength label is a translation key; the German default resolves to
+    // "Ausgezeichnet (Sehr sicher)".
+    expect(component.passwordStrengthKey()).toBe('forms.strength.excellent');
+    expect(TestBed.inject(TranslateService).text('forms.strength.excellent')).toContain(
+      'Ausgezeichnet',
+    );
   });
 
   it('should add and remove skills from FormArray', () => {

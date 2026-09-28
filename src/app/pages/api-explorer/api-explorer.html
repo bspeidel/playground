@@ -1,10 +1,8 @@
 <div class="api-container">
   <div class="page-header">
-    <h1>API-Explorer & <code>resource()</code> Netzwerk</h1>
+    <h1><span [innerHTML]="'api.page.title' | tHtml"></span></h1>
     <p class="subtitle">
-      Live-Suche über die öffentliche GitHub-API zur Demonstration der nativen Netzwerk-Reaktivität
-      von Angular 22, asynchronem Statusmanagement und automatischem Abbruch laufender Anfragen via
-      <code>AbortSignal</code>.
+      <span [innerHTML]="'api.page.subtitle' | tHtml"></span>
     </p>
   </div>
 
@@ -13,22 +11,22 @@
     <mat-card-content>
       <div class="search-bar">
         <mat-form-field appearance="outline" class="search-input">
-          <mat-label>GitHub-Repository suchen</mat-label>
+          <mat-label>{{ 'api.search.label' | t }}</mat-label>
           <input
             matInput
             [ngModel]="searchInput()"
             (ngModelChange)="searchInput.set($event)"
-            placeholder="Z. B.: angular, rxjs, vite..."
+            [placeholder]="'api.search.placeholder' | t"
           />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="sort-select">
-          <mat-label>Sortieren nach</mat-label>
+          <mat-label>{{ 'api.sort.label' | t }}</mat-label>
           <mat-select [ngModel]="selectedSort()" (ngModelChange)="selectedSort.set($event)">
-            <mat-option value="stars">Sterne (Stars)</mat-option>
-            <mat-option value="forks">Forks</mat-option>
-            <mat-option value="updated">Kürzlich aktualisiert</mat-option>
+            <mat-option value="stars">{{ 'api.sort.stars' | t }}</mat-option>
+            <mat-option value="forks">{{ 'api.sort.forks' | t }}</mat-option>
+            <mat-option value="updated">{{ 'api.sort.updated' | t }}</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -39,12 +37,12 @@
           [disabled]="reposResource.isLoading()"
         >
           <mat-icon>refresh</mat-icon>
-          Aktualisieren
+          {{ 'api.actions.refresh' | t }}
         </button>
       </div>
 
       <div class="quick-tags">
-        <span class="tags-label">Schnellvorschläge :</span>
+        <span class="tags-label">{{ 'api.quickTags.label' | t }}</span>
         <button mat-button class="tag-btn" (click)="setSearch('angular')">Angular</button>
         <button mat-button class="tag-btn" (click)="setSearch('typescript')">TypeScript</button>
         <button mat-button class="tag-btn" (click)="setSearch('material-components')">
@@ -61,17 +59,17 @@
       @if (reposResource.isLoading()) {
         <span class="status-chip loading">
           <mat-icon class="spin-icon">sync</mat-icon>
-          Ladevorgang läuft via resource()...
+          {{ 'api.status.loading' | t }}
         </span>
       } @else if (reposResource.error()) {
         <span class="status-chip error">
           <mat-icon>error_outline</mat-icon>
-          Anfragefehler
+          {{ 'api.status.error' | t }}
         </span>
       } @else {
         <span class="status-chip success">
           <mat-icon>check_circle</mat-icon>
-          {{ reposResource.value().total_count | number }} Repositories gefunden
+          {{ reposResource.value().total_count | number }} {{ 'api.status.success' | t }}
         </span>
       }
     </div>
@@ -79,11 +77,11 @@
     <div class="abort-info">
       <mat-icon>cancel</mat-icon>
       <span
-        >Automatisch abgebrochene Anfragen (AbortSignal) : <strong>{{ abortCount() }}</strong></span
+        >{{ 'api.metrics.aborted' | t }} <strong>{{ abortCount() }}</strong></span
       >
       <span class="debounce-hint">
         <mat-icon>timer</mat-icon>
-        Eingaben werden {{ debounceMs }} ms entprellt
+        {{ 'api.metrics.debounce' | t: { ms: debounceMs } }}
       </span>
     </div>
   </div>
@@ -97,13 +95,13 @@
     <mat-card appearance="outlined" class="error-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="warn">warning</mat-icon>
-        <mat-card-title>Repositories konnten nicht geladen werden</mat-card-title>
+        <mat-card-title>{{ 'api.error.title' | t }}</mat-card-title>
         <mat-card-subtitle>{{ err.message }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-actions>
         <button mat-flat-button color="primary" (click)="reposResource.reload()">
           <mat-icon>refresh</mat-icon>
-          Erneut versuchen
+          {{ 'api.error.retry' | t }}
         </button>
       </mat-card-actions>
     </mat-card>
@@ -131,7 +129,7 @@
 
         <mat-card-content>
           <p class="repo-desc">
-            {{ repo.description || 'Keine Beschreibung angegeben.' }}
+            {{ repo.description || ('api.repo.noDescription' | t) }}
           </p>
 
           <div class="repo-stats">
@@ -160,7 +158,7 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            Auf GitHub ansehen
+            {{ 'api.repo.viewOnGithub' | t }}
             <mat-icon>arrow_forward</mat-icon>
           </a>
         </mat-card-actions>
@@ -169,8 +167,8 @@
       @if (!reposResource.isLoading() && !reposResource.error()) {
         <div class="empty-results">
           <mat-icon>search_off</mat-icon>
-          <h3>Keine Ergebnisse gefunden für "{{ searchInput() }}"</h3>
-          <p>Versuchen Sie eine andere Suche wie "angular", "typescript" oder "material".</p>
+          <h3>{{ 'api.empty.title' | t: { query: searchInput() } }}</h3>
+          <p>{{ 'api.empty.hint' | t }}</p>
         </div>
       }
     }

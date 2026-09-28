@@ -1,19 +1,17 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe } from '../../i18n';
 
 @Component({
   selector: 'app-heavy-content',
-  imports: [MatCardModule, MatIconModule],
+  imports: [MatCardModule, MatIconModule, TranslatePipe],
   template: `
     <div class="heavy-box">
       <mat-icon class="icon">check_circle</mat-icon>
       <div class="content">
-        <h4>Komponente bei Bedarf geladen (&#64;defer)!</h4>
-        <p>
-          Diese Komponente und ihr JavaScript-Code wurden erst heruntergeladen und instanziiert, als
-          die Trigger-Bedingung erfüllt war.
-        </p>
+        <h4>{{ 'defer.heavy.title' | t }}</h4>
+        <p>{{ 'defer.heavy.description' | t }}</p>
       </div>
     </div>
   `,

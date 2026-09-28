@@ -6,13 +6,11 @@
         <span class="tech-pill">Angular 22</span>
         <span class="tech-pill m3">MatTree M3</span>
         <span class="tech-pill zoneless">childrenAccessor</span>
-        <span class="tech-pill tree-badge">Keine externen Abhängigkeiten</span>
+        <span class="tech-pill tree-badge">{{ 'tree.pill.noDeps' | t }}</span>
       </div>
-      <h1 class="page-title">Datei-Explorer & MatTree-Baumstruktur</h1>
+      <h1 class="page-title">{{ 'tree.title' | t }}</h1>
       <p class="page-subtitle">
-        Reaktiver hierarchischer Dateimanager powered by <code>MatTree</code> und der modernen
-        <code>childrenAccessor</code>-API von Angular Material 3. Breadcrumb-Navigation,
-        Echtzeit-Filterung, dynamische Knotenverwaltung und integrierter Code-Viewer.
+        <span [innerHTML]="'tree.subtitle' | tHtml"></span>
       </p>
     </div>
   </header>
@@ -25,15 +23,15 @@
         <div class="sidebar-title-row">
           <div class="title-with-icon">
             <mat-icon color="primary">account_tree</mat-icon>
-            <span class="sidebar-title">Projekt-Explorer</span>
+            <span class="sidebar-title">{{ 'tree.sidebar.title' | t }}</span>
           </div>
           <div class="tree-action-buttons">
             <button
               mat-icon-button
               type="button"
               (click)="expandAll()"
-              matTooltip="Gesamten Baum aufklappen"
-              aria-label="Alles aufklappen"
+              [matTooltip]="'tree.action.expandTooltip' | t"
+              [attr.aria-label]="'tree.a11y.expandAll' | t"
             >
               <mat-icon>unfold_more</mat-icon>
             </button>
@@ -41,8 +39,8 @@
               mat-icon-button
               type="button"
               (click)="collapseAll()"
-              matTooltip="Gesamten Baum einklappen"
-              aria-label="Alles einklappen"
+              [matTooltip]="'tree.action.collapseTooltip' | t"
+              [attr.aria-label]="'tree.a11y.collapseAll' | t"
             >
               <mat-icon>unfold_less</mat-icon>
             </button>
@@ -51,8 +49,8 @@
               type="button"
               color="primary"
               (click)="openCreateNode('file')"
-              matTooltip="Neue Datei"
-              aria-label="Neue Datei"
+              [matTooltip]="'tree.action.newFile' | t"
+              [attr.aria-label]="'tree.action.newFile' | t"
             >
               <mat-icon>note_add</mat-icon>
             </button>
@@ -61,8 +59,8 @@
               type="button"
               color="primary"
               (click)="openCreateNode('folder')"
-              matTooltip="Neuer Ordner"
-              aria-label="Neuer Ordner"
+              [matTooltip]="'tree.action.newFolder' | t"
+              [attr.aria-label]="'tree.action.newFolder' | t"
             >
               <mat-icon>create_new_folder</mat-icon>
             </button>
@@ -70,8 +68,8 @@
               mat-icon-button
               type="button"
               (click)="resetWorkspace()"
-              matTooltip="Baumstruktur zurücksetzen"
-              aria-label="Zurücksetzen"
+              [matTooltip]="'tree.action.resetTooltip' | t"
+              [attr.aria-label]="'tree.action.reset' | t"
             >
               <mat-icon>restart_alt</mat-icon>
             </button>
@@ -85,7 +83,7 @@
             matInput
             [ngModel]="searchQuery()"
             (ngModelChange)="searchQuery.set($event)"
-            placeholder="Datei oder Erweiterung suchen (ts, json...)"
+            [placeholder]="'tree.filter.placeholder' | t"
           />
           @if (searchQuery()) {
             <button
@@ -93,7 +91,7 @@
               matSuffix
               type="button"
               (click)="searchQuery.set('')"
-              aria-label="Suche löschen"
+              [attr.aria-label]="'tree.a11y.clearSearch' | t"
             >
               <mat-icon>close</mat-icon>
             </button>
@@ -109,7 +107,11 @@
               newNodeType() === 'file' ? 'note_add' : 'create_new_folder'
             }}</mat-icon>
             <span class="banner-label">
-              {{ newNodeType() === 'file' ? 'Neue Datei erstellen' : 'Neuen Ordner erstellen' }} :
+              {{
+                (newNodeType() === 'file' ? 'tree.creation.fileLabel' : 'tree.creation.folderLabel')
+                  | t
+              }}
+              :
             </span>
           </div>
           <div class="banner-inputs">
@@ -118,7 +120,7 @@
               class="banner-input"
               [ngModel]="newNodeName()"
               (ngModelChange)="newNodeName.set($event)"
-              placeholder="Knotenname..."
+              [placeholder]="'tree.creation.namePlaceholder' | t"
               (keydown.enter)="confirmCreateNode()"
               (keydown.escape)="cancelCreateNode()"
             />
@@ -129,9 +131,11 @@
               class="btn-confirm"
               (click)="confirmCreateNode()"
             >
-              Erstellen
+              {{ 'tree.creation.create' | t }}
             </button>
-            <button mat-stroked-button type="button" (click)="cancelCreateNode()">Abbrechen</button>
+            <button mat-stroked-button type="button" (click)="cancelCreateNode()">
+              {{ 'tree.action.cancel' | t }}
+            </button>
           </div>
         </div>
       }
@@ -181,7 +185,7 @@
               mat-icon-button
               type="button"
               matTreeNodeToggle
-              [attr.aria-label]="node.name + ' umschalten'"
+              [attr.aria-label]="'tree.a11y.toggleNode' | t: { name: node.name }"
               (click)="$event.stopPropagation()"
               class="btn-toggle"
             >
@@ -202,9 +206,9 @@
         @if (filteredTreeData().length === 0) {
           <div class="tree-empty-state">
             <mat-icon class="empty-icon">search_off</mat-icon>
-            <p>Keine Dateien entsprechen „{{ searchQuery() }}“</p>
+            <p>{{ 'tree.empty.noMatch' | t: { query: searchQuery() } }}</p>
             <button mat-stroked-button type="button" (click)="searchQuery.set('')">
-              Filter zurücksetzen
+              {{ 'tree.action.resetFilters' | t }}
             </button>
           </div>
         }
@@ -214,15 +218,15 @@
       <div class="sidebar-footer">
         <div class="stat-item">
           <mat-icon class="footer-icon">insert_drive_file</mat-icon>
-          <span>{{ workspaceStats().fileCount }} Dateien</span>
+          <span>{{ 'tree.stats.files' | t: { count: workspaceStats().fileCount } }}</span>
         </div>
         <div class="stat-item">
           <mat-icon class="footer-icon">folder</mat-icon>
-          <span>{{ workspaceStats().folderCount }} Ordner</span>
+          <span>{{ 'tree.stats.folders' | t: { count: workspaceStats().folderCount } }}</span>
         </div>
         <div class="stat-item">
           <mat-icon class="footer-icon">code</mat-icon>
-          <span>{{ workspaceStats().totalLines }} Zeilen</span>
+          <span>{{ 'tree.stats.lines' | t: { count: workspaceStats().totalLines } }}</span>
         </div>
       </div>
     </mat-card>
@@ -249,8 +253,8 @@
               mat-icon-button
               type="button"
               color="warn"
-              matTooltip="Diesen Knoten löschen"
-              aria-label="Knoten löschen"
+              [matTooltip]="'tree.action.deleteNodeTooltip' | t"
+              [attr.aria-label]="'tree.a11y.deleteNode' | t"
               (click)="deleteSelectedNode()"
             >
               <mat-icon>delete_outline</mat-icon>
@@ -284,8 +288,8 @@
                     <mat-chip class="ext-chip">{{ node.extension.toUpperCase() }}</mat-chip>
                   }
                   <mat-chip>{{ node.size }}</mat-chip>
-                  <mat-chip>{{ node.lines }} Zeilen</mat-chip>
-                  <mat-chip>{{ node.lastModified }}</mat-chip>
+                  <mat-chip>{{ 'tree.stats.lines' | t: { count: node.lines ?? 0 } }}</mat-chip>
+                  <mat-chip>{{ lastModifiedLabel(node) }}</mat-chip>
                 </mat-chip-set>
 
                 <div class="action-buttons-group">
@@ -293,20 +297,20 @@
                     mat-stroked-button
                     type="button"
                     (click)="copyFileContent()"
-                    matTooltip="Code in die Zwischenablage kopieren"
+                    [matTooltip]="'tree.action.copyTooltip' | t"
                   >
                     <mat-icon>content_copy</mat-icon>
-                    Kopieren
+                    {{ 'tree.action.copy' | t }}
                   </button>
                   <button
                     mat-flat-button
                     color="primary"
                     type="button"
                     (click)="downloadFile()"
-                    matTooltip="Diese Datei herunterladen"
+                    [matTooltip]="'tree.action.downloadTooltip' | t"
                   >
                     <mat-icon>download</mat-icon>
-                    Herunterladen
+                    {{ 'tree.action.download' | t }}
                   </button>
                 </div>
               </div>
@@ -338,13 +342,14 @@
               <div>
                 <h2 class="folder-title">{{ node.name }} /</h2>
                 <p class="folder-subtitle">
-                  {{ node.path }} &bull; {{ node.children?.length || 0 }} enthaltene Elemente
+                  {{ node.path }} &bull;
+                  {{ 'tree.folder.itemsCount' | t: { count: node.children?.length || 0 } }}
                 </p>
               </div>
             </div>
 
             <div class="folder-contents-section">
-              <h3 class="section-title">Ordnerinhalt:</h3>
+              <h3 class="section-title">{{ 'tree.folder.contents' | t }}</h3>
               <div class="folder-items-grid">
                 @for (child of node.children || []; track child.id) {
                   <button type="button" class="folder-child-card" (click)="selectNode(child)">
@@ -356,11 +361,11 @@
                     <div class="card-info-area">
                       <span class="child-name">{{ child.name }}</span>
                       <span class="child-meta">
-                        {{
-                          child.type === 'folder'
-                            ? (child.children?.length || 0) + ' Elemente'
-                            : child.size
-                        }}
+                        @if (child.type === 'folder') {
+                          {{ 'tree.folder.childCount' | t: { count: child.children?.length || 0 } }}
+                        } @else {
+                          {{ child.size }}
+                        }
                       </span>
                     </div>
                   </button>
@@ -373,11 +378,8 @@
         <!-- Empty State -->
         <div class="no-selection-placeholder">
           <mat-icon class="placeholder-icon">touch_app</mat-icon>
-          <h3>Kein Element ausgewählt</h3>
-          <p>
-            Wählen Sie links im Verzeichnisbaum eine Datei oder einen Ordner aus, um den Inhalt
-            anzuzeigen.
-          </p>
+          <h3>{{ 'tree.empty.noSelection' | t }}</h3>
+          <p>{{ 'tree.empty.noSelectionHint' | t }}</p>
         </div>
       }
     </mat-card>

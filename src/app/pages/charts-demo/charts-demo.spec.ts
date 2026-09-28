@@ -40,7 +40,7 @@ describe('ChartsDemoPage', () => {
 
     component.setDonutHover(0);
     fixture.detectChanges();
-    expect(component.activeDonutSegment()?.label).toBe(component.donutData()[0].label);
+    expect(component.activeDonutSegment()?.labelKey).toBe(component.donutData()[0].labelKey);
 
     component.setDonutHover(null);
     fixture.detectChanges();

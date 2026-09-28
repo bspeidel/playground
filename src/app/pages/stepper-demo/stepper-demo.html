@@ -5,46 +5,44 @@
       <div class="badge-title">
         <span class="tech-pill">Angular 22</span>
         <span class="tech-pill m3">MatStepper M3</span>
-        <span class="tech-pill zoneless">Echtzeit-Berechnung</span>
+        <span class="tech-pill zoneless">{{ 'stepper.header.pillRealtime' | t }}</span>
         <span class="tech-pill devops">DevOps Cloud</span>
       </div>
-      <h1 class="page-title">Cloud-Bereitstellungsassistent & M3-Stepper</h1>
+      <h1 class="page-title">{{ 'stepper.header.title' | t }}</h1>
       <p class="page-subtitle">
-        Geführter mehrstufiger Workflow mit <code>MatStepper</code>: Ressourcendimensionierung,
-        Budgetschätzung in Echtzeit mit <code>computed()</code>-Signals, Secrets-Injektion und
-        interaktive Simulation der Kubernetes-Bereitstellung.
+        <span [innerHTML]="'stepper.header.subtitle' | tHtml"></span>
       </p>
     </div>
 
     <!-- Stepper Configuration Controls Toolbar -->
     <div class="header-controls">
       <div class="control-group">
-        <span class="control-label">Ausrichtung :</span>
+        <span class="control-label">{{ 'stepper.controls.orientation' | t }}</span>
         <mat-button-toggle-group
           [value]="stepperOrientation()"
           (change)="setOrientation($event.value)"
-          aria-label="Stepper-Ausrichtung"
+          [attr.aria-label]="'stepper.controls.orientationAria' | t"
         >
           <mat-button-toggle value="horizontal">
             <mat-icon>linear_scale</mat-icon>
-            Horizontal
+            {{ 'stepper.controls.horizontal' | t }}
           </mat-button-toggle>
           <mat-button-toggle value="vertical">
             <mat-icon>view_day</mat-icon>
-            Vertical
+            {{ 'stepper.controls.vertical' | t }}
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
       <div class="control-group">
         <mat-slide-toggle [checked]="isLinear()" (change)="toggleLinear($event.checked)">
-          Strikter linearer Modus
+          {{ 'stepper.controls.linear' | t }}
         </mat-slide-toggle>
       </div>
 
       <button mat-stroked-button (click)="resetAll(stepper)" class="btn-reset">
         <mat-icon>restart_alt</mat-icon>
-        Zurücksetzen
+        {{ 'stepper.controls.reset' | t }}
       </button>
     </div>
   </header>
@@ -62,8 +60,8 @@
         <form [formGroup]="serviceForm" class="step-form-content">
           <ng-template matStepLabel>
             <div class="step-label-custom">
-              <span class="step-label-title">Architektur</span>
-              <span class="step-label-desc">Dienst & Region</span>
+              <span class="step-label-title">{{ 'stepper.step1.labelTitle' | t }}</span>
+              <span class="step-label-desc">{{ 'stepper.step1.labelDesc' | t }}</span>
             </div>
           </ng-template>
 
@@ -72,18 +70,15 @@
               <mat-icon color="primary">rocket_launch</mat-icon>
             </div>
             <div>
-              <h2 class="step-title">Dienstdefinition & Infrastruktur</h2>
-              <p class="step-desc">
-                Konfigurieren Sie Identität, Anwendungsmodell und geografischen Standort Ihres
-                Clusters.
-              </p>
+              <h2 class="step-title">{{ 'stepper.step1.title' | t }}</h2>
+              <p class="step-desc">{{ 'stepper.step1.description' | t }}</p>
             </div>
           </div>
 
           <div class="form-grid">
             <!-- Service Name -->
             <mat-form-field appearance="outline" class="col-span-full">
-              <mat-label>Eindeutiger Dienstname</mat-label>
+              <mat-label>{{ 'stepper.step1.nameLabel' | t }}</mat-label>
               <span matPrefix class="field-prefix">https://&nbsp;</span>
               <input
                 matInput
@@ -94,19 +89,19 @@
               <span matSuffix class="field-suffix">.cloud.internal</span>
               <mat-icon matIconSuffix>dns</mat-icon>
               @if (serviceForm.get('name')?.hasError('required')) {
-                <mat-error>Der Dienstname ist erforderlich</mat-error>
+                <mat-error>{{ 'stepper.step1.nameRequired' | t }}</mat-error>
               }
               @if (serviceForm.get('name')?.hasError('pattern')) {
-                <mat-error>Nur Kleinbuchstaben, Ziffern und Bindestriche</mat-error>
+                <mat-error>{{ 'stepper.step1.namePattern' | t }}</mat-error>
               }
               @if (serviceForm.get('name')?.hasError('minlength')) {
-                <mat-error>Mindestens 3 Zeichen erforderlich</mat-error>
+                <mat-error>{{ 'stepper.step1.nameMinLength' | t }}</mat-error>
               }
             </mat-form-field>
 
             <!-- Service Template Cards -->
             <div class="col-span-full">
-              <span class="section-subheading">Art der Arbeitslast:</span>
+              <span class="section-subheading">{{ 'stepper.step1.workloadType' | t }}</span>
               <div class="type-cards-grid">
                 @for (item of serviceTypes; track item.id) {
                   <button
@@ -117,10 +112,12 @@
                   >
                     <div class="card-top">
                       <mat-icon class="type-icon">{{ item.icon }}</mat-icon>
-                      <span class="port-chip">Port {{ item.defaultPort }}</span>
+                      <span class="port-chip">
+                        {{ 'stepper.step1.port' | t: { port: item.defaultPort } }}
+                      </span>
                     </div>
-                    <div class="type-title">{{ item.title }}</div>
-                    <div class="type-desc">{{ item.description }}</div>
+                    <div class="type-title">{{ item.titleKey | t }}</div>
+                    <div class="type-desc">{{ item.descriptionKey | t }}</div>
                   </button>
                 }
               </div>
@@ -128,28 +125,33 @@
 
             <!-- Cloud Region Select -->
             <mat-form-field appearance="outline" class="col-half">
-              <mat-label>Cloud-Region & Rechenzentrum</mat-label>
+              <mat-label>{{ 'stepper.step1.regionLabel' | t }}</mat-label>
               <mat-select formControlName="region">
                 @for (reg of regions; track reg.id) {
                   <mat-option [value]="reg.id">
                     <span class="region-option">
                       <span class="flag">{{ reg.flag }}</span>
-                      <span class="name">{{ reg.name }}</span>
+                      <span class="name">{{ reg.nameKey | t }}</span>
                       <span class="badge-ping">{{ reg.latencyMs }}ms</span>
                     </span>
                   </mat-option>
                 }
               </mat-select>
-              <mat-hint>
-                Ausgewählte Region: <strong>{{ selectedRegion().location }}</strong> ({{
-                  selectedRegion().co2Label
-                }})
-              </mat-hint>
+              <mat-hint
+                [innerHTML]="
+                  'stepper.step1.regionHint'
+                    | tHtml
+                      : {
+                          location: selectedRegion().locationKey | t,
+                          co2: selectedRegion().co2LabelKey | t,
+                        }
+                "
+              ></mat-hint>
             </mat-form-field>
 
             <!-- Git Repository & Branch -->
             <mat-form-field appearance="outline" class="col-half">
-              <mat-label>Git-Quell-Repository</mat-label>
+              <mat-label>{{ 'stepper.step1.repoLabel' | t }}</mat-label>
               <input
                 matInput
                 formControlName="repoUrl"
@@ -157,16 +159,16 @@
               />
               <mat-icon matIconSuffix>code</mat-icon>
               @if (serviceForm.get('repoUrl')?.hasError('required')) {
-                <mat-error>Das Git-Repository ist erforderlich</mat-error>
+                <mat-error>{{ 'stepper.step1.repoRequired' | t }}</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="col-half">
-              <mat-label>Bereitstellungs-Branch</mat-label>
+              <mat-label>{{ 'stepper.step1.branchLabel' | t }}</mat-label>
               <mat-select formControlName="branch">
-                <mat-option value="main">main (Produktion)</mat-option>
-                <mat-option value="staging">staging (Staging)</mat-option>
-                <mat-option value="develop">develop (Entwicklung)</mat-option>
+                <mat-option value="main">{{ 'stepper.step1.branchProduction' | t }}</mat-option>
+                <mat-option value="staging">{{ 'stepper.step1.branchStaging' | t }}</mat-option>
+                <mat-option value="develop">{{ 'stepper.step1.branchDevelop' | t }}</mat-option>
               </mat-select>
               <mat-icon matIconSuffix>alt_route</mat-icon>
             </mat-form-field>
@@ -181,7 +183,7 @@
               matStepperNext
               [disabled]="serviceForm.invalid && isLinear()"
             >
-              Nächster Schritt: Ressourcen & Kosten
+              {{ 'stepper.step1.next' | t }}
               <mat-icon iconPositionEnd>arrow_forward</mat-icon>
             </button>
           </div>
@@ -192,8 +194,8 @@
       <mat-step>
         <ng-template matStepLabel>
           <div class="step-label-custom">
-            <span class="step-label-title">Dimensionierung</span>
-            <span class="step-label-desc">Ressourcen & Kosten</span>
+            <span class="step-label-title">{{ 'stepper.step2.labelTitle' | t }}</span>
+            <span class="step-label-desc">{{ 'stepper.step2.labelDesc' | t }}</span>
           </div>
         </ng-template>
 
@@ -203,11 +205,9 @@
               <mat-icon color="primary">tune</mat-icon>
             </div>
             <div>
-              <h2 class="step-title">Dimensionierung & Live-Kostenrechner</h2>
+              <h2 class="step-title">{{ 'stepper.step2.title' | t }}</h2>
               <p class="step-desc">
-                Passen Sie die Schieberegler für vCPU, RAM und Replikate an. Das monatliche und
-                stündliche Budget aktualisiert sich sofort dank der reaktiven
-                <code>computed()</code>-Signals.
+                <span [innerHTML]="'stepper.step2.description' | tHtml"></span>
               </p>
             </div>
           </div>
@@ -220,7 +220,7 @@
                 <div class="slider-header">
                   <div class="slider-title-grp">
                     <mat-icon>memory</mat-icon>
-                    <span class="title">Zugewiesene vCPU-Prozessoren</span>
+                    <span class="title">{{ 'stepper.step2.cpuTitle' | t }}</span>
                   </div>
                   <span class="val-badge">{{ cpuCores() }} vCPUs</span>
                 </div>
@@ -240,7 +240,7 @@
                 <div class="slider-header">
                   <div class="slider-title-grp">
                     <mat-icon>speed</mat-icon>
-                    <span class="title">Arbeitsspeicher (RAM)</span>
+                    <span class="title">{{ 'stepper.step2.ramTitle' | t }}</span>
                   </div>
                   <span class="val-badge">{{ ramGb() }} GB RAM</span>
                 </div>
@@ -261,9 +261,11 @@
                   <div class="slider-header">
                     <div class="slider-title-grp">
                       <mat-icon>layers</mat-icon>
-                      <span class="title">Min. Replikate (Basis)</span>
+                      <span class="title">{{ 'stepper.step2.minReplicasTitle' | t }}</span>
                     </div>
-                    <span class="val-badge">{{ minReplicas() }} Instanzen</span>
+                    <span class="val-badge">
+                      {{ 'stepper.step2.instanceCount' | t: { count: minReplicas() } }}
+                    </span>
                   </div>
                   <mat-slider min="1" max="5" step="1" discrete class="custom-slider">
                     <input
@@ -278,9 +280,11 @@
                   <div class="slider-header">
                     <div class="slider-title-grp">
                       <mat-icon>trending_up</mat-icon>
-                      <span class="title">Max. Autoscaling (Spitze)</span>
+                      <span class="title">{{ 'stepper.step2.maxReplicasTitle' | t }}</span>
                     </div>
-                    <span class="val-badge">{{ maxReplicas() }} Instanzen</span>
+                    <span class="val-badge">
+                      {{ 'stepper.step2.instanceCount' | t: { count: maxReplicas() } }}
+                    </span>
                   </div>
                   <mat-slider min="2" max="20" step="1" discrete class="custom-slider">
                     <input
@@ -297,7 +301,7 @@
                 <div class="slider-header">
                   <div class="slider-title-grp">
                     <mat-icon>storage</mat-icon>
-                    <span class="title">Persistente NVMe-SSD-Festplatte</span>
+                    <span class="title">{{ 'stepper.step2.storageTitle' | t }}</span>
                   </div>
                   <span class="val-badge">{{ storageGb() }} GB</span>
                 </div>
@@ -315,11 +319,8 @@
                   [checked]="highAvailability()"
                   (change)="highAvailability.set($event.checked)"
                 >
-                  <strong>Multi-AZ-Hochverfügbarkeit (99,99% SLA)</strong>
-                  <p class="ha-desc">
-                    Verteilt Ihre Container automatisch auf 3 separate Verfügbarkeitszonen, um jeden
-                    Single Point of Failure auszuschließen (+25% Replikationskosten).
-                  </p>
+                  <strong>{{ 'stepper.step2.haTitle' | t }}</strong>
+                  <p class="ha-desc">{{ 'stepper.step2.haDescription' | t }}</p>
                 </mat-slide-toggle>
               </div>
             </div>
@@ -330,8 +331,8 @@
                 <div class="cost-card-header">
                   <mat-icon class="calc-icon">payments</mat-icon>
                   <div>
-                    <span class="cost-subtitle">Echtzeit-Budgetschätzung</span>
-                    <h3 class="cost-main-title">Voraussichtliche Kosten</h3>
+                    <span class="cost-subtitle">{{ 'stepper.step2.costSubtitle' | t }}</span>
+                    <h3 class="cost-main-title">{{ 'stepper.step2.costTitle' | t }}</h3>
                   </div>
                 </div>
 
@@ -339,39 +340,47 @@
                   <div class="price-val">
                     {{ monthlyCost() | currency: 'EUR' : 'symbol' : '1.2-2' }}
                   </div>
-                  <div class="price-period">/ Monat (Nennlast)</div>
+                  <div class="price-period">{{ 'stepper.step2.perMonth' | t }}</div>
                   <div class="price-hourly">
-                    ~ {{ hourlyCost() | currency: 'EUR' : 'symbol' : '1.3-3' }} / Stunde
+                    ~ {{ hourlyCost() | currency: 'EUR' : 'symbol' : '1.3-3' }} /
+                    {{ 'stepper.step2.hourUnit' | t }}
                   </div>
                 </div>
 
                 <div class="cost-breakdown-list">
                   <div class="cost-line">
-                    <span class="label">vCPU ({{ cpuCores() }} Kerne)</span>
+                    <span class="label">{{
+                      'stepper.step2.costCpu' | t: { count: cpuCores() }
+                    }}</span>
                     <span class="val">{{
                       cpuCores() * 16.5 | currency: 'EUR' : 'symbol' : '1.2-2'
                     }}</span>
                   </div>
                   <div class="cost-line">
-                    <span class="label">RAM ({{ ramGb() }} GB)</span>
+                    <span class="label">{{ 'stepper.step2.costRam' | t: { ram: ramGb() } }}</span>
                     <span class="val">{{
                       ramGb() * 4.2 | currency: 'EUR' : 'symbol' : '1.2-2'
                     }}</span>
                   </div>
                   <div class="cost-line">
-                    <span class="label">NVMe-Speicher ({{ storageGb() }} GB)</span>
+                    <span class="label">{{
+                      'stepper.step2.costStorage' | t: { storage: storageGb() }
+                    }}</span>
                     <span class="val">{{
                       storageGb() * 0.1 | currency: 'EUR' : 'symbol' : '1.2-2'
                     }}</span>
                   </div>
                   <div class="cost-line">
-                    <span class="label">Multi-AZ SLA</span>
-                    <span class="val">{{ highAvailability() ? '+25%' : 'Inbegriffen' }}</span>
+                    <span class="label">{{ 'stepper.step2.costSla' | t }}</span>
+                    <span class="val">{{
+                      highAvailability() ? '+25%' : ('stepper.step2.costSlaIncluded' | t)
+                    }}</span>
                   </div>
                   <div class="cost-line highlight">
-                    <span class="label">Maximales Autoscaling-Limit</span>
+                    <span class="label">{{ 'stepper.step2.costAutoscaleLimit' | t }}</span>
                     <span class="val"
-                      >{{ maxMonthlyCost() | currency: 'EUR' : 'symbol' : '1.0-0' }}/Monat</span
+                      >{{ maxMonthlyCost() | currency: 'EUR' : 'symbol' : '1.0-0'
+                      }}{{ 'stepper.step2.perMonthShort' | t }}</span
                     >
                   </div>
                 </div>
@@ -379,7 +388,7 @@
                 <div class="specs-pill-container">
                   <span class="spec-pill">
                     <mat-icon>speed</mat-icon>
-                    {{ cpuCores() * minReplicas() }} vCPU insgesamt
+                    {{ 'stepper.step2.totalCpu' | t: { count: cpuCores() * minReplicas() } }}
                   </span>
                   <span class="spec-pill">
                     <mat-icon>memory</mat-icon>
@@ -387,7 +396,9 @@
                   </span>
                   <span class="spec-pill">
                     <mat-icon>shield</mat-icon>
-                    {{ highAvailability() ? 'Multi-AZ' : 'Single-AZ' }}
+                    {{
+                      (highAvailability() ? 'stepper.step2.multiAz' : 'stepper.step2.singleAz') | t
+                    }}
                   </span>
                 </div>
               </div>
@@ -398,11 +409,11 @@
           <div class="step-footer-actions">
             <button mat-stroked-button matStepperPrevious>
               <mat-icon>arrow_back</mat-icon>
-              Zurück
+              {{ 'stepper.action.back' | t }}
             </button>
             <div class="spacer"></div>
             <button mat-flat-button color="primary" matStepperNext>
-              Nächster Schritt: Variablen & Secrets
+              {{ 'stepper.step2.next' | t }}
               <mat-icon iconPositionEnd>arrow_forward</mat-icon>
             </button>
           </div>
@@ -413,8 +424,8 @@
       <mat-step>
         <ng-template matStepLabel>
           <div class="step-label-custom">
-            <span class="step-label-title">Konfiguration</span>
-            <span class="step-label-desc">Variablen & Secrets</span>
+            <span class="step-label-title">{{ 'stepper.step3.labelTitle' | t }}</span>
+            <span class="step-label-desc">{{ 'stepper.step3.labelDesc' | t }}</span>
           </div>
         </ng-template>
 
@@ -424,18 +435,14 @@
               <mat-icon color="primary">key</mat-icon>
             </div>
             <div>
-              <h2 class="step-title">Umgebungsvariablen & verschlüsselte Secrets</h2>
-              <p class="step-desc">
-                Verwalten Sie Ihre Anwendungsvariablen dynamisch. Markieren Sie vertrauliche
-                Schlüssel als Secrets, um Maskierung und KMS-Verschlüsselung im Ruhezustand zu
-                aktivieren.
-              </p>
+              <h2 class="step-title">{{ 'stepper.step3.title' | t }}</h2>
+              <p class="step-desc">{{ 'stepper.step3.description' | t }}</p>
             </div>
           </div>
 
           <!-- Quick Presets -->
           <div class="presets-bar">
-            <span class="presets-label">Standardprofil laden:</span>
+            <span class="presets-label">{{ 'stepper.step3.presetsLabel' | t }}</span>
             <div class="presets-buttons">
               <button mat-stroked-button (click)="loadPreset('node')">
                 <mat-icon>javascript</mat-icon>
@@ -447,7 +454,7 @@
               </button>
               <button mat-stroked-button (click)="loadPreset('go')">
                 <mat-icon>bolt</mat-icon>
-                Go-Mikroservice
+                {{ 'stepper.step3.presetGo' | t }}
               </button>
             </div>
           </div>
@@ -455,10 +462,10 @@
           <!-- Dynamic Variables List -->
           <div class="env-table-wrapper">
             <div class="env-table-header">
-              <span class="col-name">Variablenschlüssel</span>
-              <span class="col-val">Wert</span>
-              <span class="col-sec">Geheimnis</span>
-              <span class="col-act">Aktionen</span>
+              <span class="col-name">{{ 'stepper.step3.colKey' | t }}</span>
+              <span class="col-val">{{ 'stepper.step3.colValue' | t }}</span>
+              <span class="col-sec">{{ 'stepper.step3.colSecret' | t }}</span>
+              <span class="col-act">{{ 'stepper.step3.colActions' | t }}</span>
             </div>
 
             <div class="env-table-rows">
@@ -470,7 +477,7 @@
                         matInput
                         [value]="item.key"
                         (input)="updateEnvKey(item.id, $any($event.target).value)"
-                        placeholder="Z. B.: DB_HOST"
+                        [placeholder]="'stepper.step3.keyPlaceholder' | t"
                       />
                     </mat-form-field>
                   </div>
@@ -482,7 +489,7 @@
                         [type]="item.isSecret ? 'password' : 'text'"
                         [value]="item.value"
                         (input)="updateEnvValue(item.id, $any($event.target).value)"
-                        placeholder="Wert oder Verbindungszeichenfolge"
+                        [placeholder]="'stepper.step3.valuePlaceholder' | t"
                       />
                     </mat-form-field>
                   </div>
@@ -491,7 +498,10 @@
                     <button
                       mat-icon-button
                       [matTooltip]="
-                        item.isSecret ? 'KMS-verschlüsselt (Maskiert)' : 'Nicht maskiert'
+                        (item.isSecret
+                          ? 'stepper.step3.secretTooltip'
+                          : 'stepper.step3.plainTooltip'
+                        ) | t
                       "
                       (click)="toggleSecretVisibility(item.id)"
                       [color]="item.isSecret ? 'primary' : ''"
@@ -504,7 +514,7 @@
                     <button
                       mat-icon-button
                       color="warn"
-                      matTooltip="Variable löschen"
+                      [matTooltip]="'stepper.step3.deleteTooltip' | t"
                       (click)="removeEnvVar(item.id)"
                     >
                       <mat-icon>delete_outline</mat-icon>
@@ -517,11 +527,12 @@
             <div class="add-var-bar">
               <button mat-stroked-button color="primary" (click)="addEnvVar()">
                 <mat-icon>add</mat-icon>
-                Variable hinzufügen
+                {{ 'stepper.step3.addVariable' | t }}
               </button>
               <span class="var-counter-text">
-                {{ envVars().length }} Variable(n) konfiguriert, davon
-                {{ secretCount() }} verschlüsselte(s) Secret(s)
+                {{
+                  'stepper.step3.counter' | t: { count: envVars().length, secrets: secretCount() }
+                }}
               </span>
             </div>
           </div>
@@ -530,11 +541,11 @@
           <div class="step-footer-actions">
             <button mat-stroked-button matStepperPrevious>
               <mat-icon>arrow_back</mat-icon>
-              Zurück
+              {{ 'stepper.action.back' | t }}
             </button>
             <div class="spacer"></div>
             <button mat-flat-button color="primary" matStepperNext>
-              Nächster Schritt: Übersicht & Bereitstellung
+              {{ 'stepper.step3.next' | t }}
               <mat-icon iconPositionEnd>arrow_forward</mat-icon>
             </button>
           </div>
@@ -545,8 +556,8 @@
       <mat-step>
         <ng-template matStepLabel>
           <div class="step-label-custom">
-            <span class="step-label-title">Bereitstellung</span>
-            <span class="step-label-desc">Überprüfung & Start</span>
+            <span class="step-label-title">{{ 'stepper.step4.labelTitle' | t }}</span>
+            <span class="step-label-desc">{{ 'stepper.step4.labelDesc' | t }}</span>
           </div>
         </ng-template>
 
@@ -556,11 +567,8 @@
               <mat-icon color="primary">cloud_done</mat-icon>
             </div>
             <div>
-              <h2 class="step-title">Abschließende Überprüfung & Live-Bereitstellung</h2>
-              <p class="step-desc">
-                Überprüfen Sie die vollständige Konfiguration und starten Sie anschließend die
-                simulierte Bereitstellungspipeline mit Echtzeit-Protokollrückmeldung.
-              </p>
+              <h2 class="step-title">{{ 'stepper.step4.title' | t }}</h2>
+              <p class="step-desc">{{ 'stepper.step4.description' | t }}</p>
             </div>
           </div>
 
@@ -569,23 +577,25 @@
             <div class="recap-card">
               <div class="recap-card-header">
                 <mat-icon color="primary">badge</mat-icon>
-                <span>Dienstidentität</span>
+                <span>{{ 'stepper.step4.recapIdentity' | t }}</span>
               </div>
               <div class="recap-content">
                 <div class="recap-row">
-                  <span class="k">Dienst:</span>
+                  <span class="k">{{ 'stepper.step4.kService' | t }}</span>
                   <span class="v code-highlight">{{ serviceForm.get('name')?.value }}</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Typ:</span>
-                  <span class="v">{{ selectedType().title }}</span>
+                  <span class="k">{{ 'stepper.step4.kType' | t }}</span>
+                  <span class="v">{{ selectedType().titleKey | t }}</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Region:</span>
-                  <span class="v">{{ selectedRegion().flag }} {{ selectedRegion().name }}</span>
+                  <span class="k">{{ 'stepper.step4.kRegion' | t }}</span>
+                  <span class="v"
+                    >{{ selectedRegion().flag }} {{ selectedRegion().nameKey | t }}</span
+                  >
                 </div>
                 <div class="recap-row">
-                  <span class="k">Git-Branch:</span>
+                  <span class="k">{{ 'stepper.step4.kBranch' | t }}</span>
                   <span class="v code-highlight">{{ serviceForm.get('branch')?.value }}</span>
                 </div>
               </div>
@@ -594,24 +604,28 @@
             <div class="recap-card">
               <div class="recap-card-header">
                 <mat-icon color="primary">dns</mat-icon>
-                <span>Ressourcen & Verfügbarkeit</span>
+                <span>{{ 'stepper.step4.recapResources' | t }}</span>
               </div>
               <div class="recap-content">
                 <div class="recap-row">
-                  <span class="k">Prozessoren:</span>
+                  <span class="k">{{ 'stepper.step4.kCores' | t }}</span>
                   <span class="v">{{ cpuCores() }} vCPUs / Pod</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Speicher:</span>
+                  <span class="k">{{ 'stepper.step4.kMemory' | t }}</span>
                   <span class="v">{{ ramGb() }} GB RAM / Pod</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Replikate:</span>
+                  <span class="k">{{ 'stepper.step4.kReplicas' | t }}</span>
                   <span class="v">{{ minReplicas() }} Min. - {{ maxReplicas() }} Max.</span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Resilienz:</span>
-                  <span class="v">{{ highAvailability() ? 'Multi-AZ (99,99%)' : 'Standard' }}</span>
+                  <span class="k">{{ 'stepper.step4.kResilience' | t }}</span>
+                  <span class="v">{{
+                    highAvailability()
+                      ? 'Multi-AZ (99,99%)'
+                      : ('stepper.step4.resilienceStandard' | t)
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -619,28 +633,32 @@
             <div class="recap-card highlight-recap">
               <div class="recap-card-header">
                 <mat-icon color="primary">receipt_long</mat-icon>
-                <span>Budget & Einstellungen</span>
+                <span>{{ 'stepper.step4.recapBudget' | t }}</span>
               </div>
               <div class="recap-content">
                 <div class="recap-row">
-                  <span class="k">Monatliche Kosten:</span>
+                  <span class="k">{{ 'stepper.step4.kMonthlyCost' | t }}</span>
                   <span class="v price-accent">
                     {{ monthlyCost() | currency: 'EUR' : 'symbol' : '1.2-2' }}
                   </span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Stündliche Kosten:</span>
+                  <span class="k">{{ 'stepper.step4.kHourlyCost' | t }}</span>
                   <span class="v">
                     ~ {{ hourlyCost() | currency: 'EUR' : 'symbol' : '1.3-3' }} / h
                   </span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">Umgebungsvariablen:</span>
-                  <span class="v">{{ envVars().length }} deklariert</span>
+                  <span class="k">{{ 'stepper.step4.kEnvVars' | t }}</span>
+                  <span class="v">
+                    {{ 'stepper.step4.envVarsDeclared' | t: { count: envVars().length } }}
+                  </span>
                 </div>
                 <div class="recap-row">
-                  <span class="k">KMS-Geheimnisse:</span>
-                  <span class="v">{{ secretCount() }} verschlüsselt</span>
+                  <span class="k">{{ 'stepper.step4.kSecrets' | t }}</span>
+                  <span class="v">
+                    {{ 'stepper.step4.secretsEncrypted' | t: { count: secretCount() } }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -656,13 +674,13 @@
                 (click)="startDeployment()"
               >
                 <mat-icon>rocket_launch</mat-icon>
-                Cloud-Bereitstellung starten
+                {{ 'stepper.step4.launch' | t }}
               </button>
             } @else if (deploymentStatus() === 'deploying') {
               <div class="deploying-state">
                 <div class="deploy-spinner-text">
                   <mat-icon class="spin-icon">sync</mat-icon>
-                  <span>Cluster-Bereitstellung läuft... ({{ deploymentProgress() }}%)</span>
+                  <span>{{ 'stepper.step4.running' | t: { progress: deploymentProgress() } }}</span>
                 </div>
                 <mat-progress-bar
                   mode="determinate"
@@ -674,19 +692,20 @@
                 <div class="success-top">
                   <mat-icon class="check-icon">check_circle</mat-icon>
                   <div>
-                    <h3 class="success-title">Bereitstellung erfolgreich abgeschlossen!</h3>
-                    <p class="success-subtitle">
-                      Der Microservice ist online, betriebsbereit und mit einem SSL-Zertifikat
-                      gesichert.
-                    </p>
+                    <h3 class="success-title">{{ 'stepper.step4.successTitle' | t }}</h3>
+                    <p class="success-subtitle">{{ 'stepper.step4.successSubtitle' | t }}</p>
                   </div>
                   <span class="status-chip-live">🟢 ONLINE (200 OK)</span>
                 </div>
 
                 <div class="endpoint-bar">
-                  <span class="endpoint-label">Öffentlicher Endpunkt:</span>
+                  <span class="endpoint-label">{{ 'stepper.step4.endpointLabel' | t }}</span>
                   <code class="endpoint-code">{{ deployedEndpoint() }}</code>
-                  <button mat-icon-button (click)="copyEndpoint()" matTooltip="Test-cURL kopieren">
+                  <button
+                    mat-icon-button
+                    (click)="copyEndpoint()"
+                    [matTooltip]="'stepper.step4.curlTooltip' | t"
+                  >
                     <mat-icon>content_copy</mat-icon>
                   </button>
                 </div>
@@ -694,11 +713,11 @@
                 <div class="success-actions">
                   <button mat-stroked-button (click)="copyEndpoint()">
                     <mat-icon>terminal</mat-icon>
-                    cURL-Befehl kopieren
+                    {{ 'stepper.step4.copyCurl' | t }}
                   </button>
                   <button mat-flat-button color="primary" (click)="startDeployment()">
                     <mat-icon>refresh</mat-icon>
-                    Erneut bereitstellen
+                    {{ 'stepper.step4.redeploy' | t }}
                   </button>
                 </div>
               </div>
@@ -715,7 +734,7 @@
               </div>
               <div class="terminal-title">
                 <mat-icon class="term-icon">terminal</mat-icon>
-                <span>k8s-cloud-runner — kontinuierliche Bereitstellungsprotokolle</span>
+                <span>{{ 'stepper.step4.terminalTitle' | t }}</span>
               </div>
               <span class="term-status-badge">
                 {{
@@ -730,11 +749,10 @@
 
             <div class="terminal-body">
               @if (deploymentLogs().length === 0) {
-                <div class="terminal-placeholder">
-                  $ Warten auf Auslösung der Bereitstellungspipeline...
-                  <br />
-                  Klicken Sie auf „Cloud-Bereitstellung starten“, um die CI/CD-Schritte auszuführen.
-                </div>
+                <div
+                  class="terminal-placeholder"
+                  [innerHTML]="'stepper.step4.terminalPlaceholder' | tHtml"
+                ></div>
               }
 
               @for (entry of deploymentLogs(); track entry.id) {
@@ -751,12 +769,12 @@
           <div class="step-footer-actions">
             <button mat-stroked-button matStepperPrevious>
               <mat-icon>arrow_back</mat-icon>
-              Zurück
+              {{ 'stepper.action.back' | t }}
             </button>
             <div class="spacer"></div>
             <button mat-stroked-button (click)="resetAll(stepper)">
               <mat-icon>restart_alt</mat-icon>
-              Assistenten zurücksetzen
+              {{ 'stepper.step4.reset' | t }}
             </button>
           </div>
         </div>

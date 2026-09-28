@@ -8,7 +8,7 @@ import {
   ChangeDetectionStrategy,
   AfterViewInit,
 } from '@angular/core';
-import { CurrencyPipe, DatePipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -26,6 +26,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  AppCurrencyPipe,
+  AppDatePipe,
+  TranslateHtmlPipe,
+  TranslatePipe,
+  TranslateService,
+} from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 import { ProjectDialog, ProjectItem } from './project-dialog';
 
 /**
@@ -52,6 +60,37 @@ const CATEGORY_ICON: Record<ProjectItem['category'], string> = {
   'Cloud / DevOps': 'cloud_queue',
   'Design System': 'palette',
   'Audit AI': 'smart_toy',
+};
+
+/**
+ * Display-layer translation keys for the raw enum values.
+ *
+ * `status`, `priority` and `category` are German strings that double as logic
+ * keys (filters, `STATUS_CLASS`, `CATEGORY_ICON`), so the stored values must
+ * stay untouched. These exhaustive maps translate them only where they are
+ * rendered as text, and TypeScript rejects the maps if a variant is ever added
+ * without a translation.
+ */
+const STATUS_LABEL_KEY: Record<ProjectItem['status'], TranslationKey> = {
+  Actif: 'table.status.active',
+  'En attente': 'table.status.pending',
+  Terminé: 'table.status.done',
+  Bloqué: 'table.status.blocked',
+};
+
+const PRIORITY_LABEL_KEY: Record<ProjectItem['priority'], TranslationKey> = {
+  Basse: 'table.priority.low',
+  Moyenne: 'table.priority.medium',
+  Haute: 'table.priority.high',
+  Critique: 'table.priority.critical',
+};
+
+const CATEGORY_LABEL_KEY: Record<ProjectItem['category'], TranslationKey> = {
+  'Web App': 'table.category.webApp',
+  'Mobile App': 'table.category.mobileApp',
+  'Cloud / DevOps': 'table.category.cloudDevOps',
+  'Design System': 'table.category.designSystem',
+  'Audit AI': 'table.category.auditAi',
 };
 
 const INITIAL_PROJECTS: ProjectItem[] = [
@@ -193,8 +232,10 @@ const INITIAL_PROJECTS: ProjectItem[] = [
   selector: 'app-table-demo',
   imports: [
     FormsModule,
-    CurrencyPipe,
-    DatePipe,
+    AppCurrencyPipe,
+    AppDatePipe,
+    TranslatePipe,
+    TranslateHtmlPipe,
     NgClass,
     MatTableModule,
     MatSortModule,
@@ -218,6 +259,7 @@ const INITIAL_PROJECTS: ProjectItem[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableDemo implements AfterViewInit {
+  private readonly translate = inject(TranslateService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
 
@@ -374,9 +416,14 @@ export class TableDemo implements AfterViewInit {
 
   checkboxLabel(row?: ProjectItem): string {
     if (!row) {
-      return `${this.isAllSelected() ? 'Alle abwählen' : 'Alle auswählen'}`;
+      return this.translate.text(
+        this.isAllSelected() ? 'table.a11y.deselectAll' : 'table.a11y.selectAll',
+      );
     }
-    return `${this.isSelected(row) ? 'Projekt abwählen' : 'Projekt auswählen'}: ${row.name}`;
+    return this.translate.text(
+      this.isSelected(row) ? 'table.a11y.deselectProject' : 'table.a11y.selectProject',
+      { name: row.name },
+    );
   }
 
   // Filters reset
@@ -384,7 +431,13 @@ export class TableDemo implements AfterViewInit {
     this.searchTerm.set('');
     this.statusFilter.set('all');
     this.categoryFilter.set('all');
-    this.snackBar.open('Filter zurückgesetzt', 'OK', { duration: 2500 });
+    this.snackBar.open(
+      this.translate.text('table.snack.filtersReset'),
+      this.translate.text('table.action.ok'),
+      {
+        duration: 2500,
+      },
+    );
   }
 
   // CRUD Operations
@@ -396,9 +449,11 @@ export class TableDemo implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result: ProjectItem | undefined) => {
       if (result) {
         this.items.update((current) => [result, ...current]);
-        this.snackBar.open(`Projekt "${result.name}" erfolgreich hinzugefügt`, 'Schließen', {
-          duration: 3500,
-        });
+        this.snackBar.open(
+          this.translate.text('table.snack.projectAdded', { name: result.name }),
+          this.translate.text('table.action.close'),
+          { duration: 3500 },
+        );
       }
     });
   }
@@ -414,9 +469,11 @@ export class TableDemo implements AfterViewInit {
         this.items.update((current) =>
           current.map((item) => (item.id === result.id ? result : item)),
         );
-        this.snackBar.open(`Projekt "${result.name}" aktualisiert`, 'Schließen', {
-          duration: 3500,
-        });
+        this.snackBar.open(
+          this.translate.text('table.snack.projectUpdated', { name: result.name }),
+          this.translate.text('table.action.close'),
+          { duration: 3500 },
+        );
       }
     });
   }
@@ -424,7 +481,11 @@ export class TableDemo implements AfterViewInit {
   deleteProject(project: ProjectItem): void {
     this.items.update((current) => current.filter((p) => p.id !== project.id));
     this.deselect(project);
-    this.snackBar.open(`Projekt "${project.name}" gelöscht`, 'Schließen', { duration: 3000 });
+    this.snackBar.open(
+      this.translate.text('table.snack.projectDeleted', { name: project.name }),
+      this.translate.text('table.action.close'),
+      { duration: 3000 },
+    );
   }
 
   private deselect(project: ProjectItem): void {
@@ -439,7 +500,11 @@ export class TableDemo implements AfterViewInit {
     const count = selectedIds.size;
     this.items.update((current) => current.filter((p) => !selectedIds.has(p.id)));
     this.setSelection(new Set());
-    this.snackBar.open(`${count} Projekt(e) gelöscht`, 'Schließen', { duration: 3500 });
+    this.snackBar.open(
+      this.translate.text('table.snack.projectsDeleted', { count }),
+      this.translate.text('table.action.close'),
+      { duration: 3500 },
+    );
   }
 
   updateSelectedStatus(newStatus: ProjectItem['status']): void {
@@ -449,37 +514,45 @@ export class TableDemo implements AfterViewInit {
       current.map((p) => (selectedIds.has(p.id) ? { ...p, status: newStatus } : p)),
     );
     this.setSelection(new Set());
-    this.snackBar.open(`Status für ${count} Projekt(e) aktualisiert`, 'Schließen', {
-      duration: 3500,
-    });
+    this.snackBar.open(
+      this.translate.text('table.snack.statusUpdated', { count }),
+      this.translate.text('table.action.close'),
+      {
+        duration: 3500,
+      },
+    );
   }
 
   // Export features
   exportFilteredCsv(): void {
     const data = this.filteredItems();
     if (!data.length) {
-      this.snackBar.open('Keine Daten zum Exportieren', 'Schließen', { duration: 2500 });
+      this.snackBar.open(
+        this.translate.text('table.snack.noData'),
+        this.translate.text('table.action.close'),
+        { duration: 2500 },
+      );
       return;
     }
 
     const headers = [
       'ID',
-      'Projekt',
-      'Kunde',
-      'Kategorie',
-      'Status',
-      'Priorität',
-      'Budget',
-      'Fortschritt',
-      'Fälligkeit',
+      this.translate.text('table.export.header.project'),
+      this.translate.text('table.export.header.client'),
+      this.translate.text('table.export.header.category'),
+      this.translate.text('table.export.header.status'),
+      this.translate.text('table.export.header.priority'),
+      this.translate.text('table.export.header.budget'),
+      this.translate.text('table.export.header.progress'),
+      this.translate.text('table.export.header.dueDate'),
     ];
     const rows = data.map((p) => [
       p.id,
       `"${p.name.replace(/"/g, '""')}"`,
       `"${p.client.replace(/"/g, '""')}"`,
-      p.category,
-      p.status,
-      p.priority,
+      this.categoryLabel(p.category),
+      this.statusLabel(p.status),
+      this.priorityLabel(p.priority),
       p.budget,
       `${p.progress}%`,
       p.dueDate.toISOString().split('T')[0],
@@ -487,21 +560,33 @@ export class TableDemo implements AfterViewInit {
 
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
     this.triggerDownload(csvContent, 'projets-export.csv', 'text/csv;charset=utf-8;');
-    this.snackBar.open(`${data.length} Projekt(e) als CSV exportiert`, 'Super', { duration: 3000 });
+    this.snackBar.open(
+      this.translate.text('table.snack.exportedCsv', { count: data.length }),
+      this.translate.text('table.action.nice'),
+      { duration: 3000 },
+    );
   }
 
   exportFilteredJson(): void {
     const data = this.filteredItems();
     if (!data.length) {
-      this.snackBar.open('Keine Daten zum Exportieren', 'Schließen', { duration: 2500 });
+      this.snackBar.open(
+        this.translate.text('table.snack.noData'),
+        this.translate.text('table.action.close'),
+        { duration: 2500 },
+      );
       return;
     }
 
     const jsonContent = JSON.stringify(data, null, 2);
     this.triggerDownload(jsonContent, 'projets-export.json', 'application/json');
-    this.snackBar.open(`${data.length} Projekt(e) als JSON exportiert`, 'Super', {
-      duration: 3000,
-    });
+    this.snackBar.open(
+      this.translate.text('table.snack.exportedJson', { count: data.length }),
+      this.translate.text('table.action.nice'),
+      {
+        duration: 3000,
+      },
+    );
   }
 
   private triggerDownload(content: string, filename: string, mimeType: string): void {
@@ -527,5 +612,18 @@ export class TableDemo implements AfterViewInit {
 
   getCategoryIcon(category: ProjectItem['category']): string {
     return CATEGORY_ICON[category];
+  }
+
+  // Display-layer translation of the raw enum values (see the maps above).
+  statusLabel(status: ProjectItem['status']): string {
+    return this.translate.text(STATUS_LABEL_KEY[status]);
+  }
+
+  priorityLabel(priority: ProjectItem['priority']): string {
+    return this.translate.text(PRIORITY_LABEL_KEY[priority]);
+  }
+
+  categoryLabel(category: ProjectItem['category']): string {
+    return this.translate.text(CATEGORY_LABEL_KEY[category]);
   }
 }

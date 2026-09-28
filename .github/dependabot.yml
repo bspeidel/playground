@@ -7,6 +7,13 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 5
+    ignore:
+      # TypeScript 7 is the native (Go) port. @angular/build@22 declares
+      # typescript ">=6.0 <6.1" as a *hard* peer dependency, so bumping to
+      # 7.x makes `npm ci` fail with ERESOLVE before any build step runs.
+      # Re-enable once the Angular toolchain supports the native port.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
     groups:
       # Angular ships minors every two weeks; review them together.
       angular:

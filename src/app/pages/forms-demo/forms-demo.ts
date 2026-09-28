@@ -27,6 +27,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { TranslateHtmlPipe, TranslatePipe, TranslateService } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 
 export interface SkillFormGroup {
   name: FormControl<string>;
@@ -106,6 +108,8 @@ function usernameAvailabilityValidator(): AsyncValidatorFn {
     MatChipsModule,
     MatSnackBarModule,
     MatDividerModule,
+    TranslatePipe,
+    TranslateHtmlPipe,
   ],
   templateUrl: './forms-demo.html',
   styleUrl: './forms-demo.scss',
@@ -114,6 +118,7 @@ function usernameAvailabilityValidator(): AsyncValidatorFn {
 export class FormsDemoPage {
   private readonly fb = inject(FormBuilder);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
   // Form State Tracking Signals
   readonly isSubmitting = signal(false);
@@ -195,13 +200,17 @@ export class FormsDemoPage {
     return score;
   });
 
-  readonly passwordStrengthLabel = computed(() => {
+  /**
+   * Translation key for the current strength bucket. The template renders it
+   * through `| t` so the label follows a language switch without recomputing.
+   */
+  readonly passwordStrengthKey = computed<TranslationKey>(() => {
     const s = this.passwordScore();
-    if (s === 0) return 'Nicht angegeben';
-    if (s <= 40) return 'Sehr schwach';
-    if (s <= 60) return 'Mittel';
-    if (s <= 80) return 'Stark';
-    return 'Ausgezeichnet (Sehr sicher)';
+    if (s === 0) return 'forms.strength.empty';
+    if (s <= 40) return 'forms.strength.weak';
+    if (s <= 60) return 'forms.strength.medium';
+    if (s <= 80) return 'forms.strength.strong';
+    return 'forms.strength.excellent';
   });
 
   readonly passwordStrengthClass = computed(() => {
@@ -243,13 +252,21 @@ export class FormsDemoPage {
 
   addSkill(): void {
     this.skillsArray.push(this.createSkillGroup());
-    this.snackBar.open('Neue Qualifikation zum FormArray hinzugefügt', 'OK', { duration: 1500 });
+    this.snackBar.open(
+      this.translate.text('forms.snack.skillAdded'),
+      this.translate.text('forms.action.ok'),
+      { duration: 1500 },
+    );
   }
 
   removeSkill(index: number): void {
     if (this.skillsArray.length > 1) {
       this.skillsArray.removeAt(index);
-      this.snackBar.open('Qualifikation entfernt', 'Schließen', { duration: 1500 });
+      this.snackBar.open(
+        this.translate.text('forms.snack.skillRemoved'),
+        this.translate.text('forms.action.close'),
+        { duration: 1500 },
+      );
     }
   }
 
@@ -272,9 +289,11 @@ export class FormsDemoPage {
     this.skillsArray.push(this.createSkillGroup('Kubernetes & Cloud', 'Avancé', 4));
     this.skillsArray.push(this.createSkillGroup('TypeScript Stricte', 'Expert', 5));
 
-    this.snackBar.open('Formular mit Beispieldaten vorausgefüllt', 'Super', {
-      duration: 2500,
-    });
+    this.snackBar.open(
+      this.translate.text('forms.snack.sampleFilled'),
+      this.translate.text('forms.action.super'),
+      { duration: 2500 },
+    );
   }
 
   resetForm(): void {
@@ -288,15 +307,23 @@ export class FormsDemoPage {
     this.skillsArray.clear();
     this.skillsArray.push(this.createSkillGroup('TypeScript', 'Expert', 5));
     this.skillsArray.push(this.createSkillGroup('Angular 22', 'Avancé', 4));
-    this.snackBar.open('Formular zurückgesetzt', 'OK', { duration: 2000 });
+    this.snackBar.open(
+      this.translate.text('forms.snack.reset'),
+      this.translate.text('forms.action.ok'),
+      {
+        duration: 2000,
+      },
+    );
   }
 
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open('Das Formular enthält Fehler. Bitte korrigieren Sie diese.', 'Schließen', {
-        duration: 3500,
-      });
+      this.snackBar.open(
+        this.translate.text('forms.snack.invalid'),
+        this.translate.text('forms.action.close'),
+        { duration: 3500 },
+      );
       return;
     }
 
@@ -316,9 +343,11 @@ export class FormsDemoPage {
       };
 
       this.submittedProfiles.update((list) => [profile, ...list]);
-      this.snackBar.open(`Profil von "${val.username}" erfolgreich gespeichert! 🎉`, 'Super!', {
-        duration: 4000,
-      });
+      this.snackBar.open(
+        this.translate.text('forms.snack.profileSaved', { username: val.username }),
+        this.translate.text('forms.action.super'),
+        { duration: 4000 },
+      );
     }, 600);
   }
 }

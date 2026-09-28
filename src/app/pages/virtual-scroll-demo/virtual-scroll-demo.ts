@@ -7,7 +7,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { DecimalPipe, DatePipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { MatCardModule } from '@angular/material/card';
@@ -20,6 +20,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  AppDatePipe,
+  AppNumberPipe,
+  TranslateHtmlPipe,
+  TranslatePipe,
+  TranslateService,
+} from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 import { TelemetryWorkerService, type TelemetryLog } from './telemetry-worker.service';
 
 export type { TelemetryLog } from './telemetry-worker.service';
@@ -40,12 +48,34 @@ const LEVEL_CLASS: Record<TelemetryLog['level'], string> = {
   DEBUG: 'level-debug',
 };
 
+/**
+ * Display translations for the log payloads the telemetry worker emits.
+ *
+ * The worker owns the dataset and hands over plain German strings, which are
+ * also what the search filter matches against. Translating here — keyed by the
+ * raw German text — keeps the worker self-contained and leaves filtering on
+ * the untranslated value, so a query for `auth-service` behaves identically in
+ * both locales.
+ */
+const MESSAGE_TRANSLATIONS: Record<string, TranslationKey> = {
+  'HTTP-Anfrage erfolgreich verarbeitet': 'virtualScroll.log.httpOk',
+  'Cache-Treffer auf Redis-Cluster': 'virtualScroll.log.cacheHit',
+  'Antwortzeit überschreitet SLA (p99)': 'virtualScroll.log.slaExceeded',
+  'JWT-Token automatisch erneuert': 'virtualScroll.log.tokenRenewed',
+  'Verbindungsfehler zum sekundären Datenbankknoten': 'virtualScroll.log.dbDown',
+  'Dauerhafte WebSocket-Synchronisation aktiv': 'virtualScroll.log.websocketSync',
+  'Speicherbereinigung des Objektpools abgeschlossen': 'virtualScroll.log.poolCleanup',
+  'Ausführung des asynchronen Workers abgeschlossen': 'virtualScroll.log.workerDone',
+};
+
 @Component({
   selector: 'app-virtual-scroll-demo',
   imports: [
     NgClass,
-    DecimalPipe,
-    DatePipe,
+    AppNumberPipe,
+    AppDatePipe,
+    TranslatePipe,
+    TranslateHtmlPipe,
     FormsModule,
     ScrollingModule,
     MatCardModule,
@@ -66,6 +96,7 @@ const LEVEL_CLASS: Record<TelemetryLog['level'], string> = {
 export class VirtualScrollDemoPage {
   private readonly snackBar = inject(MatSnackBar);
   private readonly worker = inject(TelemetryWorkerService);
+  private readonly translate = inject(TranslateService);
 
   // Viewport signal query
   readonly viewport = viewChild(CdkVirtualScrollViewport);
@@ -159,16 +190,21 @@ export class VirtualScrollDemoPage {
 
       if (notify) {
         this.snackBar.open(
-          `${size.toLocaleString()} Logs in ${durationMs.toFixed(1)} ms im Web Worker generiert` +
-            ` (Blockade: ${(performance.now() - started).toFixed(1)} ms)`,
-          'OK',
+          this.translate.text('virtualScroll.snack.generated', {
+            size: size.toLocaleString(this.translate.localeTag()),
+            duration: durationMs.toFixed(1),
+            blocked: (performance.now() - started).toFixed(1),
+          }),
+          this.translate.text('virtualScroll.action.ok'),
           { duration: 3500 },
         );
       }
     } catch (error) {
       this.snackBar.open(
-        error instanceof Error ? error.message : 'Datensatz konnte nicht erzeugt werden.',
-        'Schließen',
+        error instanceof Error
+          ? error.message
+          : this.translate.text('virtualScroll.snack.generateFailed'),
+        this.translate.text('virtualScroll.action.close'),
         { duration: 4000 },
       );
     }
@@ -208,16 +244,20 @@ export class VirtualScrollDemoPage {
 
     if (vp && idx >= 0 && idx <= maxIdx) {
       vp.scrollToIndex(idx, 'smooth');
-      this.snackBar.open(`Sofortige Navigation zu Index #${idx.toLocaleString()}`, 'OK', {
-        duration: 2000,
-      });
+      this.snackBar.open(
+        this.translate.text('virtualScroll.snack.jumpedToIndex', {
+          index: idx.toLocaleString(this.translate.localeTag()),
+        }),
+        this.translate.text('virtualScroll.action.ok'),
+        { duration: 2000 },
+      );
     } else {
       this.snackBar.open(
-        `Bitte geben Sie einen Index zwischen 0 und ${maxIdx.toLocaleString()} ein`,
-        'Schließen',
-        {
-          duration: 3000,
-        },
+        this.translate.text('virtualScroll.snack.invalidIndex', {
+          max: maxIdx.toLocaleString(this.translate.localeTag()),
+        }),
+        this.translate.text('virtualScroll.action.close'),
+        { duration: 3000 },
       );
     }
   }
@@ -237,6 +277,16 @@ export class VirtualScrollDemoPage {
 
   getLevelClass(level: TelemetryLog['level']): string {
     return LEVEL_CLASS[level];
+  }
+
+  /**
+   * Localized label for a log payload. Unknown messages (a worker running a
+   * newer dataset, for instance) fall back to the raw text rather than to a
+   * visible translation-key marker.
+   */
+  logMessage(message: string): string {
+    const key = MESSAGE_TRANSLATIONS[message];
+    return key ? this.translate.text(key) : message;
   }
 
   trackById = (_index: number, log: TelemetryLog): number => log.id;

@@ -18,6 +18,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTree, MatTreeModule } from '@angular/material/tree';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateHtmlPipe, TranslatePipe, TranslateService } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 
 export type FileExtension = 'ts' | 'html' | 'scss' | 'json' | 'md' | 'svg';
 
@@ -29,7 +31,13 @@ export interface FileNode {
   size?: string;
   lines?: number;
   extension?: FileExtension;
-  lastModified?: string;
+  /**
+   * Timestamp metadata is stored as a translation key plus its parameters
+   * rather than a pre-formatted German string, so the file metadata follows
+   * the active locale.
+   */
+  lastModifiedKey?: TranslationKey;
+  lastModifiedParams?: Record<string, string>;
   content?: string;
   path?: string;
 }
@@ -66,7 +74,8 @@ const INITIAL_WORKSPACE_DATA: FileNode[] = [
                 extension: 'ts',
                 size: '2.8 KB',
                 lines: 48,
-                lastModified: 'Heute 02:40',
+                lastModifiedKey: 'tree.meta.todayAt',
+                lastModifiedParams: { time: '02:40' },
                 path: 'src/app/core/auth.service.ts',
                 content: `import { Injectable, signal, computed } from '@angular/core';
 
@@ -102,7 +111,8 @@ export class AuthService {
                 extension: 'ts',
                 size: '1.9 KB',
                 lines: 34,
-                lastModified: 'Gestern 18:22',
+                lastModifiedKey: 'tree.meta.yesterdayAt',
+                lastModifiedParams: { time: '18:22' },
                 path: 'src/app/core/api.interceptor.ts',
                 content: `import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
@@ -140,7 +150,8 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
                 extension: 'ts',
                 size: '1.4 KB',
                 lines: 26,
-                lastModified: '25. Sept. 14:10',
+                lastModifiedKey: 'tree.meta.dateAt',
+                lastModifiedParams: { date: '25. Sept.', time: '14:10' },
                 path: 'src/app/models/user.model.ts',
                 content: `export interface UserProfile {
   id: string;
@@ -162,7 +173,8 @@ export type UserRole = 'superadmin' | 'tenant_admin' | 'developer';`,
             extension: 'ts',
             size: '1.2 KB',
             lines: 22,
-            lastModified: '26. Sept. 09:15',
+            lastModifiedKey: 'tree.meta.dateAt',
+            lastModifiedParams: { date: '26. Sept.', time: '09:15' },
             path: 'src/app/app.config.ts',
             content: `import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
@@ -185,7 +197,8 @@ export const appConfig: ApplicationConfig = {
             extension: 'ts',
             size: '2.1 KB',
             lines: 38,
-            lastModified: 'Heute 01:05',
+            lastModifiedKey: 'tree.meta.todayAt',
+            lastModifiedParams: { time: '01:05' },
             path: 'src/app/app.routes.ts',
             content: `import { Routes } from '@angular/router';
 
@@ -216,7 +229,8 @@ export const routes: Routes = [
             extension: 'svg',
             size: '1.1 KB',
             lines: 15,
-            lastModified: '22. Sept. 11:00',
+            lastModifiedKey: 'tree.meta.dateAt',
+            lastModifiedParams: { date: '22. Sept.', time: '11:00' },
             path: 'src/assets/logo.svg',
             content: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
   <defs>
@@ -236,7 +250,8 @@ export const routes: Routes = [
             extension: 'json',
             size: '0.8 KB',
             lines: 18,
-            lastModified: '24. Sept. 16:45',
+            lastModifiedKey: 'tree.meta.dateAt',
+            lastModifiedParams: { date: '24. Sept.', time: '16:45' },
             path: 'src/assets/app-config.json',
             content: `{
   "apiBaseUrl": "https://api.playground.corp/v1",
@@ -259,7 +274,8 @@ export const routes: Routes = [
         extension: 'scss',
         size: '1.8 KB',
         lines: 32,
-        lastModified: '26. Sept. 10:30',
+        lastModifiedKey: 'tree.meta.dateAt',
+        lastModifiedParams: { date: '26. Sept.', time: '10:30' },
         path: 'src/styles.scss',
         content: `@use '@angular/material' as mat;
 
@@ -295,7 +311,8 @@ html, body {
         extension: 'md',
         size: '3.2 KB',
         lines: 65,
-        lastModified: '23. Sept. 17:15',
+        lastModifiedKey: 'tree.meta.dateAt',
+        lastModifiedParams: { date: '23. Sept.', time: '17:15' },
         path: 'docs/architecture.md',
         content: `# Technische Architektur & Angular 22 Paradigmen
 
@@ -312,7 +329,8 @@ html, body {
         extension: 'md',
         size: '2.4 KB',
         lines: 42,
-        lastModified: '25. Sept. 11:20',
+        lastModifiedKey: 'tree.meta.dateAt',
+        lastModifiedParams: { date: '25. Sept.', time: '11:20' },
         path: 'docs/deploy.md',
         content: `# Cloud-Bereitstellungsleitfaden
 
@@ -331,7 +349,8 @@ html, body {
     extension: 'json',
     size: '1.8 KB',
     lines: 45,
-    lastModified: 'Heute 03:00',
+    lastModifiedKey: 'tree.meta.todayAt',
+    lastModifiedParams: { time: '03:00' },
     path: 'package.json',
     content: `{
   "name": "playground",
@@ -353,7 +372,8 @@ html, body {
     extension: 'md',
     size: '4.5 KB',
     lines: 95,
-    lastModified: 'Heute 02:50',
+    lastModifiedKey: 'tree.meta.todayAt',
+    lastModifiedParams: { time: '02:50' },
     path: 'README.md',
     content: `# Angular 22 & Material 3 Enterprise Playground
 
@@ -376,12 +396,15 @@ Autonomer Hochleistungs-Demonstrator auf GitHub Pages.`,
     MatTooltipModule,
     MatTreeModule,
     MatSnackBarModule,
+    TranslatePipe,
+    TranslateHtmlPipe,
   ],
   templateUrl: './tree-demo.html',
   styleUrl: './tree-demo.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeDemoPage {
+  private readonly translate = inject(TranslateService);
   private readonly snackBar = inject(MatSnackBar);
 
   @ViewChild(MatTree) tree!: MatTree<FileNode>;
@@ -576,7 +599,7 @@ export class TreeDemoPage {
       extension: ext,
       size: type === 'file' ? '0.4 KB' : undefined,
       lines: type === 'file' ? 8 : undefined,
-      lastModified: 'Gerade eben',
+      lastModifiedKey: 'tree.meta.justNow',
       children: type === 'folder' ? [] : undefined,
       path: `src/${rawName}`,
       content:
@@ -597,8 +620,8 @@ export class TreeDemoPage {
     this.isCreatingNode.set(false);
     this.selectedNode.set(newNode);
     this.snackBar.open(
-      `${type === 'file' ? 'Neue Datei' : 'Neuer Ordner'} erfolgreich erstellt!`,
-      'OK',
+      this.translate.text(type === 'file' ? 'tree.snack.fileCreated' : 'tree.snack.folderCreated'),
+      this.translate.text('tree.action.ok'),
       {
         duration: 2500,
       },
@@ -612,7 +635,11 @@ export class TreeDemoPage {
 
     this.treeData.update((root) => this.removeNodeById(root, selected.id));
     this.selectedNode.set(null);
-    this.snackBar.open(`„${selected.name}“ wurde gelöscht.`, 'Schließen', { duration: 2500 });
+    this.snackBar.open(
+      this.translate.text('tree.snack.nodeDeleted', { name: selected.name }),
+      this.translate.text('tree.action.close'),
+      { duration: 2500 },
+    );
   }
 
   // Reset to initial workspace
@@ -620,7 +647,11 @@ export class TreeDemoPage {
     this.treeData.set(INITIAL_WORKSPACE_DATA);
     this.searchQuery.set('');
     this.selectedNode.set(INITIAL_WORKSPACE_DATA[0].children![0].children![0].children![0]);
-    this.snackBar.open('Arbeitsbereich zurückgesetzt.', 'OK', { duration: 2500 });
+    this.snackBar.open(
+      this.translate.text('tree.snack.workspaceReset'),
+      this.translate.text('tree.action.ok'),
+      { duration: 2500 },
+    );
   }
 
   // Copy code to clipboard
@@ -628,7 +659,11 @@ export class TreeDemoPage {
     const node = this.selectedNode();
     if (node?.content && navigator.clipboard) {
       navigator.clipboard.writeText(node.content);
-      this.snackBar.open('Inhalt in die Zwischenablage kopiert!', 'Super', { duration: 2500 });
+      this.snackBar.open(
+        this.translate.text('tree.snack.copied'),
+        this.translate.text('tree.action.nice'),
+        { duration: 2500 },
+      );
     }
   }
 
@@ -644,7 +679,19 @@ export class TreeDemoPage {
     link.download = node.name;
     link.click();
     URL.revokeObjectURL(url);
-    this.snackBar.open(`Download von „${node.name}“ gestartet.`, 'OK', { duration: 2500 });
+    this.snackBar.open(
+      this.translate.text('tree.snack.downloadStarted', { name: node.name }),
+      this.translate.text('tree.action.ok'),
+      { duration: 2500 },
+    );
+  }
+
+  /** Display-layer translation of a node's modification timestamp. */
+  lastModifiedLabel(node: FileNode): string {
+    if (!node.lastModifiedKey) {
+      return '';
+    }
+    return this.translate.text(node.lastModifiedKey, node.lastModifiedParams);
   }
 
   // Recursive filtering helper

@@ -1,9 +1,7 @@
 <div class="defer-container">
   <div class="page-header">
-    <h1>Deferrable Views (<code>&#64;defer</code>)</h1>
-    <p class="subtitle">
-      Native Performance-Optimierung von Angular zum granularen, verzögerten Laden von Komponenten.
-    </p>
+    <h1><span [innerHTML]="'defer.page.title' | tHtml"></span></h1>
+    <p class="subtitle">{{ 'defer.page.subtitle' | t }}</p>
   </div>
 
   <div class="defer-grid">
@@ -11,8 +9,8 @@
     <mat-card appearance="outlined" class="defer-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">touch_app</mat-icon>
-        <mat-card-title>Trigger : <code>on interaction</code></mat-card-title>
-        <mat-card-subtitle>Verzögertes Laden beim Klick auf den Trigger-Button</mat-card-subtitle>
+        <mat-card-title [innerHTML]="'defer.interaction.title' | tHtml"></mat-card-title>
+        <mat-card-subtitle>{{ 'defer.interaction.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
@@ -21,16 +19,16 @@
             <app-heavy-content></app-heavy-content>
           } @placeholder {
             <div class="placeholder-box">
-              <p>Der Inhalt wartet auf Benutzerinteraktion.</p>
+              <p>{{ 'defer.interaction.placeholder' | t }}</p>
               <button #triggerBtn mat-flat-button color="primary">
                 <mat-icon>download</mat-icon>
-                Klicken zum Laden der Komponente
+                {{ 'defer.interaction.action' | t }}
               </button>
             </div>
           } @loading (minimum 500ms) {
             <div class="loading-box">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              <span>JavaScript-Chunk wird geladen...</span>
+              <span>{{ 'defer.interaction.loading' | t }}</span>
             </div>
           }
         </div>
@@ -41,10 +39,8 @@
     <mat-card appearance="outlined" class="defer-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">mouse</mat-icon>
-        <mat-card-title>Trigger : <code>on hover</code></mat-card-title>
-        <mat-card-subtitle
-          >Ladevorgang ausgelöst durch Überfahren mit dem Mauszeiger</mat-card-subtitle
-        >
+        <mat-card-title [innerHTML]="'defer.hover.title' | tHtml"></mat-card-title>
+        <mat-card-subtitle>{{ 'defer.hover.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
@@ -54,12 +50,12 @@
           } @placeholder {
             <div #hoverTarget class="placeholder-box hoverable">
               <mat-icon>pan_tool</mat-icon>
-              <p>Bewegen Sie die Maus über diesen Bereich, um das sofortige Laden auszulösen!</p>
+              <p>{{ 'defer.hover.placeholder' | t }}</p>
             </div>
           } @loading (minimum 500ms) {
             <div class="loading-box">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              <span>Laden durch Hover ausgelöst...</span>
+              <span>{{ 'defer.hover.loading' | t }}</span>
             </div>
           }
         </div>
@@ -70,8 +66,8 @@
     <mat-card appearance="outlined" class="defer-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">schedule</mat-icon>
-        <mat-card-title>Trigger : <code>on timer(2s)</code></mat-card-title>
-        <mat-card-subtitle>Automatisches verzögertes Laden nach 2 Sekunden</mat-card-subtitle>
+        <mat-card-title [innerHTML]="'defer.timer.title' | tHtml"></mat-card-title>
+        <mat-card-subtitle>{{ 'defer.timer.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
@@ -81,12 +77,12 @@
           } @placeholder {
             <div class="placeholder-box">
               <mat-icon>hourglass_bottom</mat-icon>
-              <p>Countdown von 2 Sekunden vor dem automatischen Laden...</p>
+              <p>{{ 'defer.timer.placeholder' | t }}</p>
             </div>
           } @loading (minimum 500ms) {
             <div class="loading-box">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              <span>Automatisches Laden nach Verzögerung...</span>
+              <span>{{ 'defer.timer.loading' | t }}</span>
             </div>
           }
         </div>

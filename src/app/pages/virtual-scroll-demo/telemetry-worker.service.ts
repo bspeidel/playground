@@ -1,4 +1,5 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
+import { Injectable, OnDestroy, inject, signal } from '@angular/core';
+import { TranslateService } from '../../i18n';
 import type { TelemetryLog as WorkerLog } from './telemetry.worker';
 
 export interface TelemetryLog extends Omit<WorkerLog, 'timestamp'> {
@@ -18,6 +19,7 @@ export interface DatasetResult {
  */
 @Injectable({ providedIn: 'root' })
 export class TelemetryWorkerService implements OnDestroy {
+  private readonly translate = inject(TranslateService);
   private worker: Worker | null = null;
   private seed = 1;
 
@@ -58,7 +60,7 @@ export class TelemetryWorkerService implements OnDestroy {
 
       worker.onerror = (event: ErrorEvent) => {
         cleanup();
-        reject(new Error(event.message || 'Der Telemetrie-Worker konnte nicht gestartet werden.'));
+        reject(new Error(event.message || this.translate.text('virtualScroll.worker.startFailed')));
       };
 
       worker.postMessage({ count, seed: this.seed });

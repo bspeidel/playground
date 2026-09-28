@@ -1,5 +1,4 @@
 import { Component, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,9 +7,16 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AppCurrencyPipe, TranslatePipe, TranslateHtmlPipe, TranslateService } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 
+/**
+ * Chart segments are display-only data: the legend and the donut centre label
+ * render the name, nothing looks it up. So the name is a key, translated in
+ * the template.
+ */
 export interface DonutSegment {
-  label: string;
+  labelKey: TranslationKey;
   value: number;
   color: string;
   icon: string;
@@ -24,7 +30,8 @@ export interface SprintVelocity {
 
 export interface SparklineMetric {
   id: string;
-  title: string;
+  titleKey: TranslationKey;
+  /** Unit is a technical symbol (Req/s, ms, ‰) — kept verbatim in both locales. */
   unit: string;
   values: number[];
   color: string;
@@ -33,8 +40,9 @@ export interface SparklineMetric {
 @Component({
   selector: 'app-charts-demo',
   imports: [
-    CommonModule,
-    CurrencyPipe,
+    AppCurrencyPipe,
+    TranslatePipe,
+    TranslateHtmlPipe,
     FormsModule,
     MatCardModule,
     MatButtonModule,
@@ -50,14 +58,15 @@ export interface SparklineMetric {
 })
 export class ChartsDemoPage {
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
   // Donut chart state
   readonly donutData = signal<DonutSegment[]>([
-    { label: 'Cloud & Infrastruktur', value: 42000, color: '#2563eb', icon: 'cloud' },
-    { label: 'Web- & Mobile-Entwicklung', value: 58000, color: '#7c3aed', icon: 'devices' },
-    { label: 'KI-Modelle & LLM', value: 36000, color: '#059669', icon: 'smart_toy' },
-    { label: 'Sicherheit & Compliance', value: 24000, color: '#ea580c', icon: 'security' },
-    { label: 'Design-System & UX', value: 18000, color: '#0284c7', icon: 'palette' },
+    { labelKey: 'charts.donut.cloud', value: 42000, color: '#2563eb', icon: 'cloud' },
+    { labelKey: 'charts.donut.webMobile', value: 58000, color: '#7c3aed', icon: 'devices' },
+    { labelKey: 'charts.donut.ai', value: 36000, color: '#059669', icon: 'smart_toy' },
+    { labelKey: 'charts.donut.security', value: 24000, color: '#ea580c', icon: 'security' },
+    { labelKey: 'charts.donut.design', value: 18000, color: '#0284c7', icon: 'palette' },
   ]);
 
   readonly activeDonutIndex = signal<number | null>(null);
@@ -82,21 +91,21 @@ export class ChartsDemoPage {
   readonly metricsList = signal<SparklineMetric[]>([
     {
       id: 'traffic',
-      title: 'Benutzerdatenverkehr (Req/Sek)',
+      titleKey: 'charts.metric.titleTraffic',
       unit: 'Req/s',
       values: [240, 290, 310, 450, 420, 560, 680, 640, 720, 850, 910, 890],
       color: '#2563eb',
     },
     {
       id: 'latency',
-      title: 'API-Antwortzeit (ms)',
+      titleKey: 'charts.metric.titleLatency',
       unit: 'ms',
       values: [48, 52, 45, 59, 62, 54, 49, 43, 41, 38, 36, 35],
       color: '#059669',
     },
     {
       id: 'errors',
-      title: '5xx-Fehlerrate (‰)',
+      titleKey: 'charts.metric.titleErrors',
       unit: '‰',
       values: [8, 12, 15, 9, 6, 14, 8, 4, 3, 2, 1, 2],
       color: '#ea580c',
@@ -221,6 +230,10 @@ export class ChartsDemoPage {
       })),
     );
 
-    this.snackBar.open('Datenreihen erfolgreich neu generiert!', 'OK', { duration: 2500 });
+    this.snackBar.open(
+      this.translate.text('charts.snack.regenerated'),
+      this.translate.text('charts.action.ok'),
+      { duration: 2500 },
+    );
   }
 }

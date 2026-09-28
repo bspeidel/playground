@@ -1,6 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import localeFr from '@angular/common/locales/fr';
 import { ApiExplorerPage } from './api-explorer';
+
+// The page formats counts with the locale-aware `AppNumberPipe`, which asks
+// Angular for de-DE / fr-FR data. The app registers that in `app.config.ts`,
+// which a component-level TestBed never loads.
+registerLocaleData(localeDe);
+registerLocaleData(localeFr);
 
 describe('ApiExplorerPage', () => {
   beforeEach(async () => {

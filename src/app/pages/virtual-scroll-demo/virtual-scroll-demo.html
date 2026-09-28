@@ -5,17 +5,15 @@
       <div class="badge-title">
         <span class="tech-pill">Angular 22</span>
         <span class="tech-pill m3">CDK Scrolling</span>
-        <span class="tech-pill zoneless">Zoneless 60 FPS</span>
+        <span class="tech-pill zoneless">{{ 'virtualScroll.header.pillZoneless' | t }}</span>
       </div>
-      <h1 class="page-title">Virtuelles Scrollen & Performance-Benchmark</h1>
+      <h1 class="page-title">{{ 'virtualScroll.header.title' | t }}</h1>
       <p class="page-subtitle">
-        Flüssiges und verzögerungsfreies Rendering von <strong>50.000+</strong> Elementen mit
-        <code>&#64;angular/cdk/scrolling</code>. Der Viewport recycelt kontinuierlich eine feste
-        Anzahl von DOM-Knoten, anstatt den Browser zu überlasten.
+        <span [innerHTML]="'virtualScroll.header.subtitle' | tHtml"></span>
       </p>
     </div>
     <div class="header-actions">
-      <span class="scale-label">Datensatzgröße :</span>
+      <span class="scale-label">{{ 'virtualScroll.header.datasetSize' | t }}</span>
       <div class="scale-buttons">
         <button
           mat-stroked-button
@@ -50,19 +48,19 @@
   </header>
 
   <!-- Benchmark & Performance KPIs -->
-  <section class="kpi-grid" aria-label="Leistungsindikatoren der Virtualisierung">
+  <section class="kpi-grid" [attr.aria-label]="'virtualScroll.kpis.ariaLabel' | t">
     <mat-card class="kpi-card" appearance="outlined">
       <mat-card-header>
         <div class="kpi-icon-wrapper primary">
           <mat-icon>storage</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Elemente im Speicher</div>
+          <div class="kpi-label">{{ 'virtualScroll.kpi.elements.label' | t }}</div>
           <div class="kpi-value">{{ filteredLogs().length | number }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Vollständiges Quell-Array im JS-Speicher</span>
+        <span>{{ 'virtualScroll.kpi.elements.hint' | t }}</span>
       </mat-card-content>
     </mat-card>
 
@@ -72,12 +70,12 @@
           <mat-icon>memory</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Aktive DOM-Knoten</div>
+          <div class="kpi-label">{{ 'virtualScroll.kpi.dom.label' | t }}</div>
           <div class="kpi-value">~{{ estimatedVirtualDomNodes() }}</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Kontinuierliches Recycling im DOM</span>
+        <span>{{ 'virtualScroll.kpi.dom.hint' | t }}</span>
       </mat-card-content>
     </mat-card>
 
@@ -87,12 +85,12 @@
           <mat-icon>speed</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">DOM-Reduktion</div>
+          <div class="kpi-label">{{ 'virtualScroll.kpi.reduction.label' | t }}</div>
           <div class="kpi-value">{{ domReductionPercent() }}%</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Browser-Speichereinsparung</span>
+        <span>{{ 'virtualScroll.kpi.reduction.hint' | t }}</span>
       </mat-card-content>
     </mat-card>
 
@@ -102,12 +100,12 @@
           <mat-icon>timer</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Durchschnittliche Latenz (p50)</div>
+          <div class="kpi-label">{{ 'virtualScroll.kpi.latency.label' | t }}</div>
           <div class="kpi-value">{{ avgLatency() }} ms</div>
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>{{ errorLogsCount() }} Fehlerprotokolle erkannt</span>
+        <span>{{ 'virtualScroll.kpi.latency.errors' | t: { count: errorLogsCount() } }}</span>
       </mat-card-content>
     </mat-card>
 
@@ -117,7 +115,7 @@
           <mat-icon>memory</mat-icon>
         </div>
         <div class="kpi-header-text">
-          <div class="kpi-label">Generierung (Web Worker)</div>
+          <div class="kpi-label">{{ 'virtualScroll.kpi.generation.label' | t }}</div>
           <div class="kpi-value">
             @if (lastGenerationMs(); as ms) {
               {{ ms.toFixed(1) }} ms
@@ -128,7 +126,7 @@
         </div>
       </mat-card-header>
       <mat-card-content class="kpi-footer">
-        <span>Haupt-Thread bleibt währenddessen blockierfrei</span>
+        <span>{{ 'virtualScroll.kpi.generation.hint' | t }}</span>
       </mat-card-content>
     </mat-card>
   </section>
@@ -138,16 +136,21 @@
     <div class="filters-bar">
       <!-- Search -->
       <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
-        <mat-label>Suchen (Dienst, Nachricht, #ID)...</mat-label>
+        <mat-label>{{ 'virtualScroll.filters.searchLabel' | t }}</mat-label>
         <input
           matInput
           [ngModel]="searchQuery()"
           (ngModelChange)="searchQuery.set($event)"
-          placeholder="Z. B.: auth-service, Redis, #4200..."
+          [placeholder]="'virtualScroll.filters.searchPlaceholder' | t"
         />
         <mat-icon matPrefix>search</mat-icon>
         @if (searchQuery()) {
-          <button mat-icon-button matSuffix (click)="searchQuery.set('')" aria-label="Löschen">
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="searchQuery.set('')"
+            [attr.aria-label]="'virtualScroll.filters.searchClear' | t"
+          >
             <mat-icon>close</mat-icon>
           </button>
         }
@@ -155,9 +158,9 @@
 
       <!-- Level Filter -->
       <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
-        <mat-label>Protokollstufe</mat-label>
+        <mat-label>{{ 'virtualScroll.filters.levelLabel' | t }}</mat-label>
         <mat-select [ngModel]="selectedLevel()" (ngModelChange)="selectedLevel.set($event)">
-          <mat-option value="all">Alle Stufen</mat-option>
+          <mat-option value="all">{{ 'virtualScroll.filters.levelAll' | t }}</mat-option>
           <mat-option value="INFO">INFO</mat-option>
           <mat-option value="WARN">WARN</mat-option>
           <mat-option value="ERROR">ERROR</mat-option>
@@ -171,18 +174,26 @@
         <button
           mat-stroked-button
           (click)="scrollToTop()"
-          matTooltip="Zum Anfang springen (Index #1)"
+          [matTooltip]="'virtualScroll.nav.topTooltip' | t"
         >
           <mat-icon>vertical_align_top</mat-icon>
-          Anfang
+          {{ 'virtualScroll.nav.top' | t }}
         </button>
-        <button mat-stroked-button (click)="scrollToMiddle()" matTooltip="Zur Mitte springen">
+        <button
+          mat-stroked-button
+          (click)="scrollToMiddle()"
+          [matTooltip]="'virtualScroll.nav.middleTooltip' | t"
+        >
           <mat-icon>vertical_align_center</mat-icon>
-          Mitte
+          {{ 'virtualScroll.nav.middle' | t }}
         </button>
-        <button mat-stroked-button (click)="scrollToBottom()" matTooltip="Zum Ende springen">
+        <button
+          mat-stroked-button
+          (click)="scrollToBottom()"
+          [matTooltip]="'virtualScroll.nav.bottomTooltip' | t"
+        >
           <mat-icon>vertical_align_bottom</mat-icon>
-          Ende
+          {{ 'virtualScroll.nav.bottom' | t }}
         </button>
 
         <div class="custom-jump-wrap">
@@ -195,7 +206,7 @@
             [max]="filteredLogs().length - 1"
           />
           <button mat-flat-button color="primary" (click)="scrollToCustomIndex()">
-            Zu Index springen
+            {{ 'virtualScroll.nav.jump' | t }}
           </button>
         </div>
       </div>
@@ -205,13 +216,20 @@
   <!-- CDK Virtual Scroll Viewport -->
   <mat-card class="viewport-card" appearance="outlined">
     <div class="viewport-header">
-      <span class="viewport-stats">
-        Anzeige von <strong>{{ filteredLogs().length | number }}</strong> Telemetrieeinträgen
-        (Aktueller Offset: <strong>{{ currentScrollOffset() | number }}px</strong>)
-      </span>
+      <span
+        class="viewport-stats"
+        [innerHTML]="
+          'virtualScroll.viewport.stats'
+            | tHtml
+              : {
+                  count: filteredLogs().length | number,
+                  offset: currentScrollOffset() | number,
+                }
+        "
+      ></span>
       <span class="viewport-fps-tag">
         <span class="fps-dot"></span>
-        60 FPS Zoneless
+        {{ 'virtualScroll.viewport.fpsTag' | t }}
       </span>
     </div>
 
@@ -220,8 +238,9 @@
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         <div class="generation-message">
           <mat-icon>hourglass_top</mat-icon>
-          {{ pending.toLocaleString() }} Telemetrieeinträge werden im
-          <strong>Web Worker</strong> generiert &ndash; die UI bleibt reaktionsfähig.
+          <span
+            [innerHTML]="'virtualScroll.overlay.generating' | tHtml: { count: pending | number }"
+          ></span>
         </div>
       </div>
     }
@@ -245,8 +264,8 @@
           <span class="log-time">{{ log.timestamp | date: 'HH:mm:ss.SSS' }}</span>
         </div>
 
-        <div class="log-message" [matTooltip]="log.message">
-          {{ log.message }}
+        <div class="log-message" [matTooltip]="logMessage(log.message)">
+          {{ logMessage(log.message) }}
         </div>
 
         <div class="log-metrics">
@@ -271,23 +290,12 @@
     <mat-card appearance="outlined" class="info-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">architecture</mat-icon>
-        <mat-card-title>Warum ist Virtualisierung essenziell?</mat-card-title>
-        <mat-card-subtitle>Vergleich Standard-DOM vs. CDK Virtual Scroll</mat-card-subtitle>
+        <mat-card-title>{{ 'virtualScroll.comparison.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'virtualScroll.comparison.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <p>
-          Wenn Sie 50.000 Elemente mit einem einfachen klassischen <code>&#64;for</code> rendern
-          würden, müsste der Browser mehr als <strong>150.000 DOM-Knoten</strong> gleichzeitig
-          zuweisen und berechnen. Dies würde zu einem vollständigen Einfrieren der
-          Benutzeroberfläche (mehrere Sekunden Blockade) und einem Speicherverbrauch von mehreren
-          hundert Megabyte führen.
-        </p>
-        <p>
-          Mit <code>CdkVirtualScrollViewport</code> injiziert Angular nur die
-          <strong>~14 sichtbaren Elemente</strong> auf dem Bildschirm in das DOM. In Kombination mit
-          <code>provideZonelessChangeDetection()</code> wird die CPU-Auslastung auf ein absolutes
-          Minimum reduziert und das Scrollen bleibt ultraflüssig bei 60/120 Bildern pro Sekunde.
-        </p>
+        <p [innerHTML]="'virtualScroll.comparison.paragraph1' | tHtml"></p>
+        <p [innerHTML]="'virtualScroll.comparison.paragraph2' | tHtml"></p>
       </mat-card-content>
     </mat-card>
   </div>

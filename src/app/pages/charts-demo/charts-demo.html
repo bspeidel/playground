@@ -4,20 +4,18 @@
     <div class="header-content">
       <div class="badge-title">
         <span class="tech-pill">Angular 22</span>
-        <span class="tech-pill m3">SVG Natif Pur</span>
-        <span class="tech-pill zoneless">Zero Lib Externe</span>
+        <span class="tech-pill m3">{{ 'charts.pill.nativeSvg' | t }}</span>
+        <span class="tech-pill zoneless">{{ 'charts.pill.zeroLib' | t }}</span>
       </div>
-      <h1 class="page-title">Grafische Visualisierung & SVG-Analytics</h1>
+      <h1 class="page-title">{{ 'charts.title' | t }}</h1>
       <p class="page-subtitle">
-        100% autonome interaktive Vektorgrafiken, angetrieben durch <code>computed()</code>-Signals
-        von Angular 22. Kein einziges überflüssiges Kilobyte, maximale Performance und automatische
-        Anpassung an das Material 3 Dark-/Light-Theme.
+        <span [innerHTML]="'charts.subtitle' | tHtml"></span>
       </p>
     </div>
     <div class="header-actions">
       <button mat-flat-button color="primary" (click)="randomizeData()">
         <mat-icon>shuffle</mat-icon>
-        Daten neu generieren
+        {{ 'charts.action.regenerate' | t }}
       </button>
     </div>
   </header>
@@ -28,10 +26,8 @@
     <mat-card appearance="outlined" class="chart-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">pie_chart</mat-icon>
-        <mat-card-title>Budgetaufteilung nach Bereich</mat-card-title>
-        <mat-card-subtitle
-          >SVG-Donut mit reaktiver stroke-dashoffset-Trigonometrie</mat-card-subtitle
-        >
+        <mat-card-title>{{ 'charts.donut.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'charts.donut.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="donut-card-content">
         <div class="donut-wrapper">
@@ -40,7 +36,7 @@
             <circle cx="120" cy="120" r="80" class="donut-bg" />
 
             <!-- Reactive SVG segments -->
-            @for (seg of donutSegmentsWithAngles(); track seg.label; let i = $index) {
+            @for (seg of donutSegmentsWithAngles(); track seg.labelKey; let i = $index) {
               <circle
                 cx="120"
                 cy="120"
@@ -59,20 +55,24 @@
             <g class="donut-center">
               @if (activeDonutSegment(); as activeSeg) {
                 <text x="120" y="108" class="center-label" text-anchor="middle">
-                  {{ activeSeg.label }}
+                  {{ activeSeg.labelKey | t }}
                 </text>
                 <text x="120" y="132" class="center-value" text-anchor="middle">
                   {{ activeSeg.value | currency: 'EUR' : 'symbol' : '1.0-0' }}
                 </text>
                 <text x="120" y="152" class="center-pct" text-anchor="middle">
-                  {{ activeSeg.percentage }}% der Gesamtsumme
+                  {{ 'charts.donut.percentOfTotal' | t: { percentage: activeSeg.percentage } }}
                 </text>
               } @else {
-                <text x="120" y="112" class="center-label" text-anchor="middle">Gesamtbudget</text>
+                <text x="120" y="112" class="center-label" text-anchor="middle">
+                  {{ 'charts.donut.totalBudget' | t }}
+                </text>
                 <text x="120" y="138" class="center-value" text-anchor="middle">
                   {{ donutTotal() | currency: 'EUR' : 'symbol' : '1.0-0' }}
                 </text>
-                <text x="120" y="154" class="center-pct" text-anchor="middle">100% zugewiesen</text>
+                <text x="120" y="154" class="center-pct" text-anchor="middle">
+                  {{ 'charts.donut.fullyAllocated' | t }}
+                </text>
               }
             </g>
           </svg>
@@ -80,7 +80,7 @@
 
         <!-- Interactive Legend -->
         <div class="donut-legend">
-          @for (seg of donutSegmentsWithAngles(); track seg.label; let i = $index) {
+          @for (seg of donutSegmentsWithAngles(); track seg.labelKey; let i = $index) {
             <div
               class="legend-item"
               [class.highlighted]="activeDonutIndex() === i"
@@ -88,7 +88,7 @@
               (mouseleave)="setDonutHover(null)"
             >
               <span class="legend-color-dot" [style.backgroundColor]="seg.color"></span>
-              <span class="legend-name">{{ seg.label }}</span>
+              <span class="legend-name">{{ seg.labelKey | t }}</span>
               <span class="legend-val">{{ seg.value | currency: 'EUR' : 'symbol' : '1.0-0' }}</span>
               <span class="legend-badge">{{ seg.percentage }}%</span>
             </div>
@@ -101,11 +101,10 @@
     <mat-card appearance="outlined" class="chart-card">
       <mat-card-header>
         <mat-icon mat-card-avatar color="primary">bar_chart</mat-icon>
-        <mat-card-title>Velocity der letzten Sprints</mat-card-title>
-        <mat-card-subtitle
-          >Geplante vs. realisierte Story Points (Durchschnitt:
-          {{ avgCompletedStoryPoints() }} SP)</mat-card-subtitle
-        >
+        <mat-card-title>{{ 'charts.velocity.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{
+          'charts.velocity.subtitle' | t: { average: avgCompletedStoryPoints() }
+        }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="bar-chart-content">
         <div class="bar-chart-wrapper">
@@ -174,15 +173,15 @@
           <div class="legend-series">
             <span class="series-tag">
               <span class="color-sample planned"></span>
-              Geplant (SP)
+              {{ 'charts.velocity.seriesPlanned' | t }}
             </span>
             <span class="series-tag">
               <span class="color-sample completed"></span>
-              Realisert (SP)
+              {{ 'charts.velocity.seriesCompleted' | t }}
             </span>
             <span class="series-tag">
               <span class="color-sample target"></span>
-              Durchschnitt
+              {{ 'charts.velocity.seriesAverage' | t }}
             </span>
           </div>
 
@@ -192,7 +191,7 @@
               <strong>{{ currentSprint.sprint }} :</strong>
               <span>{{ currentSprint.completed }} / {{ currentSprint.planned }} SP</span>
             } @else {
-              <span class="hint-text">Fahren Sie über einen Balken, um Details anzuzeigen</span>
+              <span class="hint-text">{{ 'charts.velocity.hint' | t }}</span>
             }
           </div>
         </div>
@@ -204,10 +203,8 @@
   <mat-card appearance="outlined" class="chart-card sparkline-card">
     <mat-card-header>
       <mat-icon mat-card-avatar color="primary">show_chart</mat-icon>
-      <mat-card-title>Trendkurve & Echtzeit-Metriken</mat-card-title>
-      <mat-card-subtitle
-        >Bézier-Spline-Interpolation in SVG mit reaktivem Flächenverlauf</mat-card-subtitle
-      >
+      <mat-card-title>{{ 'charts.sparkline.title' | t }}</mat-card-title>
+      <mat-card-subtitle>{{ 'charts.sparkline.subtitle' | t }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <!-- Top controls & metric selector -->
@@ -215,24 +212,24 @@
         <mat-button-toggle-group
           [ngModel]="selectedMetricId()"
           (ngModelChange)="selectedMetricId.set($event)"
-          aria-label="Aktive Metrik"
+          [attr.aria-label]="'charts.a11y.activeMetric' | t"
         >
-          <mat-button-toggle value="traffic">Datenverkehr (Req/s)</mat-button-toggle>
-          <mat-button-toggle value="latency">Latenz (ms)</mat-button-toggle>
-          <mat-button-toggle value="errors">Fehler (‰)</mat-button-toggle>
+          <mat-button-toggle value="traffic">{{ 'charts.metric.traffic' | t }}</mat-button-toggle>
+          <mat-button-toggle value="latency">{{ 'charts.metric.latency' | t }}</mat-button-toggle>
+          <mat-button-toggle value="errors">{{ 'charts.metric.errors' | t }}</mat-button-toggle>
         </mat-button-toggle-group>
 
         <div class="metric-stats-strip">
           <div class="stat-box">
-            <span class="stat-lbl">Aktueller Wert</span>
+            <span class="stat-lbl">{{ 'charts.stat.current' | t }}</span>
             <span class="stat-val">{{ currentMetricLatest() }} {{ currentMetric().unit }}</span>
           </div>
           <div class="stat-box">
-            <span class="stat-lbl">Minimum</span>
+            <span class="stat-lbl">{{ 'charts.stat.minimum' | t }}</span>
             <span class="stat-val">{{ currentMetricMin() }} {{ currentMetric().unit }}</span>
           </div>
           <div class="stat-box">
-            <span class="stat-lbl">Maximum</span>
+            <span class="stat-lbl">{{ 'charts.stat.maximum' | t }}</span>
             <span class="stat-val">{{ currentMetricMax() }} {{ currentMetric().unit }}</span>
           </div>
         </div>

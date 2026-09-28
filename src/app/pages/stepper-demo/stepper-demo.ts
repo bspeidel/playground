@@ -6,7 +6,6 @@ import {
   inject,
   OnDestroy,
 } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -28,6 +27,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatStepper, MatStepperModule, StepperOrientation } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AppCurrencyPipe, TranslateHtmlPipe, TranslatePipe, TranslateService } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 
 export interface EnvVariable {
   id: string;
@@ -38,18 +39,18 @@ export interface EnvVariable {
 
 export interface RegionOption {
   id: string;
-  name: string;
-  location: string;
+  nameKey: TranslationKey;
+  locationKey: TranslationKey;
   flag: string;
   latencyMs: number;
   carbonScore: 'A' | 'B' | 'C';
-  co2Label: string;
+  co2LabelKey: TranslationKey;
 }
 
 export interface ServiceTypeOption {
   id: string;
-  title: string;
-  description: string;
+  titleKey: TranslationKey;
+  descriptionKey: TranslationKey;
   icon: string;
   defaultPort: number;
 }
@@ -64,8 +65,9 @@ export interface DeploymentLog {
 @Component({
   selector: 'app-stepper-demo',
   imports: [
-    CommonModule,
-    CurrencyPipe,
+    AppCurrencyPipe,
+    TranslatePipe,
+    TranslateHtmlPipe,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -90,6 +92,7 @@ export interface DeploymentLog {
 export class StepperDemoPage implements OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
   private deploymentTimerId: ReturnType<typeof setTimeout> | null = null;
 
   // Stepper UI Controls
@@ -100,29 +103,29 @@ export class StepperDemoPage implements OnDestroy {
   readonly serviceTypes: ServiceTypeOption[] = [
     {
       id: 'webapp',
-      title: 'Web-App & SSR',
-      description: 'Angular 22 / Node.js mit hybridem Rendering und Edge-CDN',
+      titleKey: 'stepper.type.webapp.title',
+      descriptionKey: 'stepper.type.webapp.description',
       icon: 'web',
       defaultPort: 4200,
     },
     {
       id: 'api',
-      title: 'API & Microservice',
-      description: 'Hochleistungsfähiger REST- / gRPC-Dienst (Nest, Go, FastAPI)',
+      titleKey: 'stepper.type.api.title',
+      descriptionKey: 'stepper.type.api.description',
       icon: 'api',
       defaultPort: 8080,
     },
     {
       id: 'worker',
-      title: 'Worker & Queue',
-      description: 'Asynchroner Nachrichtenverarbeiter (Kafka / RabbitMQ)',
+      titleKey: 'stepper.type.worker.title',
+      descriptionKey: 'stepper.type.worker.description',
       icon: 'sync_alt',
       defaultPort: 9090,
     },
     {
       id: 'cache',
-      title: 'Cache & In-Memory',
-      description: 'Dedizierte Redis- / Valkey-Instanz mit automatischer Replikation',
+      titleKey: 'stepper.type.cache.title',
+      descriptionKey: 'stepper.type.cache.description',
       icon: 'storage',
       defaultPort: 6379,
     },
@@ -131,39 +134,39 @@ export class StepperDemoPage implements OnDestroy {
   readonly regions: RegionOption[] = [
     {
       id: 'europe-west9',
-      name: 'Westeuropa (Paris)',
-      location: 'Frankreich, Île-de-France',
+      nameKey: 'stepper.region.europeWest9.name',
+      locationKey: 'stepper.region.europeWest9.location',
       flag: '🇫🇷',
       latencyMs: 14,
       carbonScore: 'A',
-      co2Label: '100% kohlenstoffarme Energie',
+      co2LabelKey: 'stepper.region.europeWest9.co2',
     },
     {
       id: 'europe-west1',
-      name: 'Nordeuropa (Belgien)',
-      location: 'Belgien, St. Ghislain',
+      nameKey: 'stepper.region.europeWest1.name',
+      locationKey: 'stepper.region.europeWest1.location',
       flag: '🇧🇪',
       latencyMs: 19,
       carbonScore: 'A',
-      co2Label: 'Erneuerbare Energie',
+      co2LabelKey: 'stepper.region.europeWest1.co2',
     },
     {
       id: 'us-east4',
-      name: 'US Ost (Nord-Virginia)',
-      location: 'USA, Virginia',
+      nameKey: 'stepper.region.usEast4.name',
+      locationKey: 'stepper.region.usEast4.location',
       flag: '🇺🇸',
       latencyMs: 82,
       carbonScore: 'B',
-      co2Label: 'Standard-Stromnetz',
+      co2LabelKey: 'stepper.region.usEast4.co2',
     },
     {
       id: 'asia-northeast1',
-      name: 'Ost-Asien (Tokio)',
-      location: 'Japan, Tokio',
+      nameKey: 'stepper.region.asiaNortheast1.name',
+      locationKey: 'stepper.region.asiaNortheast1.location',
       flag: '🇯🇵',
       latencyMs: 215,
       carbonScore: 'C',
-      co2Label: 'CO2-Kompensation',
+      co2LabelKey: 'stepper.region.asiaNortheast1.co2',
     },
   ];
 
@@ -333,9 +336,11 @@ export class StepperDemoPage implements OnDestroy {
     }
 
     this.envVars.set(presets);
-    this.snackBar.open(`Vorlage ${preset.toUpperCase()} erfolgreich eingefügt!`, 'OK', {
-      duration: 2500,
-    });
+    this.snackBar.open(
+      this.translate.text('stepper.snack.presetLoaded', { preset: preset.toUpperCase() }),
+      this.translate.text('stepper.action.ok'),
+      { duration: 2500 },
+    );
   }
 
   // Deployment Simulation
@@ -347,9 +352,11 @@ export class StepperDemoPage implements OnDestroy {
     this.deploymentLogs.set([]);
 
     const serviceName = this.serviceForm.get('name')?.value || 'my-service';
-    const region = this.selectedRegion().name;
+    const region = this.translate.text(this.selectedRegion().nameKey);
     const branch = this.serviceForm.get('branch')?.value || 'main';
 
+    // The pipeline lines are built up front and replayed on a timer, so they
+    // are resolved into the active locale once, here.
     const steps: { progress: number; delay: number; log: DeploymentLog }[] = [
       {
         progress: 20,
@@ -358,7 +365,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 1,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Validierung der Cloud-Spezifikation & Kubernetes-Cluster [${region}]... OK`,
+          message: this.translate.text('stepper.log.validating', { region }),
         },
       },
       {
@@ -368,7 +375,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 2,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Klonen des Git-Repositorys (Branch '${branch}') & Abhängigkeitsprüfung...`,
+          message: this.translate.text('stepper.log.cloning', { branch }),
         },
       },
       {
@@ -378,7 +385,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 3,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Multi-Arch-OCI-Container-Image-Build (BuildKit sha256:7f4a01)... Abgeschlossen`,
+          message: this.translate.text('stepper.log.imageBuild'),
         },
       },
       {
@@ -388,7 +395,9 @@ export class StepperDemoPage implements OnDestroy {
           id: 4,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Verschlüsselung und Injektion von ${this.envVars().length} Umgebungsvariablen (KMS Vault)...`,
+          message: this.translate.text('stepper.log.encryptingVars', {
+            count: this.envVars().length,
+          }),
         },
       },
       {
@@ -398,7 +407,11 @@ export class StepperDemoPage implements OnDestroy {
           id: 5,
           timestamp: this.getNowTime(),
           level: 'info',
-          message: `Bereitstellung von ${this.minReplicas()} Pods (${this.cpuCores()} vCPU, ${this.ramGb()} GB RAM) mit Multi-AZ...`,
+          message: this.translate.text('stepper.log.provisioning', {
+            replicas: this.minReplicas(),
+            cpu: this.cpuCores(),
+            ram: this.ramGb(),
+          }),
         },
       },
       {
@@ -408,7 +421,7 @@ export class StepperDemoPage implements OnDestroy {
           id: 6,
           timestamp: this.getNowTime(),
           level: 'ready',
-          message: `Health-Checks erfolgreich (HTTP 200). SSL-Ingress-Router mit Let's Encrypt-Zertifikat aktiv!`,
+          message: this.translate.text('stepper.log.healthChecks'),
         },
       },
     ];
@@ -424,8 +437,8 @@ export class StepperDemoPage implements OnDestroy {
           this.deployedEndpoint.set(endpoint);
           this.deploymentStatus.set('success');
           this.snackBar.open(
-            'Microservice erfolgreich auf dem Cluster bereitgestellt! 🚀',
-            'Super',
+            this.translate.text('stepper.snack.deployed'),
+            this.translate.text('stepper.action.super'),
             {
               duration: 4000,
             },
@@ -460,16 +473,22 @@ export class StepperDemoPage implements OnDestroy {
     this.highAvailability.set(true);
 
     stepper.reset();
-    this.snackBar.open('Assistent und Konfigurationen zurückgesetzt.', 'Schließen', {
-      duration: 2500,
-    });
+    this.snackBar.open(
+      this.translate.text('stepper.snack.reset'),
+      this.translate.text('stepper.action.close'),
+      { duration: 2500 },
+    );
   }
 
   copyEndpoint(): void {
     const url = this.deployedEndpoint();
     if (url && navigator.clipboard) {
       navigator.clipboard.writeText(`curl -i ${url}/healthz`);
-      this.snackBar.open('cURL-Befehl in die Zwischenablage kopiert!', 'OK', { duration: 2500 });
+      this.snackBar.open(
+        this.translate.text('stepper.snack.copied'),
+        this.translate.text('stepper.action.ok'),
+        { duration: 2500 },
+      );
     }
   }
 

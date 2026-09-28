@@ -1,6 +1,5 @@
 import { Component, inject, signal, resource, ChangeDetectionStrategy } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { AppNumberPipe, TranslateHtmlPipe, TranslatePipe } from '../../i18n';
 import {
   GitHubApiService,
   type GitHubSearchResponse,
@@ -25,7 +25,6 @@ const SEARCH_DEBOUNCE_MS = 300;
 @Component({
   selector: 'app-api-explorer',
   imports: [
-    DecimalPipe,
     FormsModule,
     MatCardModule,
     MatButtonModule,
@@ -35,6 +34,9 @@ const SEARCH_DEBOUNCE_MS = 300;
     MatSelectModule,
     MatProgressBarModule,
     MatChipsModule,
+    AppNumberPipe,
+    TranslatePipe,
+    TranslateHtmlPipe,
   ],
   templateUrl: './api-explorer.html',
   styleUrl: './api-explorer.scss',

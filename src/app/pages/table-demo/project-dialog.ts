@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
+import { TranslatePipe } from '../../i18n';
 
 export interface ProjectItem {
   id: string;
@@ -33,70 +34,79 @@ export interface ProjectItem {
     MatButtonModule,
     MatIconModule,
     MatSliderModule,
+    TranslatePipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2 mat-dialog-title>
       <mat-icon class="dialog-icon">{{ data ? 'edit' : 'add_circle' }}</mat-icon>
-      {{ data ? 'Projekt bearbeiten' : 'Neues Projekt' }}
+      {{ (data ? 'table.dialog.editTitle' : 'table.dialog.createTitle') | t }}
     </h2>
 
     <mat-dialog-content class="dialog-content">
       <form [formGroup]="form" class="project-form">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Projektname</mat-label>
-          <input matInput formControlName="name" placeholder="Z. B.: Dashboard-Relaunch V3" />
+          <mat-label>{{ 'table.dialog.nameLabel' | t }}</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            [placeholder]="'table.dialog.namePlaceholder' | t"
+          />
           <mat-icon matPrefix>folder</mat-icon>
           @if (form.get('name')?.hasError('required')) {
-            <mat-error>Der Name ist erforderlich</mat-error>
+            <mat-error>{{ 'table.dialog.nameRequired' | t }}</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Kunde / Unternehmen</mat-label>
-          <input matInput formControlName="client" placeholder="Z. B.: Acme Corp" />
+          <mat-label>{{ 'table.dialog.clientLabel' | t }}</mat-label>
+          <input
+            matInput
+            formControlName="client"
+            [placeholder]="'table.dialog.clientPlaceholder' | t"
+          />
           <mat-icon matPrefix>business</mat-icon>
           @if (form.get('client')?.hasError('required')) {
-            <mat-error>Der Kunde ist erforderlich</mat-error>
+            <mat-error>{{ 'table.dialog.clientRequired' | t }}</mat-error>
           }
         </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Kategorie</mat-label>
+            <mat-label>{{ 'table.dialog.categoryLabel' | t }}</mat-label>
             <mat-select formControlName="category">
-              <mat-option value="Web App">Web App</mat-option>
-              <mat-option value="Mobile App">Mobile App</mat-option>
-              <mat-option value="Cloud / DevOps">Cloud / DevOps</mat-option>
-              <mat-option value="Design System">Design System</mat-option>
-              <mat-option value="Audit AI">Audit AI</mat-option>
+              <mat-option value="Web App">{{ 'table.category.webApp' | t }}</mat-option>
+              <mat-option value="Mobile App">{{ 'table.category.mobileApp' | t }}</mat-option>
+              <mat-option value="Cloud / DevOps">{{ 'table.category.cloudDevOps' | t }}</mat-option>
+              <mat-option value="Design System">{{ 'table.category.designSystem' | t }}</mat-option>
+              <mat-option value="Audit AI">{{ 'table.category.auditAi' | t }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Priorität</mat-label>
+            <mat-label>{{ 'table.dialog.priorityLabel' | t }}</mat-label>
             <mat-select formControlName="priority">
-              <mat-option value="Basse">Niedrig</mat-option>
-              <mat-option value="Moyenne">Mittel</mat-option>
-              <mat-option value="Haute">Hoch</mat-option>
-              <mat-option value="Critique">Kritisch</mat-option>
+              <mat-option value="Basse">{{ 'table.priority.low' | t }}</mat-option>
+              <mat-option value="Moyenne">{{ 'table.priority.medium' | t }}</mat-option>
+              <mat-option value="Haute">{{ 'table.priority.high' | t }}</mat-option>
+              <mat-option value="Critique">{{ 'table.priority.critical' | t }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Status</mat-label>
+            <mat-label>{{ 'table.dialog.statusLabel' | t }}</mat-label>
             <mat-select formControlName="status">
-              <mat-option value="Actif">Aktiv</mat-option>
-              <mat-option value="En attente">Wartend</mat-option>
-              <mat-option value="Terminé">Abgeschlossen</mat-option>
-              <mat-option value="Bloqué">Blockiert</mat-option>
+              <mat-option value="Actif">{{ 'table.status.active' | t }}</mat-option>
+              <mat-option value="En attente">{{ 'table.status.pending' | t }}</mat-option>
+              <mat-option value="Terminé">{{ 'table.status.done' | t }}</mat-option>
+              <mat-option value="Bloqué">{{ 'table.status.blocked' | t }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Budget (€)</mat-label>
+            <mat-label>{{ 'table.dialog.budgetLabel' | t }}</mat-label>
             <input matInput type="number" formControlName="budget" min="0" step="500" />
             <mat-icon matPrefix>payments</mat-icon>
           </mat-form-field>
@@ -104,7 +114,7 @@ export interface ProjectItem {
 
         <div class="slider-field">
           <label for="project-progress" class="slider-label">
-            Fortschritt : {{ form.get('progress')?.value }}%
+            {{ 'table.dialog.progress' | t: { value: form.get('progress')?.value ?? 0 } }}
           </label>
           <mat-slider min="0" max="100" step="5" discrete>
             <input id="project-progress" matSliderThumb formControlName="progress" />
@@ -114,9 +124,9 @@ export interface ProjectItem {
     </mat-dialog-content>
 
     <mat-dialog-actions align="end" class="dialog-actions">
-      <button mat-button (click)="cancel()">Abbrechen</button>
+      <button mat-button (click)="cancel()">{{ 'table.action.cancel' | t }}</button>
       <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="save()">
-        {{ data ? 'Aktualisieren' : 'Projekt erstellen' }}
+        {{ (data ? 'table.dialog.update' : 'table.dialog.create') | t }}
       </button>
     </mat-dialog-actions>
   `,
