@@ -137,6 +137,13 @@
 .main-content {
   flex: 1;
   background-color: var(--mat-sys-surface);
+
+  // `tabindex="-1"` makes the region programmatically focusable without
+  // adding it to the tab order. Suppress the default focus ring, which would
+  // otherwise outline the whole viewport on every navigation.
+  &:focus {
+    outline: none;
+  }
 }
 
 .app-footer {

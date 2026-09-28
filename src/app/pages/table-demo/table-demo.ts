@@ -8,7 +8,7 @@ import {
   ChangeDetectionStrategy,
   AfterViewInit,
 } from '@angular/core';
-import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -26,8 +26,33 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { SelectionModel } from '@angular/cdk/collections';
 import { ProjectDialog, ProjectItem } from './project-dialog';
+
+/**
+ * Exhaustive status → CSS class maps. Typed as `Record` so TypeScript
+ * rejects the map if a status variant is ever added without a style.
+ */
+const STATUS_CLASS: Record<ProjectItem['status'], string> = {
+  Actif: 'status-active',
+  'En attente': 'status-pending',
+  Terminé: 'status-done',
+  Bloqué: 'status-blocked',
+};
+
+const PRIORITY_CLASS: Record<ProjectItem['priority'], string> = {
+  Basse: 'priority-low',
+  Moyenne: 'priority-medium',
+  Haute: 'priority-high',
+  Critique: 'priority-critical',
+};
+
+const CATEGORY_ICON: Record<ProjectItem['category'], string> = {
+  'Web App': 'language',
+  'Mobile App': 'smartphone',
+  'Cloud / DevOps': 'cloud_queue',
+  'Design System': 'palette',
+  'Audit AI': 'smart_toy',
+};
 
 const INITIAL_PROJECTS: ProjectItem[] = [
   {
@@ -167,10 +192,10 @@ const INITIAL_PROJECTS: ProjectItem[] = [
 @Component({
   selector: 'app-table-demo',
   imports: [
-    CommonModule,
     FormsModule,
     CurrencyPipe,
     DatePipe,
+    NgClass,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
@@ -205,10 +230,16 @@ export class TableDemo implements AfterViewInit {
   readonly searchTerm = signal<string>('');
   readonly statusFilter = signal<string>('all');
   readonly categoryFilter = signal<string>('all');
-  readonly selectedCount = signal<number>(0);
 
-  // Selection model
-  readonly selection = new SelectionModel<ProjectItem>(true, []);
+  /**
+   * Single source of truth for the row selection.
+   *
+   * Previously this was a `SelectionModel` (not reactive) plus a manual
+   * `selectedCount` signal, which forced `selectedBudget` to read a dummy
+   * signal to establish a dependency. Storing ids in a signal makes every
+   * derived value genuinely reactive.
+   */
+  private readonly _selectedIds = signal<ReadonlySet<string>>(new Set());
 
   // Filtered dataset computed automatically via Signals
   readonly filteredItems = computed(() => {
@@ -246,11 +277,24 @@ export class TableDemo implements AfterViewInit {
     return Math.round(list.reduce((acc, p) => acc + p.progress, 0) / list.length);
   });
 
+  readonly selectedIds = this._selectedIds.asReadonly();
+
+  readonly selectedCount = computed(() => this._selectedIds().size);
+
   readonly selectedBudget = computed(() => {
-    // Read selectedCount signal to establish reactive tracking
-    this.selectedCount();
-    return this.selection.selected.reduce((acc, p) => acc + p.budget, 0);
+    const ids = this._selectedIds();
+    return this.items()
+      .filter((p) => ids.has(p.id))
+      .reduce((acc, p) => acc + p.budget, 0);
   });
+
+  isSelected(project: ProjectItem): boolean {
+    return this._selectedIds().has(project.id);
+  }
+
+  private setSelection(ids: ReadonlySet<string>): void {
+    this._selectedIds.set(ids);
+  }
 
   // MatTable DataSource
   readonly dataSource = new MatTableDataSource<ProjectItem>([]);
@@ -301,36 +345,38 @@ export class TableDemo implements AfterViewInit {
 
   // Selection handlers
   isAllSelected(): boolean {
-    const numSelected = this.selection.selected.length;
+    const numSelected = this._selectedIds().size;
     const numRows = this.dataSource.data.length;
     return numSelected > 0 && numSelected === numRows;
   }
 
   isPartiallySelected(): boolean {
-    const numSelected = this.selection.selected.length;
+    const numSelected = this._selectedIds().size;
     const numRows = this.dataSource.data.length;
     return numSelected > 0 && numSelected < numRows;
   }
 
   toggleAllRows(): void {
     if (this.isAllSelected()) {
-      this.selection.clear();
+      this.setSelection(new Set());
     } else {
-      this.dataSource.data.forEach((row) => this.selection.select(row));
+      this.setSelection(new Set(this.dataSource.data.map((row) => row.id)));
     }
-    this.selectedCount.set(this.selection.selected.length);
   }
 
   toggleRow(row: ProjectItem): void {
-    this.selection.toggle(row);
-    this.selectedCount.set(this.selection.selected.length);
+    const next = new Set(this._selectedIds());
+    if (!next.delete(row.id)) {
+      next.add(row.id);
+    }
+    this.setSelection(next);
   }
 
   checkboxLabel(row?: ProjectItem): string {
     if (!row) {
       return `${this.isAllSelected() ? 'Alle abwählen' : 'Alle auswählen'}`;
     }
-    return `${this.selection.isSelected(row) ? 'Projekt abwählen' : 'Projekt auswählen'}: ${row.name}`;
+    return `${this.isSelected(row) ? 'Projekt abwählen' : 'Projekt auswählen'}: ${row.name}`;
   }
 
   // Filters reset
@@ -377,29 +423,32 @@ export class TableDemo implements AfterViewInit {
 
   deleteProject(project: ProjectItem): void {
     this.items.update((current) => current.filter((p) => p.id !== project.id));
-    this.selection.deselect(project);
-    this.selectedCount.set(this.selection.selected.length);
+    this.deselect(project);
     this.snackBar.open(`Projekt "${project.name}" gelöscht`, 'Schließen', { duration: 3000 });
+  }
+
+  private deselect(project: ProjectItem): void {
+    const next = new Set(this._selectedIds());
+    next.delete(project.id);
+    this.setSelection(next);
   }
 
   // Batch actions
   deleteSelected(): void {
-    const count = this.selection.selected.length;
-    const selectedIds = new Set(this.selection.selected.map((p) => p.id));
+    const selectedIds = this._selectedIds();
+    const count = selectedIds.size;
     this.items.update((current) => current.filter((p) => !selectedIds.has(p.id)));
-    this.selection.clear();
-    this.selectedCount.set(0);
+    this.setSelection(new Set());
     this.snackBar.open(`${count} Projekt(e) gelöscht`, 'Schließen', { duration: 3500 });
   }
 
   updateSelectedStatus(newStatus: ProjectItem['status']): void {
-    const count = this.selection.selected.length;
-    const selectedIds = new Set(this.selection.selected.map((p) => p.id));
+    const selectedIds = this._selectedIds();
+    const count = selectedIds.size;
     this.items.update((current) =>
       current.map((p) => (selectedIds.has(p.id) ? { ...p, status: newStatus } : p)),
     );
-    this.selection.clear();
-    this.selectedCount.set(0);
+    this.setSelection(new Set());
     this.snackBar.open(`Status für ${count} Projekt(e) aktualisiert`, 'Schließen', {
       duration: 3500,
     });
@@ -467,45 +516,16 @@ export class TableDemo implements AfterViewInit {
     URL.revokeObjectURL(url);
   }
 
-  // Helpers for template styling
+  // Helpers for template styling — lookups on the exhaustive maps above.
   getStatusClass(status: ProjectItem['status']): string {
-    switch (status) {
-      case 'Actif':
-        return 'status-active';
-      case 'Terminé':
-        return 'status-done';
-      case 'En attente':
-        return 'status-pending';
-      case 'Bloqué':
-        return 'status-blocked';
-    }
+    return STATUS_CLASS[status];
   }
 
   getPriorityClass(priority: ProjectItem['priority']): string {
-    switch (priority) {
-      case 'Critique':
-        return 'priority-critical';
-      case 'Haute':
-        return 'priority-high';
-      case 'Moyenne':
-        return 'priority-medium';
-      case 'Basse':
-        return 'priority-low';
-    }
+    return PRIORITY_CLASS[priority];
   }
 
   getCategoryIcon(category: ProjectItem['category']): string {
-    switch (category) {
-      case 'Web App':
-        return 'language';
-      case 'Mobile App':
-        return 'smartphone';
-      case 'Cloud / DevOps':
-        return 'cloud_queue';
-      case 'Design System':
-        return 'palette';
-      case 'Audit AI':
-        return 'smart_toy';
-    }
+    return CATEGORY_ICON[category];
   }
 }

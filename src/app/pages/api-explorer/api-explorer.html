@@ -16,8 +16,8 @@
           <mat-label>GitHub-Repository suchen</mat-label>
           <input
             matInput
-            [ngModel]="searchTerm()"
-            (ngModelChange)="searchTerm.set($event)"
+            [ngModel]="searchInput()"
+            (ngModelChange)="searchInput.set($event)"
             placeholder="Z. B.: angular, rxjs, vite..."
           />
           <mat-icon matSuffix>search</mat-icon>
@@ -81,6 +81,10 @@
       <span
         >Automatisch abgebrochene Anfragen (AbortSignal) : <strong>{{ abortCount() }}</strong></span
       >
+      <span class="debounce-hint">
+        <mat-icon>timer</mat-icon>
+        Eingaben werden {{ debounceMs }} ms entprellt
+      </span>
     </div>
   </div>
 
@@ -165,7 +169,7 @@
       @if (!reposResource.isLoading() && !reposResource.error()) {
         <div class="empty-results">
           <mat-icon>search_off</mat-icon>
-          <h3>Keine Ergebnisse gefunden für "{{ searchTerm() }}"</h3>
+          <h3>Keine Ergebnisse gefunden für "{{ searchInput() }}"</h3>
           <p>Versuchen Sie eine andere Suche wie "angular", "typescript" oder "material".</p>
         </div>
       }

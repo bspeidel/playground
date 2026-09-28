@@ -63,16 +63,37 @@ describe('TableDemo', () => {
     component.toggleRow(firstItem);
     fixture.detectChanges();
 
-    expect(component.selection.isSelected(firstItem)).toBe(true);
+    expect(component.isSelected(firstItem)).toBe(true);
     expect(component.selectedCount()).toBe(1);
     expect(component.selectedBudget()).toBe(firstItem.budget);
 
     component.toggleRow(firstItem);
     fixture.detectChanges();
 
-    expect(component.selection.isSelected(firstItem)).toBe(false);
+    expect(component.isSelected(firstItem)).toBe(false);
     expect(component.selectedCount()).toBe(0);
     expect(component.selectedBudget()).toBe(0);
+  });
+
+  it('should derive selectedBudget reactively without manual counter updates', () => {
+    const fixture = TestBed.createComponent(TableDemo);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const [a, b] = component.items();
+    component.toggleRow(a);
+    component.toggleRow(b);
+    fixture.detectChanges();
+
+    expect(component.selectedBudget()).toBe(a.budget + b.budget);
+
+    // Deleting a selected project must be reflected in the derived total
+    // without any manual bookkeeping signal being bumped.
+    component.deleteProject(a);
+    fixture.detectChanges();
+
+    expect(component.selectedCount()).toBe(1);
+    expect(component.selectedBudget()).toBe(b.budget);
   });
 
   it('should toggle all rows with toggleAllRows', () => {

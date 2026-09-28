@@ -1,12 +1,13 @@
 import {
   Component,
+  afterNextRender,
   signal,
   computed,
   viewChild,
   inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule, DecimalPipe, DatePipe } from '@angular/common';
+import { DecimalPipe, DatePipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { MatCardModule } from '@angular/material/card';
@@ -19,68 +20,30 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TelemetryWorkerService, type TelemetryLog } from './telemetry-worker.service';
 
-export interface TelemetryLog {
-  id: number;
-  timestamp: Date;
-  service: string;
-  level: 'INFO' | 'WARN' | 'ERROR' | 'DEBUG';
-  message: string;
-  latencyMs: number;
-  statusCode: number;
-}
+export type { TelemetryLog } from './telemetry-worker.service';
 
-const SERVICES = [
-  'auth-service',
-  'payment-gateway',
-  'inventory-api',
-  'edge-worker',
-  'ai-inference',
-];
-const LEVELS: TelemetryLog['level'][] = ['INFO', 'INFO', 'INFO', 'WARN', 'ERROR', 'DEBUG'];
-const MESSAGES = [
-  'HTTP-Anfrage erfolgreich verarbeitet',
-  'Cache-Treffer auf Redis-Cluster',
-  'Antwortzeit überschreitet SLA (p99)',
-  'JWT-Token automatisch erneuert',
-  'Verbindungsfehler zum sekundären Datenbankknoten',
-  'Dauerhafte WebSocket-Synchronisation aktiv',
-  'Speicherbereinigung des Objektpools abgeschlossen',
-  'Ausführung des asynchronen Workers abgeschlossen',
-];
+const INITIAL_DATASET_SIZE = 50_000;
 
-function generateDataset(count: number): TelemetryLog[] {
-  const baseTime = Date.now() - count * 1500;
-  const items: TelemetryLog[] = new Array(count);
+/**
+ * Row height in pixels. Single source of truth: bound to the viewport via
+ * `itemSize` and reused for scroll-offset maths. Keep in sync with
+ * `.log-row { height }` in the stylesheet.
+ */
+const ITEM_SIZE = 64;
 
-  for (let i = 0; i < count; i++) {
-    const level = LEVELS[Math.floor(Math.random() * LEVELS.length)];
-    const service = SERVICES[Math.floor(Math.random() * SERVICES.length)];
-    const message = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
-    const latency =
-      level === 'ERROR'
-        ? Math.floor(800 + Math.random() * 1200)
-        : Math.floor(10 + Math.random() * 120);
-    const statusCode = level === 'ERROR' ? 500 : level === 'WARN' ? 429 : 200;
-
-    items[i] = {
-      id: i + 1,
-      timestamp: new Date(baseTime + i * 1500),
-      service,
-      level,
-      message,
-      latencyMs: latency,
-      statusCode,
-    };
-  }
-
-  return items;
-}
+const LEVEL_CLASS: Record<TelemetryLog['level'], string> = {
+  INFO: 'level-info',
+  WARN: 'level-warn',
+  ERROR: 'level-error',
+  DEBUG: 'level-debug',
+};
 
 @Component({
   selector: 'app-virtual-scroll-demo',
   imports: [
-    CommonModule,
+    NgClass,
     DecimalPipe,
     DatePipe,
     FormsModule,
@@ -102,17 +65,32 @@ function generateDataset(count: number): TelemetryLog[] {
 })
 export class VirtualScrollDemoPage {
   private readonly snackBar = inject(MatSnackBar);
+  private readonly worker = inject(TelemetryWorkerService);
 
   // Viewport signal query
   readonly viewport = viewChild(CdkVirtualScrollViewport);
 
   // Reactive state signals
-  readonly totalItemsCount = signal<number>(50000);
-  readonly allLogs = signal<TelemetryLog[]>(generateDataset(50000));
+  readonly totalItemsCount = signal<number>(INITIAL_DATASET_SIZE);
+  readonly allLogs = signal<TelemetryLog[]>([]);
   readonly searchQuery = signal<string>('');
   readonly selectedLevel = signal<string>('all');
-  readonly targetIndexInput = signal<number>(15000);
+  readonly targetIndexInput = signal<number>(15_000);
   readonly currentScrollOffset = signal<number>(0);
+
+  /** True while the Web Worker is building the dataset. */
+  readonly isGenerating = this.worker.pendingCount.asReadonly();
+
+  /** Wall-clock duration of the last generation, in milliseconds. */
+  readonly lastGenerationMs = signal<number | null>(null);
+
+  constructor() {
+    // Generate the initial dataset off the main thread, once the component is
+    // mounted. Building it synchronously froze the UI for ~150 ms.
+    afterNextRender(() => {
+      void this.regenerate(INITIAL_DATASET_SIZE, { notify: false });
+    });
+  }
 
   // Filtered dataset computed automatically
   readonly filteredLogs = computed(() => {
@@ -141,9 +119,13 @@ export class VirtualScrollDemoPage {
 
   readonly domReductionPercent = computed(() => {
     const total = this.filteredLogs().length;
-    if (total === 0) return 0;
+    if (total === 0) return '0.00';
+
     const rendered = this.estimatedVirtualDomNodes();
-    return ((1 - rendered / total) * 100).toFixed(2);
+    // With a very small filtered set the viewport can hold every row, so the
+    // "reduction" would compute as a negative number. Clamp it at zero.
+    const reduction = ((total - rendered) / total) * 100;
+    return Math.max(0, reduction).toFixed(2);
   });
 
   readonly errorLogsCount = computed(
@@ -159,17 +141,37 @@ export class VirtualScrollDemoPage {
 
   // Scale Change
   setDatasetSize(size: number): void {
-    this.totalItemsCount.set(size);
-    const start = performance.now();
-    const newItems = generateDataset(size);
-    this.allLogs.set(newItems);
-    const duration = (performance.now() - start).toFixed(1);
+    void this.regenerate(size);
+  }
 
-    this.targetIndexInput.set(Math.floor(size / 2));
-    this.scrollToTop();
-    this.snackBar.open(`${size.toLocaleString()} Logs in ${duration} ms generiert!`, 'OK', {
-      duration: 3000,
-    });
+  private async regenerate(size: number, options: { notify?: boolean } = {}): Promise<void> {
+    const { notify = true } = options;
+    const started = performance.now();
+
+    try {
+      const { items, durationMs } = await this.worker.generate(size);
+
+      this.allLogs.set(items);
+      this.totalItemsCount.set(size);
+      this.lastGenerationMs.set(durationMs);
+      this.targetIndexInput.set(Math.floor(size / 2));
+      this.scrollToTop();
+
+      if (notify) {
+        this.snackBar.open(
+          `${size.toLocaleString()} Logs in ${durationMs.toFixed(1)} ms im Web Worker generiert` +
+            ` (Blockade: ${(performance.now() - started).toFixed(1)} ms)`,
+          'OK',
+          { duration: 3500 },
+        );
+      }
+    } catch (error) {
+      this.snackBar.open(
+        error instanceof Error ? error.message : 'Datensatz konnte nicht erzeugt werden.',
+        'Schließen',
+        { duration: 4000 },
+      );
+    }
   }
 
   // Scroll Actions
@@ -186,7 +188,7 @@ export class VirtualScrollDemoPage {
     if (vp) {
       const mid = Math.floor(this.filteredLogs().length / 2);
       vp.scrollToIndex(mid, 'smooth');
-      this.currentScrollOffset.set(mid * 64);
+      this.currentScrollOffset.set(mid * this.itemSize);
     }
   }
 
@@ -195,7 +197,7 @@ export class VirtualScrollDemoPage {
     if (vp) {
       const last = this.filteredLogs().length - 1;
       vp.scrollToIndex(last, 'smooth');
-      this.currentScrollOffset.set(last * 64);
+      this.currentScrollOffset.set(last * this.itemSize);
     }
   }
 
@@ -227,16 +229,15 @@ export class VirtualScrollDemoPage {
     }
   }
 
+  /**
+   * Row height in pixels, also bound to the viewport's `itemSize` input so the
+   * simulated scroll offsets can never drift from the real layout.
+   */
+  readonly itemSize = ITEM_SIZE;
+
   getLevelClass(level: TelemetryLog['level']): string {
-    switch (level) {
-      case 'ERROR':
-        return 'level-error';
-      case 'WARN':
-        return 'level-warn';
-      case 'INFO':
-        return 'level-info';
-      case 'DEBUG':
-        return 'level-debug';
-    }
+    return LEVEL_CLASS[level];
   }
+
+  trackById = (_index: number, log: TelemetryLog): number => log.id;
 }

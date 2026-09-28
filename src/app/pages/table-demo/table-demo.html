@@ -209,8 +209,8 @@
           <th mat-header-cell *matHeaderCellDef class="col-select">
             <mat-checkbox
               (change)="$event ? toggleAllRows() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && isPartiallySelected()"
+              [checked]="selectedCount() > 0 && isAllSelected()"
+              [indeterminate]="selectedCount() > 0 && isPartiallySelected()"
               [aria-label]="checkboxLabel()"
             >
             </mat-checkbox>
@@ -219,7 +219,7 @@
             <mat-checkbox
               (click)="$event.stopPropagation()"
               (change)="$event ? toggleRow(row) : null"
-              [checked]="selection.isSelected(row)"
+              [checked]="isSelected(row)"
               [aria-label]="checkboxLabel(row)"
             >
             </mat-checkbox>
@@ -327,7 +327,7 @@
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns"
-          [class.selected-row]="selection.isSelected(row)"
+          [class.selected-row]="isSelected(row)"
           (click)="toggleRow(row)"
           class="clickable-row"
         ></tr>

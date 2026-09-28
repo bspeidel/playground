@@ -1,37 +1,45 @@
-import { Injectable, signal, effect, inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Injectable, effect, signal } from '@angular/core';
 
 export type ThemeMode = 'light' | 'dark';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ThemeService {
-  private readonly platformId = inject(PLATFORM_ID);
-  readonly isDark = signal(false);
+const STORAGE_KEY = 'playground-theme';
 
-  constructor() {
-    if (isPlatformBrowser(this.platformId)) {
-      const savedTheme = localStorage.getItem('playground-theme') as ThemeMode | null;
-      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)')?.matches ?? false;
-      const initialDark = savedTheme ? savedTheme === 'dark' : prefersDark;
-      this.isDark.set(initialDark);
-
-      effect(() => {
-        const dark = this.isDark();
-        const root = document.documentElement;
-        if (dark) {
-          root.classList.add('dark-theme');
-          localStorage.setItem('playground-theme', 'dark');
-        } else {
-          root.classList.remove('dark-theme');
-          localStorage.setItem('playground-theme', 'light');
-        }
-      });
+function readInitialMode(): ThemeMode {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'light' || saved === 'dark') {
+      return saved;
     }
+  } catch {
+    // localStorage can throw in private browsing / sandboxed iframes.
   }
 
-  toggleTheme() {
-    this.isDark.update((d) => !d);
+  return window.matchMedia?.('(prefers-color-scheme: dark)')?.matches ? 'dark' : 'light';
+}
+
+@Injectable({ providedIn: 'root' })
+export class ThemeService {
+  /**
+   * Initialised from `localStorage` / `prefers-color-scheme` during
+   * construction, so the very first render already has the right theme and no
+   * flash of the wrong colour scheme occurs.
+   */
+  readonly isDark = signal(readInitialMode() === 'dark');
+
+  constructor() {
+    effect(() => {
+      const dark = this.isDark();
+      document.documentElement.classList.toggle('dark-theme', dark);
+
+      try {
+        localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+      } catch {
+        // Persistence is best-effort; the theme still applies for this session.
+      }
+    });
+  }
+
+  toggleTheme(): void {
+    this.isDark.update((dark) => !dark);
   }
 }

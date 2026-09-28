@@ -1,7 +1,15 @@
-import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  Component,
+  ElementRef,
+  signal,
+  inject,
+  viewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -40,8 +48,11 @@ export interface NavCategory {
 })
 export class App {
   private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly router = inject(Router);
   readonly themeService = inject(ThemeService);
   readonly title = signal('playground');
+
+  readonly mainContent = viewChild<ElementRef<HTMLElement>>('mainContent');
 
   readonly isMobile = signal(false);
   readonly isSidenavOpen = signal(true);
@@ -87,6 +98,17 @@ export class App {
         const mobile = result.matches;
         this.isMobile.set(mobile);
         this.isSidenavOpen.set(!mobile);
+      });
+
+    // Move focus into the freshly rendered page after each navigation so
+    // keyboard and screen-reader users are not stranded on the nav link.
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        queueMicrotask(() => this.mainContent()?.nativeElement.focus());
       });
   }
 

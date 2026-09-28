@@ -96,7 +96,8 @@
     }
   }
 
-  .abort-info {
+  .abort-info,
+  .debounce-hint {
     display: flex;
     align-items: center;
     gap: 6px;

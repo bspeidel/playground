@@ -2,15 +2,74 @@
 <html lang="de">
   <head>
     <meta charset="utf-8" />
-    <title>Playground</title>
+    <title>Playground – Interaktive Angular-22-Demos</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
-      rel="stylesheet"
+
+    <meta
+      name="description"
+      content="Interaktiver Angular-22-Playground: Signals, Zoneless Change Detection, @defer, resource(), Angular Material 3, CDK Drag & Drop, Virtual Scrolling und mehr."
     />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#005cbb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1b1b1f" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Playground – Interaktive Angular-22-Demos" />
+    <meta
+      property="og:description"
+      content="Signals, Zoneless Change Detection, @defer, resource() und Angular Material 3 – interaktiv demonstriert."
+    />
+    <meta property="og:locale" content="de_DE" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!--
+      Apply the persisted theme before the first paint to avoid a flash of the
+      light colour scheme. Kept inline and tiny on purpose; the service
+      remains the source of truth once Angular boots.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('playground-theme');
+          var dark =
+            stored === 'dark' ||
+            (stored !== 'light' &&
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) {
+            document.documentElement.classList.add('dark-theme');
+          }
+        } catch (e) {
+          /* storage unavailable – fall back to the light theme */
+        }
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      />
+    </noscript>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    </noscript>
   </head>
   <body>
     <app-root></app-root>

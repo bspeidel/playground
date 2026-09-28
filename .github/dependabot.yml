@@ -1,0 +1,32 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # Angular ships minors every two weeks; review them together.
+      angular:
+        patterns:
+          - '@angular/*'
+          - 'typescript-eslint'
+          - 'angular-eslint'
+      testing:
+        patterns:
+          - 'jest'
+          - 'jest-*'
+          - '@types/jest'
+          - '@jest/*'
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        patterns:
+          - '*'

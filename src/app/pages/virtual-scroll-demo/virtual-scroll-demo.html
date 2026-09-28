@@ -110,6 +110,27 @@
         <span>{{ errorLogsCount() }} Fehlerprotokolle erkannt</span>
       </mat-card-content>
     </mat-card>
+
+    <mat-card class="kpi-card" appearance="outlined">
+      <mat-card-header>
+        <div class="kpi-icon-wrapper primary">
+          <mat-icon>memory</mat-icon>
+        </div>
+        <div class="kpi-header-text">
+          <div class="kpi-label">Generierung (Web Worker)</div>
+          <div class="kpi-value">
+            @if (lastGenerationMs(); as ms) {
+              {{ ms.toFixed(1) }} ms
+            } @else {
+              &ndash;
+            }
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="kpi-footer">
+        <span>Haupt-Thread bleibt währenddessen blockierfrei</span>
+      </mat-card-content>
+    </mat-card>
   </section>
 
   <!-- Controls Toolbar -->
@@ -194,14 +215,25 @@
       </span>
     </div>
 
+    @if (isGenerating(); as pending) {
+      <div class="generation-overlay" role="status" aria-live="polite">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <div class="generation-message">
+          <mat-icon>hourglass_top</mat-icon>
+          {{ pending.toLocaleString() }} Telemetrieeinträge werden im
+          <strong>Web Worker</strong> generiert &ndash; die UI bleibt reaktionsfähig.
+        </div>
+      </div>
+    }
+
     <cdk-virtual-scroll-viewport
-      itemSize="64"
+      [itemSize]="itemSize"
       minBufferPx="200"
       maxBufferPx="400"
       class="telemetry-viewport"
       (scrolledIndexChange)="onViewportScroll()"
     >
-      <div *cdkVirtualFor="let log of filteredLogs()" class="log-row">
+      <div *cdkVirtualFor="let log of filteredLogs(); trackBy: trackById" class="log-row">
         <div class="log-id">#{{ log.id }}</div>
 
         <div class="log-level-badge" [ngClass]="getLevelClass(log.level)">

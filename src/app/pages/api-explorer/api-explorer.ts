@@ -1,5 +1,6 @@
-import { Component, signal, resource, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, resource, ChangeDetectionStrategy } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,33 +10,22 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import {
+  GitHubApiService,
+  type GitHubSearchResponse,
+  type GitHubSort,
+} from '../../services/github-api.service';
 
-export interface GitHubRepo {
-  id: number;
-  name: string;
-  full_name: string;
-  html_url: string;
-  description: string | null;
-  stargazers_count: number;
-  forks_count: number;
-  open_issues_count: number;
-  language: string | null;
-  updated_at: string;
-  owner: {
-    login: string;
-    avatar_url: string;
-  };
-}
+const EMPTY_RESULT: GitHubSearchResponse = { total_count: 0, items: [] };
 
-export interface GitHubSearchResponse {
-  total_count: number;
-  items: GitHubRepo[];
-}
+/** Milliseconds to wait after the last keystroke before hitting the API. */
+const SEARCH_DEBOUNCE_MS = 300;
 
 @Component({
   selector: 'app-api-explorer',
   imports: [
-    CommonModule,
+    DecimalPipe,
     FormsModule,
     MatCardModule,
     MatButtonModule,
@@ -51,50 +41,41 @@ export interface GitHubSearchResponse {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApiExplorerPage {
-  readonly searchTerm = signal('angular');
-  readonly selectedSort = signal<'stars' | 'forks' | 'updated'>('stars');
-  readonly abortCount = signal(0);
+  private readonly githubApi = inject(GitHubApiService);
+
+  /** Raw value bound to the search input; updated on every keystroke. */
+  readonly searchInput = signal('angular');
+  readonly selectedSort = signal<GitHubSort>('stars');
+
+  /**
+   * Debounced query actually driving the request. Without this, typing a
+   * nine-character term would fire nine requests and exhaust the anonymous
+   * GitHub rate limit (~10 requests/minute).
+   */
+  readonly searchTerm = toSignal(
+    toObservable(this.searchInput).pipe(
+      map((value) => value.trim()),
+      distinctUntilChanged(),
+      debounceTime(SEARCH_DEBOUNCE_MS),
+    ),
+    { initialValue: 'angular' },
+  );
+
+  readonly abortCount = this.githubApi.abortedCount;
+
+  /** Exposed for display so the template never hardcodes the debounce window. */
+  readonly debounceMs = SEARCH_DEBOUNCE_MS;
 
   readonly reposResource = resource({
     params: () => ({
-      query: this.searchTerm().trim(),
+      query: this.searchTerm(),
       sort: this.selectedSort(),
     }),
-    defaultValue: { total_count: 0, items: [] } as GitHubSearchResponse,
-    loader: async ({ params, abortSignal }) => {
-      if (!params.query) {
-        return { total_count: 0, items: [] };
-      }
-
-      const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(
-        params.query,
-      )}&sort=${params.sort}&per_page=9`;
-
-      abortSignal.addEventListener('abort', () => {
-        this.abortCount.update((c) => c + 1);
-      });
-
-      const response = await fetch(url, {
-        signal: abortSignal,
-        headers: {
-          Accept: 'application/vnd.github.v3+json',
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new Error(
-            'GitHub-API-Ratenlimit erreicht (Rate Limit). Bitte versuchen Sie es in Kürze erneut.',
-          );
-        }
-        throw new Error(`GitHub-Netzwerkfehler (${response.status}) : ${response.statusText}`);
-      }
-
-      return (await response.json()) as GitHubSearchResponse;
-    },
+    defaultValue: EMPTY_RESULT,
+    loader: ({ params, abortSignal }) => this.githubApi.search(params, abortSignal),
   });
 
-  setSearch(query: string) {
-    this.searchTerm.set(query);
+  setSearch(query: string): void {
+    this.searchInput.set(query);
   }
 }
