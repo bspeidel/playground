@@ -1,6 +1,7 @@
 export {
   AVAILABLE_LOCALES,
   DE,
+  EN,
   FR,
   LOCALE_NAMES,
   LOCALE_TAGS,

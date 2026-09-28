@@ -1,6 +1,7 @@
 const { setupZonelessTestEnv } = require('jest-preset-angular/setup-env/zoneless');
 const { registerLocaleData } = require('@angular/common');
 const localeDe = require('@angular/common/locales/de');
+const localeEn = require('@angular/common/locales/en');
 const localeFr = require('@angular/common/locales/fr');
 
 // Mirrors the bootstrap in `src/app/app.config.ts`, which unit tests never
@@ -8,6 +9,7 @@ const localeFr = require('@angular/common/locales/fr');
 // throw NG0701 (missing locale data) as soon as a component under test
 // renders `| date`, `| number`, `| currency` or `| percent`.
 registerLocaleData(localeDe.default ?? localeDe);
+registerLocaleData(localeEn.default ?? localeEn);
 registerLocaleData(localeFr.default ?? localeFr);
 
 setupZonelessTestEnv();

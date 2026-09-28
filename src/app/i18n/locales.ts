@@ -1,24 +1,30 @@
 /**
  * Runtime i18n for the playground.
  *
- * The app ships two locales. Translations are plain objects so the bundle stays
- * small and the language can be switched without a page reload, which the
- * compile-time `$localize` pipeline cannot do.
+ * The app ships three locales. Translations are plain objects so the bundle
+ * stays small and the language can be switched without a page reload, which
+ * the compile-time `$localize` pipeline cannot do.
+ *
+ * German is the source of truth for the dictionary; every other locale is
+ * typed against it.
  */
 export const DE = 'de';
+export const EN = 'en';
 export const FR = 'fr';
 
-export const AVAILABLE_LOCALES = [DE, FR] as const;
+export const AVAILABLE_LOCALES = [DE, EN, FR] as const;
 export type LocaleId = (typeof AVAILABLE_LOCALES)[number];
 
 /** Locale tags used by Angular's `LOCALE_ID`, pipes and `Intl`. */
 export const LOCALE_TAGS: Record<LocaleId, string> = {
   [DE]: 'de-DE',
+  [EN]: 'en-US',
   [FR]: 'fr-FR',
 };
 
 export const LOCALE_NAMES: Record<LocaleId, string> = {
   [DE]: 'Deutsch',
+  [EN]: 'English',
   [FR]: 'Français',
 };
 

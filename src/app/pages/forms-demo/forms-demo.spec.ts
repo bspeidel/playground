@@ -63,11 +63,10 @@ describe('FormsDemoPage', () => {
     expect(component.passwordScore()).toBe(100);
     expect(component.passwordCriteria().hasUpper).toBe(true);
     expect(component.passwordCriteria().hasSpecial).toBe(true);
-    // The strength label is a translation key; the German default resolves to
-    // "Ausgezeichnet (Sehr sicher)".
+    // The strength label is a translation key; the active locale resolves it.
     expect(component.passwordStrengthKey()).toBe('forms.strength.excellent');
     expect(TestBed.inject(TranslateService).text('forms.strength.excellent')).toContain(
-      'Ausgezeichnet',
+      'Excellent',
     );
   });
 

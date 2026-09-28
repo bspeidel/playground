@@ -23,7 +23,8 @@ describe('DeferDemoPage', () => {
     fixture.detectChanges();
 
     const host = fixture.nativeElement as HTMLElement;
-    expect(host.querySelector('h1')?.textContent).toContain('Deferrable Views');
+    // English is the default locale, so the heading renders in English.
+    expect(host.querySelector('h1')?.textContent).toContain('Deferrable views');
   });
 
   it('should render the deferred placeholders before their triggers fire', () => {

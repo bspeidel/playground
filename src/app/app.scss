@@ -55,11 +55,47 @@
     flex: 1;
   }
 
+  // Three language names do not fit next to the brand and the theme button on
+  // a phone, so the labels shrink first and the brand title drops out last.
+  .locale-toggle {
+    flex-shrink: 0;
+    margin-right: 4px;
+
+    ::ng-deep .mat-button-toggle-label-content {
+      padding: 0 10px;
+      line-height: 32px;
+    }
+  }
+
   .theme-toggle-btn {
     transition: transform 0.2s ease;
 
     &:hover {
       transform: rotate(15deg);
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .main-toolbar {
+    .locale-toggle {
+      ::ng-deep .mat-button-toggle-label-content {
+        padding: 0 6px;
+        font-size: 0.7rem;
+        line-height: 28px;
+      }
+    }
+
+    .brand .version-badge {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .main-toolbar {
+    .brand .brand-title {
+      display: none;
     }
   }
 }

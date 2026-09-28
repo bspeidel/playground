@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
 import { TranslateHtmlPipe, TranslatePipe } from './translate.pipe';
 import { TranslateService } from './translate.service';
-import { DE, FR } from './locales';
+import { DE, EN, FR } from './locales';
 import { TRANSLATIONS } from './translations';
 
 @Component({
@@ -41,12 +41,12 @@ describe('TranslatePipe', () => {
   }
 
   it('should translate a key', () => {
-    expect(render().de).toBe(TRANSLATIONS[DE]['nav.overview']);
+    expect(render().de).toBe(TRANSLATIONS[EN]['nav.overview']);
   });
 
   /**
    * The pipe is impure precisely so this works: a pure pipe would keep the
-   * cached German string because its input (the key) did not change.
+   * cached previous string because its input (the key) did not change.
    */
   it('should re-translate after a locale switch without the input changing', () => {
     const fixture = TestBed.createComponent(HostComponent);
@@ -54,22 +54,42 @@ describe('TranslatePipe', () => {
     const host = fixture.nativeElement as HTMLElement;
     const plain = host.querySelector('.plain')!;
 
-    expect(plain.textContent!.trim()).toBe(TRANSLATIONS[DE]['nav.overview']);
+    expect(plain.textContent!.trim()).toBe(TRANSLATIONS[EN]['nav.overview']);
 
     TestBed.inject(TranslateService).setLocale(FR);
     fixture.detectChanges();
 
     expect(plain.textContent!.trim()).toBe(TRANSLATIONS[FR]['nav.overview']);
+
+    TestBed.inject(TranslateService).setLocale(DE);
+    fixture.detectChanges();
+
+    expect(plain.textContent!.trim()).toBe(TRANSLATIONS[DE]['nav.overview']);
   });
 
   it('should accept a params argument', () => {
     // `nav.overview` has no placeholder, so params are simply unused here.
     // The substitution logic itself is covered in translate.service.spec.ts.
-    expect(render().params).toBe(TRANSLATIONS[DE]['nav.overview']);
+    expect(render().params).toBe(TRANSLATIONS[EN]['nav.overview']);
   });
 
   it('should render markup for tHtml', () => {
     // The footer is plain text, so it should not gain any elements.
     expect(render().html).not.toContain('<');
+  });
+
+  it('should re-translate across all three locales', () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+    const plain = fixture.nativeElement.querySelector('.plain') as HTMLElement;
+    const translate = TestBed.inject(TranslateService);
+
+    const seen = ([DE, EN, FR] as const).map((locale) => {
+      translate.setLocale(locale);
+      fixture.detectChanges();
+      return plain.textContent!.trim();
+    });
+
+    expect(new Set(seen).size).toBe(3);
   });
 });

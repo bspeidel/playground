@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { KanbanDemoPage } from './kanban-demo';
-import { FR, TranslateService } from '../../i18n';
+import { DE, EN, FR, TranslateService } from '../../i18n';
 
 describe('KanbanDemoPage', () => {
   beforeEach(async () => {
@@ -132,16 +132,24 @@ describe('KanbanDemoPage', () => {
 
     it('should render seed task titles in the active locale', () => {
       const { fixture, component } = create();
+      const translate = TestBed.inject(TranslateService);
       const task = component.columns()[0].tasks[0];
 
       expect(task.titleKey).toBeTruthy();
-      expect(component.taskTitle(task)).toBe(task.title);
 
-      TestBed.inject(TranslateService).setLocale(FR);
+      translate.setLocale(DE);
       fixture.detectChanges();
+      const german = component.taskTitle(task);
+      expect(german).toBe(task.title);
 
-      expect(component.taskTitle(task)).not.toBe(task.title);
-      expect(component.taskTitle(task).length).toBeGreaterThan(0);
+      translate.setLocale(FR);
+      fixture.detectChanges();
+      const french = component.taskTitle(task);
+      expect(french).not.toBe(german);
+
+      translate.setLocale(EN);
+      fixture.detectChanges();
+      expect(component.taskTitle(task)).not.toBe(french);
     });
 
     it('should fall back to the raw text for tasks without a key', () => {
@@ -172,15 +180,22 @@ describe('KanbanDemoPage', () => {
 
     it('should translate German tags and pass neutral tags through', () => {
       const { fixture, component } = create();
+      const translate = TestBed.inject(TranslateService);
 
+      translate.setLocale(DE);
+      fixture.detectChanges();
       expect(component.tagLabel('Grafik')).toBe('Grafik');
       expect(component.tagLabel('UI/UX')).toBe('UI/UX');
       expect(component.tagLabel('CDK')).toBe('CDK');
 
-      TestBed.inject(TranslateService).setLocale(FR);
+      translate.setLocale(FR);
       fixture.detectChanges();
-
       expect(component.tagLabel('Grafik')).toBe('Graphiques');
+      expect(component.tagLabel('UI/UX')).toBe('UI/UX');
+
+      translate.setLocale(EN);
+      fixture.detectChanges();
+      expect(component.tagLabel('Grafik')).toBe('Graphics');
       expect(component.tagLabel('UI/UX')).toBe('UI/UX');
     });
   });

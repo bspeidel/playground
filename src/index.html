@@ -26,8 +26,9 @@
 
     <!--
       Apply the persisted theme before the first paint to avoid a flash of the
-      light colour scheme. Kept inline and tiny on purpose; the service
-      remains the source of truth once Angular boots.
+      light colour scheme, and set the document language from the persisted
+      locale so screen readers start on the right one. Kept inline and tiny on
+      purpose; the services remain the source of truth once Angular boots.
     -->
     <script>
       (function () {
@@ -41,8 +42,16 @@
           if (dark) {
             document.documentElement.classList.add('dark-theme');
           }
+
+          var locale = localStorage.getItem('playground-locale');
+          if (locale !== 'de' && locale !== 'en' && locale !== 'fr') {
+            var lang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+            var primary = lang.toLowerCase().split('-')[0];
+            locale = primary === 'de' || primary === 'fr' || primary === 'en' ? primary : 'en';
+          }
+          document.documentElement.lang = locale;
         } catch (e) {
-          /* storage unavailable – fall back to the light theme */
+          /* storage unavailable – fall back to the defaults */
         }
       })();
     </script>

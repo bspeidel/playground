@@ -116,10 +116,11 @@ describe('MaterialDemoPage', () => {
     const component = fixture.componentInstance;
     fixture.detectChanges();
 
-    // Default locale should be German (de-DE)
-    expect(component.activeLocale()).toBe('de-DE');
-    expect(component.dateAdapter.getFirstDayOfWeek()).toBe(1); // Monday / Montag in Germany
-    expect(component.dateAdapter.getMonthNames('long')[0]).toBe('Januar'); // German month name
+    // The datepicker locale is seeded from the app locale, which defaults to
+    // English. First day of week is Sunday (0) in en-US.
+    expect(component.activeLocale()).toBe('en-US');
+    expect(component.dateAdapter.getFirstDayOfWeek()).toBe(0);
+    expect(component.dateAdapter.getMonthNames('long')[0]).toBe('January');
 
     // Switch to French
     component.setLocale('fr-FR');

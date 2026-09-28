@@ -78,7 +78,18 @@ export interface TaskItem {
     MatTimepickerModule,
     MatAutocompleteModule,
   ],
-  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'de-DE' }],
+  providers: [
+    provideNativeDateAdapter(),
+    // Derived from the app locale rather than hardcoded: a fixed 'de-DE' here
+    // made `activeLocale` advertise one locale while the adapter actually
+    // formatted in another. `setLocale()` still overrides it, which is the
+    // point of the DateAdapter demo.
+    {
+      provide: MAT_DATE_LOCALE,
+      useFactory: (translate: TranslateService) => translate.localeTag(),
+      deps: [TranslateService],
+    },
+  ],
   templateUrl: './material-demo.html',
   styleUrl: './material-demo.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
