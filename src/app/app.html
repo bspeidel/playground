@@ -4,7 +4,7 @@
     <button
       mat-icon-button
       (click)="sidenav.toggle()"
-      aria-label="Navigationsmenü umschalten"
+      [attr.aria-label]="'shell.a11y.toggleNav' | t"
       class="menu-toggle-btn"
     >
       <mat-icon>menu</mat-icon>
@@ -20,11 +20,23 @@
 
     <div class="spacer"></div>
 
+    <mat-button-toggle-group
+      class="locale-toggle"
+      [value]="translate.locale()"
+      (change)="setLocale($event.value)"
+      [attr.aria-label]="'shell.a11y.language' | t"
+      hideSingleSelectionIndicator
+    >
+      @for (code of translate.available; track code) {
+        <mat-button-toggle [value]="code">{{ localeNames[code] }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+
     <button
       mat-icon-button
       (click)="themeService.toggleTheme()"
       [attr.aria-label]="
-        themeService.isDark() ? 'Zu hellem Modus wechseln' : 'Zu dunklem Modus wechseln'
+        (themeService.isDark() ? 'shell.a11y.switchToLight' : 'shell.a11y.switchToDark') | t
       "
       class="theme-toggle-btn"
     >
@@ -42,8 +54,8 @@
       class="main-sidenav"
     >
       <mat-nav-list class="sidenav-list">
-        @for (category of navCategories; track category.name) {
-          <div mat-subheader class="category-header">{{ category.name }}</div>
+        @for (category of navCategories; track category.nameKey) {
+          <div mat-subheader class="category-header">{{ category.nameKey | t }}</div>
           @for (item of category.items; track item.path) {
             <a
               mat-list-item
@@ -53,7 +65,7 @@
               class="nav-item"
             >
               <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-              <span matListItemTitle>{{ item.label }}</span>
+              <span matListItemTitle>{{ item.labelKey | t }}</span>
             </a>
           }
           @if (!$last) {
@@ -73,9 +85,7 @@
       <!-- Footer -->
       <footer class="app-footer">
         <div class="footer-content">
-          <p>
-            Interaktiver Angular 22 Playground • Zoneless-Änderungserkennung • Angular Material 3
-          </p>
+          <p>{{ 'shell.footer' | t }}</p>
         </div>
       </footer>
     </mat-sidenav-content>

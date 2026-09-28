@@ -2,45 +2,42 @@
   <header class="hero-section">
     <div class="hero-badge">
       <mat-icon>terminal</mat-icon>
-      <span>Angular 22 & Material 3 Playground</span>
+      <span>{{ 'overview.hero.badge' | t }}</span>
     </div>
-    <h1>Willkommen auf Ihrem Playground</h1>
-    <p class="hero-subtitle">
-      Ein interaktiver Raum zur Erkundung der neuesten Funktionen von Angular 22: Reaktivität ohne
-      Zone.js, Material Design 3, Signals und Deferrable Views.
-    </p>
+    <h1>{{ 'overview.hero.title' | t }}</h1>
+    <p class="hero-subtitle">{{ 'overview.hero.subtitle' | t }}</p>
     <div class="hero-actions">
       <a mat-flat-button color="primary" routerLink="/signals">
         <mat-icon>play_arrow</mat-icon>
-        Signals entdecken
+        {{ 'overview.hero.ctaSignals' | t }}
       </a>
       <a mat-stroked-button routerLink="/material">
         <mat-icon>palette</mat-icon>
-        Material-Komponenten
+        {{ 'overview.hero.ctaMaterial' | t }}
       </a>
     </div>
   </header>
 
   <section class="grid-section">
-    <h2>Experimentierbereiche</h2>
+    <h2>{{ 'overview.sections.title' | t }}</h2>
     <div class="cards-grid">
-      @for (feature of features; track feature.title) {
+      @for (feature of features; track feature.link) {
         <mat-card class="feature-card" appearance="outlined">
           <mat-card-header>
             <div mat-card-avatar class="card-icon-container">
               <mat-icon>{{ feature.icon }}</mat-icon>
             </div>
-            <mat-card-title>{{ feature.title }}</mat-card-title>
+            <mat-card-title>{{ feature.titleKey | t }}</mat-card-title>
             <mat-card-subtitle>
-              <span class="chip-tag">{{ feature.tag }}</span>
+              <span class="chip-tag">{{ feature.tagKey | t }}</span>
             </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <p>{{ feature.description }}</p>
+            <p>{{ feature.descriptionKey | t }}</p>
           </mat-card-content>
           <mat-card-actions align="end">
             <a mat-button color="primary" [routerLink]="feature.link">
-              Demo öffnen
+              {{ 'overview.card.cta' | t }}
               <mat-icon>arrow_forward</mat-icon>
             </a>
           </mat-card-actions>
@@ -53,25 +50,25 @@
     <mat-card appearance="outlined">
       <mat-card-header>
         <mat-icon mat-card-avatar>info</mat-icon>
-        <mat-card-title>Laufzeitumgebung</mat-card-title>
-        <mat-card-subtitle>Aktuelle Projektkonfiguration</mat-card-subtitle>
+        <mat-card-title>{{ 'overview.runtime.title' | t }}</mat-card-title>
+        <mat-card-subtitle>{{ 'overview.runtime.subtitle' | t }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="status-grid">
           <div class="status-item">
-            <span class="label">Angular Core & CLI</span>
+            <span class="label">{{ 'overview.runtime.angularCore' | t }}</span>
             <span class="value">v22.2.0</span>
           </div>
           <div class="status-item">
-            <span class="label">Angular Material</span>
+            <span class="label">{{ 'overview.runtime.material' | t }}</span>
             <span class="value">v22.2.0 (Material 3)</span>
           </div>
           <div class="status-item">
-            <span class="label">Änderungserkennung</span>
-            <span class="value highlight">Zoneless (ohne Zone.js)</span>
+            <span class="label">{{ 'overview.runtime.changeDetection' | t }}</span>
+            <span class="value highlight">{{ 'overview.runtime.zoneless' | t }}</span>
           </div>
           <div class="status-item">
-            <span class="label">TypeScript</span>
+            <span class="label">{{ 'overview.runtime.typescript' | t }}</span>
             <span class="value">~6.0.3</span>
           </div>
         </div>

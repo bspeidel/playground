@@ -4,103 +4,109 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { TranslatePipe } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
+
+interface Feature {
+  icon: string;
+  link: string;
+  titleKey: TranslationKey;
+  descriptionKey: TranslationKey;
+  tagKey: TranslationKey;
+}
 
 @Component({
   selector: 'app-overview',
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatIconModule, MatChipsModule],
+  imports: [
+    RouterLink,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatChipsModule,
+    TranslatePipe,
+  ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverviewPage {
-  readonly features = [
+  readonly features: readonly Feature[] = [
     {
-      title: 'Angular 22 Core & Zoneless',
       icon: 'bolt',
-      description:
-        'Zoneless-Änderungserkennung (provideZonelessChangeDetection), Signal-First-Architektur und maximale Performance.',
       link: '/signals',
-      tag: 'Performance',
+      titleKey: 'overview.feature.core.title',
+      descriptionKey: 'overview.feature.core.description',
+      tagKey: 'overview.feature.core.tag',
     },
     {
-      title: 'Angular Material 3',
       icon: 'palette',
-      description:
-        'Vollständiges Material Design 3 Theming mit Azure- und Blue-Paletten, Tokens und modernen Komponenten.',
       link: '/material',
-      tag: 'UI/UX',
+      titleKey: 'overview.feature.material.title',
+      descriptionKey: 'overview.feature.material.description',
+      tagKey: 'overview.feature.material.tag',
     },
     {
-      title: 'Deferrable Views (@defer)',
       icon: 'hourglass_empty',
-      description:
-        'Integriertes Template-Lazy-Loading mit Triggern wie Viewport, Hover, Interaction und Timer.',
       link: '/defer',
-      tag: 'Optimierung',
+      titleKey: 'overview.feature.defer.title',
+      descriptionKey: 'overview.feature.defer.description',
+      tagKey: 'overview.feature.defer.tag',
     },
     {
-      title: 'API-Explorer & resource()',
       icon: 'public',
-      description:
-        'Asynchrone Suche über die öffentliche GitHub-API mit provideHttpClient, AbortSignal und Fehlerbehandlung.',
       link: '/api-explorer',
-      tag: 'Netzwerk',
+      titleKey: 'overview.feature.api.title',
+      descriptionKey: 'overview.feature.api.description',
+      tagKey: 'overview.feature.api.tag',
     },
     {
-      title: 'Datentabelle & Dashboard-KPIs',
       icon: 'table_chart',
-      description:
-        'Interaktive MatTable mit Sortierung, Paginierung, reaktiven Signal-Filtern, Mehrfachauswahl und CSV/JSON-Export.',
       link: '/table',
-      tag: 'Daten',
+      titleKey: 'overview.feature.table.title',
+      descriptionKey: 'overview.feature.table.description',
+      tagKey: 'overview.feature.table.tag',
     },
     {
-      title: 'Kanban-Board Drag & Drop',
       icon: 'view_kanban',
-      description:
-        'Agiles Aufgabenmanagement mit @angular/cdk/drag-drop, verbundenen Spalten, flüssiger Vorschau und Signal-Reaktivität.',
       link: '/kanban',
-      tag: 'Produktivität',
+      titleKey: 'overview.feature.kanban.title',
+      descriptionKey: 'overview.feature.kanban.description',
+      tagKey: 'overview.feature.kanban.tag',
     },
     {
-      title: 'Reaktive & typisierte Formulare',
       icon: 'dynamic_form',
-      description:
-        'Asynchrone debouncte Validierung, erweiterbare FormArray-Sammlungen, Kreuzvalidierung und Passwortstärke-Anzeige.',
       link: '/forms',
-      tag: 'Formulare',
+      titleKey: 'overview.feature.forms.title',
+      descriptionKey: 'overview.feature.forms.description',
+      tagKey: 'overview.feature.forms.tag',
     },
     {
-      title: 'Virtuelles Scrollen & Benchmark',
       icon: 'speed',
-      description:
-        'Sofortiges Rendern von 50.000+ Logs mit @angular/cdk/scrolling, 99,9 % DOM-Reduzierung und 60 FPS in Zoneless.',
       link: '/virtual-scroll',
-      tag: 'Performance',
+      titleKey: 'overview.feature.virtualScroll.title',
+      descriptionKey: 'overview.feature.virtualScroll.description',
+      tagKey: 'overview.feature.virtualScroll.tag',
     },
     {
-      title: 'SVG-Visualisierung & Analysen',
       icon: 'insights',
-      description:
-        'Interaktives Donut-Diagramm, Geschwindigkeits-Balkendiagramm und Sparklines in nativem, reaktivem SVG ohne externe Bibliotheken.',
       link: '/charts',
-      tag: 'Visualisierung',
+      titleKey: 'overview.feature.charts.title',
+      descriptionKey: 'overview.feature.charts.description',
+      tagKey: 'overview.feature.charts.tag',
     },
     {
-      title: 'Cloud-Bereitstellungsassistent (Stepper)',
       icon: 'rocket_launch',
-      description:
-        'Mehrstufiger MatStepper M3 Workflow: Dimensionierung, reaktive Live-Kostenberechnung, Secret-Verwaltung und CI/CD-Logs.',
       link: '/stepper',
-      tag: 'Workflow',
+      titleKey: 'overview.feature.stepper.title',
+      descriptionKey: 'overview.feature.stepper.description',
+      tagKey: 'overview.feature.stepper.tag',
     },
     {
-      title: 'Datei-Explorer (MatTree)',
       icon: 'folder_open',
-      description:
-        'Projekt-Baumstruktur mit MatTree M3 und childrenAccessor: Sofortfilter, Breadcrumbs, Knotenverwaltung und Code-Viewer.',
       link: '/tree',
-      tag: 'Hierarchie',
+      titleKey: 'overview.feature.tree.title',
+      descriptionKey: 'overview.feature.tree.description',
+      tagKey: 'overview.feature.tree.tag',
     },
   ];
 }

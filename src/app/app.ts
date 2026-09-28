@@ -16,16 +16,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ThemeService } from './services/theme.service';
+import { TranslatePipe, TranslateService, LOCALE_NAMES, type LocaleId } from './i18n';
+import type { TranslationKey } from './i18n/translations';
 
 export interface NavItem {
   path: string;
-  label: string;
+  /** Translation key for the label, resolved by the `t` pipe. */
+  labelKey: TranslationKey;
   icon: string;
 }
 
 export interface NavCategory {
-  name: string;
+  nameKey: TranslationKey;
   items: NavItem[];
 }
 
@@ -41,6 +46,9 @@ export interface NavCategory {
     MatSidenavModule,
     MatListModule,
     MatDividerModule,
+    MatButtonToggleModule,
+    MatTooltipModule,
+    TranslatePipe,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -50,37 +58,44 @@ export class App {
   private readonly breakpointObserver = inject(BreakpointObserver);
   private readonly router = inject(Router);
   readonly themeService = inject(ThemeService);
+  readonly translate = inject(TranslateService);
   readonly title = signal('playground');
 
+  readonly localeNames = LOCALE_NAMES;
+
   readonly mainContent = viewChild<ElementRef<HTMLElement>>('mainContent');
+
+  setLocale(locale: LocaleId): void {
+    this.translate.setLocale(locale);
+  }
 
   readonly isMobile = signal(false);
   readonly isSidenavOpen = signal(true);
 
   readonly navCategories: readonly NavCategory[] = [
     {
-      name: 'Allgemein',
-      items: [{ path: '/overview', label: 'Übersicht', icon: 'dashboard' }],
+      nameKey: 'nav.category.general',
+      items: [{ path: '/overview', labelKey: 'nav.overview', icon: 'dashboard' }],
     },
     {
-      name: 'Angular-Funktionen & Performance',
+      nameKey: 'nav.category.angular',
       items: [
-        { path: '/signals', label: 'Signals & Zoneless', icon: 'bolt' },
-        { path: '/defer', label: 'Defer (@defer)', icon: 'hourglass_empty' },
-        { path: '/api-explorer', label: 'API & Netzwerk', icon: 'public' },
-        { path: '/virtual-scroll', label: 'Virtuelles Scrollen & Performance', icon: 'speed' },
+        { path: '/signals', labelKey: 'nav.signals', icon: 'bolt' },
+        { path: '/defer', labelKey: 'nav.defer', icon: 'hourglass_empty' },
+        { path: '/api-explorer', labelKey: 'nav.api', icon: 'public' },
+        { path: '/virtual-scroll', labelKey: 'nav.virtualScroll', icon: 'speed' },
       ],
     },
     {
-      name: 'UI-Komponenten & Demos',
+      nameKey: 'nav.category.ui',
       items: [
-        { path: '/material', label: 'Material 3', icon: 'palette' },
-        { path: '/forms', label: 'Typisierte Formulare', icon: 'dynamic_form' },
-        { path: '/table', label: 'Datentabelle & KPIs', icon: 'table_chart' },
-        { path: '/kanban', label: 'Kanban-Board', icon: 'view_kanban' },
-        { path: '/charts', label: 'Analysen & Diagramme', icon: 'insights' },
-        { path: '/stepper', label: 'Bereitstellungsassistent', icon: 'rocket_launch' },
-        { path: '/tree', label: 'Datei-Explorer', icon: 'folder_open' },
+        { path: '/material', labelKey: 'nav.material', icon: 'palette' },
+        { path: '/forms', labelKey: 'nav.forms', icon: 'dynamic_form' },
+        { path: '/table', labelKey: 'nav.table', icon: 'table_chart' },
+        { path: '/kanban', labelKey: 'nav.kanban', icon: 'view_kanban' },
+        { path: '/charts', labelKey: 'nav.charts', icon: 'insights' },
+        { path: '/stepper', labelKey: 'nav.stepper', icon: 'rocket_launch' },
+        { path: '/tree', labelKey: 'nav.tree', icon: 'folder_open' },
       ],
     },
   ];

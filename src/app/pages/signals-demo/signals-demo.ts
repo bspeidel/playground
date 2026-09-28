@@ -6,7 +6,6 @@ import {
   resource,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,10 +14,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { AppCurrencyPipe, TranslateHtmlPipe, TranslatePipe } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
 
 interface CartItem {
   id: number;
+  /**
+   * Stable, locale-independent match target for {@link filteredItems}. The
+   * user-facing name lives in `nameKey` so the display can be translated
+   * without breaking the filter. `null` for items the user typed in.
+   */
   name: string;
+  nameKey: TranslationKey | null;
   price: number;
   quantity: number;
 }
@@ -33,7 +40,6 @@ export interface PlanOption {
 @Component({
   selector: 'app-signals-demo',
   imports: [
-    CommonModule,
     FormsModule,
     MatCardModule,
     MatButtonModule,
@@ -42,6 +48,9 @@ export interface PlanOption {
     MatInputModule,
     MatChipsModule,
     MatProgressBarModule,
+    AppCurrencyPipe,
+    TranslatePipe,
+    TranslateHtmlPipe,
   ],
   templateUrl: './signals-demo.html',
   styleUrl: './signals-demo.scss',
@@ -96,9 +105,27 @@ export class SignalsDemoPage {
   // 5. Reactive Cart demo
   readonly searchFilter = signal('');
   readonly items = signal<CartItem[]>([
-    { id: 1, name: 'Angular 22 T-Shirt', price: 25, quantity: 1 },
-    { id: 2, name: 'Material 3 Mug', price: 15, quantity: 2 },
-    { id: 3, name: 'Zoneless Stickers Pack', price: 8, quantity: 3 },
+    {
+      id: 1,
+      name: 'Angular 22 T-Shirt',
+      nameKey: 'signals.cart.item.angularTshirt',
+      price: 25,
+      quantity: 1,
+    },
+    {
+      id: 2,
+      name: 'Material 3 Mug',
+      nameKey: 'signals.cart.item.materialMug',
+      price: 15,
+      quantity: 2,
+    },
+    {
+      id: 3,
+      name: 'Zoneless Stickers Pack',
+      nameKey: 'signals.cart.item.zonelessStickers',
+      price: 8,
+      quantity: 3,
+    },
   ]);
 
   readonly filteredItems = computed(() => {
@@ -178,7 +205,10 @@ export class SignalsDemoPage {
     const price = parseFloat(priceInput.value);
 
     if (name && !isNaN(price) && price > 0) {
-      this.items.update((items) => [...items, { id: Date.now(), name, price, quantity: 1 }]);
+      this.items.update((items) => [
+        ...items,
+        { id: Date.now(), name, nameKey: null, price, quantity: 1 },
+      ]);
       nameInput.value = '';
       priceInput.value = '';
     }
