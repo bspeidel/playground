@@ -8,11 +8,29 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '../../i18n';
+import type { TranslationKey } from '../../i18n/translations';
+
+/**
+ * Fallback tag for tasks created without one. Deliberately a plain constant
+ * rather than a translated call: tags are data, the search box matches on them,
+ * and freezing a locale into them would make the tag stick.
+ */
+const DEFAULT_TAG = 'Allgemein';
 
 export interface KanbanTask {
   id: string;
+  /**
+   * Raw German text. Kept verbatim because `filteredTasks` matches the search
+   * box against it; the display uses `titleKey` when present.
+   */
   title: string;
   description: string;
+  /**
+   * Display-layer translation keys for the seed tasks. `null` for tasks the
+   * user creates through the dialog, whose text has no translation.
+   */
+  titleKey?: TranslationKey | null;
+  descriptionKey?: TranslationKey | null;
   priority: 'Basse' | 'Moyenne' | 'Haute' | 'Critique';
   assignee: { name: string; initials: string; color: string };
   tags: string[];
@@ -185,14 +203,36 @@ export class KanbanDialog {
         .map((t) => t.trim())
         .filter((t) => t.length > 0);
 
+      const original = this.data?.task;
+      const title = val.title!.trim();
+      const description = (val.description ?? '').trim();
+
+      // A translation key is only still valid if the text behind it is
+      // unchanged. If the user edited the field, the key would now point at a
+      // string the task no longer holds, so it is dropped and the raw text
+      // takes over.
+      const titleKey = original && original.title === title ? (original.titleKey ?? null) : null;
+
+      // An empty description is stored as an empty string plus a key, rather
+      // than baking the active locale's placeholder into the task data — that
+      // text would otherwise stay frozen in whichever language was active
+      // when the task happened to be created.
+      const descriptionKey = !description
+        ? ('kanban.dialog.defaultDescription' as const)
+        : original && original.description === description
+          ? (original.descriptionKey ?? null)
+          : null;
+
       const result: KanbanTask = {
-        id: this.data?.task?.id ?? `TSK-${Math.floor(100 + Math.random() * 900)}`,
-        title: val.title!,
-        description: val.description || this.translate.text('kanban.dialog.defaultDescription'),
+        id: original?.id ?? `TSK-${Math.floor(100 + Math.random() * 900)}`,
+        title,
+        description,
+        titleKey,
+        descriptionKey,
         priority: val.priority! as KanbanTask['priority'],
         assignee: member,
-        tags: tagsArray.length > 0 ? tagsArray : [this.translate.text('kanban.dialog.defaultTag')],
-        createdAt: this.data?.task?.createdAt ?? new Date(),
+        tags: tagsArray.length > 0 ? tagsArray : [DEFAULT_TAG],
+        createdAt: original?.createdAt ?? new Date(),
       };
 
       this.dialogRef.close(result);

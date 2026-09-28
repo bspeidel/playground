@@ -399,6 +399,39 @@ const de = {
   'kanban.dialog.defaultDescription': 'Keine Beschreibung angegeben.',
   'kanban.dialog.defaultTag': 'Allgemein',
 
+  // ── Kanban: Tags ────────────────────────────────────────────────────────
+  'kanban.tag.grafik': 'Grafik',
+  'kanban.tag.formulare': 'Formulare',
+  'kanban.tag.allgemein': 'Allgemein',
+
+  // ── Kanban: Aufgaben der Demo ───────────────────────────────────────────
+  // Seed task titles and descriptions. The raw German strings stay on the task
+  // objects because the search box matches against them; these keys are what
+  // the UI renders.
+  'kanban.seed.101.title': 'WebGPU-Shader in Canvas evaluieren',
+  'kanban.seed.101.description': 'Browser-Kompatibilität und 3D-Rendering-Gewinn prüfen.',
+  'kanban.seed.102.title': 'Core Web Vitals (INP) Audit',
+  'kanban.seed.102.description': 'Reaktivität auf Benutzerinteraktionen auf Mobilgeräten prüfen.',
+  'kanban.seed.103.title': 'Migration der Formulare zu Typed Forms',
+  'kanban.seed.103.description':
+    'Alte UntypedFormGroup durch die strikte typisierte Version ersetzen.',
+  'kanban.seed.104.title': 'Playwright Regressionstests',
+  'kanban.seed.104.description':
+    'Automatisierte End-to-End-Tests für die CI/CD-Pipeline hinzufügen.',
+  'kanban.seed.105.title': 'Flüssige CDK Drag & Drop Integration',
+  'kanban.seed.105.description':
+    'cdkDropListConnectedTo mit Material-3-Animationen implementieren.',
+  'kanban.seed.106.title': 'Optimierung des Vite / esbuild Bundles',
+  'kanban.seed.106.description': 'Style-Chunks analysieren und Assets komprimieren.',
+  'kanban.seed.107.title': 'Zoneless-Architektur Angular 22',
+  'kanban.seed.107.description':
+    'Aktivierung von provideZonelessChangeDetection und Entfernung von Zone.js.',
+  'kanban.seed.108.title': 'Material 3 Dark- / Light-Theme',
+  'kanban.seed.108.description': 'Verwaltung von CSS-Variablen und Speicherung im localStorage.',
+  'kanban.seed.109.title': 'GitHub Actions CI/CD Bereitstellung',
+  'kanban.seed.109.description':
+    'Automatisierung von Jest-Tests und GitHub Pages Veröffentlichung.',
+
   // ── Datei-Explorer ──────────────────────────────────────────────────────
   'tree.pill.noDeps': 'Keine externen Abhängigkeiten',
   'tree.title': 'Datei-Explorer & MatTree-Baumstruktur',
@@ -1387,6 +1420,33 @@ const fr: Record<TranslationKey, string> = {
   'kanban.dialog.create': 'Créer la tâche',
   'kanban.dialog.defaultDescription': 'Aucune description fournie.',
   'kanban.dialog.defaultTag': 'Général',
+
+  // ── Kanban : tags ───────────────────────────────────────────────────────
+  'kanban.tag.grafik': 'Graphiques',
+  'kanban.tag.formulare': 'Formulaires',
+  'kanban.tag.allgemein': 'Général',
+
+  // ── Kanban : tâches de la démo ──────────────────────────────────────────
+  'kanban.seed.101.title': 'Évaluer les shaders WebGPU dans Canvas',
+  'kanban.seed.101.description': 'Vérifier la compatibilité navigateur et le gain en rendu 3D.',
+  'kanban.seed.102.title': 'Audit Core Web Vitals (INP)',
+  'kanban.seed.102.description': 'Évaluer la réactivité aux interactions utilisateur sur mobile.',
+  'kanban.seed.103.title': 'Migration des formulaires vers les Typed Forms',
+  'kanban.seed.103.description':
+    'Remplacer l’ancien UntypedFormGroup par la version strictement typée.',
+  'kanban.seed.104.title': 'Tests de régression Playwright',
+  'kanban.seed.104.description': 'Ajouter des tests end-to-end automatisés à la chaîne CI/CD.',
+  'kanban.seed.105.title': 'Intégration fluide du Drag & Drop CDK',
+  'kanban.seed.105.description':
+    'Implémenter cdkDropListConnectedTo avec les animations Material 3.',
+  'kanban.seed.106.title': 'Optimisation du bundle Vite / esbuild',
+  'kanban.seed.106.description': 'Analyser les chunks de style et compresser les assets.',
+  'kanban.seed.107.title': 'Architecture zoneless Angular 22',
+  'kanban.seed.107.description': 'Activer provideZonelessChangeDetection et supprimer Zone.js.',
+  'kanban.seed.108.title': 'Thème Material 3 sombre / clair',
+  'kanban.seed.108.description': 'Gérer les variables CSS et la persistance dans le localStorage.',
+  'kanban.seed.109.title': 'Déploiement CI/CD avec GitHub Actions',
+  'kanban.seed.109.description': 'Automatiser les tests Jest et la publication GitHub Pages.',
 
   // ── Explorateur de fichiers ─────────────────────────────────────────────
   'tree.pill.noDeps': 'Aucune dépendance externe',

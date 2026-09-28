@@ -44,6 +44,18 @@ const PRIORITY_LABEL_KEY: Record<KanbanTask['priority'], TranslationKey> = {
   Critique: 'kanban.priority.critical',
 };
 
+/**
+ * Display-layer keys for the seed tags that are actual German words. Tags are
+ * free-form strings (`F&E`, `CDK`, `UI/UX` need no translation), so this is a
+ * lookup rather than an exhaustive union map, and unknown tags fall through to
+ * their raw value.
+ */
+const TAG_LABEL_KEY: Record<string, TranslationKey> = {
+  Grafik: 'kanban.tag.grafik',
+  Formulare: 'kanban.tag.formulare',
+  Allgemein: 'kanban.tag.allgemein',
+};
+
 const INITIAL_COLUMNS: KanbanColumn[] = [
   {
     id: 'backlog',
@@ -54,7 +66,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-101',
         title: 'WebGPU-Shader in Canvas evaluieren',
+        titleKey: 'kanban.seed.101.title',
         description: 'Browser-Kompatibilität und 3D-Rendering-Gewinn prüfen.',
+        descriptionKey: 'kanban.seed.101.description',
         priority: 'Basse',
         assignee: { name: 'Benjamin S.', initials: 'BS', color: '#2563eb' },
         tags: ['F&E', 'Grafik'],
@@ -63,7 +77,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-102',
         title: 'Core Web Vitals (INP) Audit',
+        titleKey: 'kanban.seed.102.title',
         description: 'Reaktivität auf Benutzerinteraktionen auf Mobilgeräten prüfen.',
+        descriptionKey: 'kanban.seed.102.description',
         priority: 'Moyenne',
         assignee: { name: 'Sophie Martin', initials: 'SM', color: '#7c3aed' },
         tags: ['Audit', 'Perf'],
@@ -80,7 +96,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-103',
         title: 'Migration der Formulare zu Typed Forms',
+        titleKey: 'kanban.seed.103.title',
         description: 'Alte UntypedFormGroup durch die strikte typisierte Version ersetzen.',
+        descriptionKey: 'kanban.seed.103.description',
         priority: 'Haute',
         assignee: { name: 'Alexandre Roy', initials: 'AR', color: '#059669' },
         tags: ['Refacto', 'Formulare'],
@@ -89,7 +107,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-104',
         title: 'Playwright Regressionstests',
+        titleKey: 'kanban.seed.104.title',
         description: 'Automatisierte End-to-End-Tests für die CI/CD-Pipeline hinzufügen.',
+        descriptionKey: 'kanban.seed.104.description',
         priority: 'Moyenne',
         assignee: { name: 'Camille Leroy', initials: 'CL', color: '#ea580c' },
         tags: ['QA', 'Testing'],
@@ -106,7 +126,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-105',
         title: 'Flüssige CDK Drag & Drop Integration',
+        titleKey: 'kanban.seed.105.title',
         description: 'cdkDropListConnectedTo mit Material-3-Animationen implementieren.',
+        descriptionKey: 'kanban.seed.105.description',
         priority: 'Critique',
         assignee: { name: 'Benjamin S.', initials: 'BS', color: '#2563eb' },
         tags: ['CDK', 'UI/UX'],
@@ -115,7 +137,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-106',
         title: 'Optimierung des Vite / esbuild Bundles',
+        titleKey: 'kanban.seed.106.title',
         description: 'Style-Chunks analysieren und Assets komprimieren.',
+        descriptionKey: 'kanban.seed.106.description',
         priority: 'Haute',
         assignee: { name: 'Alexandre Roy', initials: 'AR', color: '#059669' },
         tags: ['Build', 'Optimierung'],
@@ -132,7 +156,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-107',
         title: 'Zoneless-Architektur Angular 22',
+        titleKey: 'kanban.seed.107.title',
         description: 'Aktivierung von provideZonelessChangeDetection und Entfernung von Zone.js.',
+        descriptionKey: 'kanban.seed.107.description',
         priority: 'Critique',
         assignee: { name: 'Benjamin S.', initials: 'BS', color: '#2563eb' },
         tags: ['Core', 'Zoneless'],
@@ -141,7 +167,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-108',
         title: 'Material 3 Dark- / Light-Theme',
+        titleKey: 'kanban.seed.108.title',
         description: 'Verwaltung von CSS-Variablen und Speicherung im localStorage.',
+        descriptionKey: 'kanban.seed.108.description',
         priority: 'Haute',
         assignee: { name: 'Sophie Martin', initials: 'SM', color: '#7c3aed' },
         tags: ['M3', 'Theme'],
@@ -150,7 +178,9 @@ const INITIAL_COLUMNS: KanbanColumn[] = [
       {
         id: 'TSK-109',
         title: 'GitHub Actions CI/CD Bereitstellung',
+        titleKey: 'kanban.seed.109.title',
         description: 'Automatisierung von Jest-Tests und GitHub Pages Veröffentlichung.',
+        descriptionKey: 'kanban.seed.109.description',
         priority: 'Haute',
         assignee: { name: 'Camille Leroy', initials: 'CL', color: '#ea580c' },
         tags: ['DevOps', 'CI/CD'],
@@ -381,6 +411,23 @@ export class KanbanDemoPage {
   /** Display-layer translation of the raw priority value (see PRIORITY_LABEL_KEY). */
   getPriorityLabel(priority: KanbanTask['priority']): string {
     return this.translate.text(PRIORITY_LABEL_KEY[priority]);
+  }
+
+  /**
+   * Task titles and descriptions fall back to the raw text for tasks created
+   * through the dialog, which have no translation.
+   */
+  taskTitle(task: KanbanTask): string {
+    return task.titleKey ? this.translate.text(task.titleKey) : task.title;
+  }
+
+  taskDescription(task: KanbanTask): string {
+    return task.descriptionKey ? this.translate.text(task.descriptionKey) : task.description;
+  }
+
+  tagLabel(tag: string): string {
+    const key = TAG_LABEL_KEY[tag];
+    return key ? this.translate.text(key) : tag;
   }
 
   /** Display-layer translation of a column title. */

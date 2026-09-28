@@ -1,13 +1,24 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { KanbanDemoPage } from './kanban-demo';
+import { FR, TranslateService } from '../../i18n';
 
 describe('KanbanDemoPage', () => {
   beforeEach(async () => {
+    // The locale is persisted to localStorage, so a test that switches to
+    // French would otherwise leak into the next one.
+    localStorage.clear();
+    document.documentElement.removeAttribute('lang');
+
     await TestBed.configureTestingModule({
       imports: [KanbanDemoPage],
       providers: [provideZonelessChangeDetection()],
     }).compileComponents();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    document.documentElement.removeAttribute('lang');
   });
 
   it('should create the component', () => {
@@ -110,5 +121,67 @@ describe('KanbanDemoPage', () => {
     expect(component.searchQuery()).toBe('');
     expect(component.priorityFilter()).toBe('all');
     expect(component.columns()[0].tasks.some((t) => t.id === target.id)).toBe(true);
+  });
+
+  describe('localized task content', () => {
+    function create() {
+      const fixture = TestBed.createComponent(KanbanDemoPage);
+      fixture.detectChanges();
+      return { fixture, component: fixture.componentInstance };
+    }
+
+    it('should render seed task titles in the active locale', () => {
+      const { fixture, component } = create();
+      const task = component.columns()[0].tasks[0];
+
+      expect(task.titleKey).toBeTruthy();
+      expect(component.taskTitle(task)).toBe(task.title);
+
+      TestBed.inject(TranslateService).setLocale(FR);
+      fixture.detectChanges();
+
+      expect(component.taskTitle(task)).not.toBe(task.title);
+      expect(component.taskTitle(task).length).toBeGreaterThan(0);
+    });
+
+    it('should fall back to the raw text for tasks without a key', () => {
+      const { component } = create();
+      const custom = { ...component.columns()[0].tasks[0], titleKey: null, descriptionKey: null };
+
+      expect(component.taskTitle(custom)).toBe(custom.title);
+      expect(component.taskDescription(custom)).toBe(custom.description);
+    });
+
+    /**
+     * The search box matches the raw German strings, which must survive
+     * translation — otherwise switching locale would silently break filtering.
+     */
+    it('should keep filtering on the raw text after a locale switch', () => {
+      const { fixture, component } = create();
+      const task = component.columns()[0].tasks[0];
+      const query = task.title.slice(0, 6);
+
+      TestBed.inject(TranslateService).setLocale(FR);
+      fixture.detectChanges();
+
+      component.searchQuery.set(query);
+      fixture.detectChanges();
+
+      expect(component.isTaskDimmed(task)).toBe(false);
+    });
+
+    it('should translate German tags and pass neutral tags through', () => {
+      const { fixture, component } = create();
+
+      expect(component.tagLabel('Grafik')).toBe('Grafik');
+      expect(component.tagLabel('UI/UX')).toBe('UI/UX');
+      expect(component.tagLabel('CDK')).toBe('CDK');
+
+      TestBed.inject(TranslateService).setLocale(FR);
+      fixture.detectChanges();
+
+      expect(component.tagLabel('Grafik')).toBe('Graphiques');
+      expect(component.tagLabel('UI/UX')).toBe('UI/UX');
+    });
   });
 });

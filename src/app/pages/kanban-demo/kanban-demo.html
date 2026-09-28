@@ -204,13 +204,13 @@
               </div>
 
               <!-- Card Body -->
-              <h3 class="card-title">{{ task.title }}</h3>
-              <p class="card-desc">{{ task.description }}</p>
+              <h3 class="card-title">{{ taskTitle(task) }}</h3>
+              <p class="card-desc">{{ taskDescription(task) }}</p>
 
               <!-- Tags -->
               <div class="card-tags">
                 @for (tag of task.tags; track tag) {
-                  <span class="tag-pill">{{ tag }}</span>
+                  <span class="tag-pill">{{ tagLabel(tag) }}</span>
                 }
               </div>
 
