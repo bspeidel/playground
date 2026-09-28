@@ -1,0 +1,182 @@
+/**
+ * virtualScroll demo / shell strings.
+ *
+ * `de` is the source of truth for this namespace. `en` and `fr` are typed
+ * as `Record<NamespaceKey, string>` against it, so adding a key without
+ * translating it is a compile error rather than a silent fallback.
+ */
+export const de = {
+  'virtualScroll.header.title': 'Virtuelles Scrollen & Performance-Benchmark',
+  'virtualScroll.header.subtitle':
+    'Flüssiges und verzögerungsfreies Rendering von <strong>50.000+</strong> Elementen mit <code>@angular/cdk/scrolling</code>. Der Viewport recycelt kontinuierlich eine feste Anzahl von DOM-Knoten, anstatt den Browser zu überlasten.',
+  'virtualScroll.header.pillZoneless': 'Zoneless 60 FPS',
+  'virtualScroll.header.datasetSize': 'Datensatzgröße :',
+  'virtualScroll.kpis.ariaLabel': 'Leistungsindikatoren der Virtualisierung',
+  'virtualScroll.kpi.elements.label': 'Elemente im Speicher',
+  'virtualScroll.kpi.elements.hint': 'Vollständiges Quell-Array im JS-Speicher',
+  'virtualScroll.kpi.dom.label': 'Aktive DOM-Knoten',
+  'virtualScroll.kpi.dom.hint': 'Kontinuierliches Recycling im DOM',
+  'virtualScroll.kpi.reduction.label': 'DOM-Reduktion',
+  'virtualScroll.kpi.reduction.hint': 'Browser-Speichereinsparung',
+  'virtualScroll.kpi.latency.label': 'Durchschnittliche Latenz (p50)',
+  'virtualScroll.kpi.latency.errors': '{count} Fehlerprotokolle erkannt',
+  'virtualScroll.kpi.generation.label': 'Generierung (Web Worker)',
+  'virtualScroll.kpi.generation.hint': 'Haupt-Thread bleibt währenddessen blockierfrei',
+  'virtualScroll.filters.searchLabel': 'Suchen (Dienst, Nachricht, #ID)...',
+  'virtualScroll.filters.searchPlaceholder': 'Z. B.: auth-service, Redis, #4200...',
+  'virtualScroll.filters.searchClear': 'Löschen',
+  'virtualScroll.filters.levelLabel': 'Protokollstufe',
+  'virtualScroll.filters.levelAll': 'Alle Stufen',
+  'virtualScroll.nav.top': 'Anfang',
+  'virtualScroll.nav.topTooltip': 'Zum Anfang springen (Index #1)',
+  'virtualScroll.nav.middle': 'Mitte',
+  'virtualScroll.nav.middleTooltip': 'Zur Mitte springen',
+  'virtualScroll.nav.bottom': 'Ende',
+  'virtualScroll.nav.bottomTooltip': 'Zum Ende springen',
+  'virtualScroll.nav.jump': 'Zu Index springen',
+  'virtualScroll.viewport.stats':
+    'Anzeige von <strong>{count}</strong> Telemetrieeinträgen (Aktueller Offset: <strong>{offset}px</strong>)',
+  'virtualScroll.viewport.fpsTag': '60 FPS Zoneless',
+  'virtualScroll.overlay.generating':
+    '{count} Telemetrieeinträge werden im <strong>Web Worker</strong> generiert – die UI bleibt reaktionsfähig.',
+  'virtualScroll.comparison.title': 'Warum ist Virtualisierung essenziell?',
+  'virtualScroll.comparison.subtitle': 'Vergleich Standard-DOM vs. CDK Virtual Scroll',
+  'virtualScroll.comparison.paragraph1':
+    'Wenn Sie 50.000 Elemente mit einem einfachen klassischen <code>@for</code> rendern würden, müsste der Browser mehr als <strong>150.000 DOM-Knoten</strong> gleichzeitig zuweisen und berechnen. Dies würde zu einem vollständigen Einfrieren der Benutzeroberfläche (mehrere Sekunden Blockade) und einem Speicherverbrauch von mehreren hundert Megabyte führen.',
+  'virtualScroll.comparison.paragraph2':
+    'Mit <code>CdkVirtualScrollViewport</code> injiziert Angular nur die <strong>~14 sichtbaren Elemente</strong> auf dem Bildschirm in das DOM. In Kombination mit <code>provideZonelessChangeDetection()</code> wird die CPU-Auslastung auf ein absolutes Minimum reduziert und das Scrollen bleibt ultraflüssig bei 60/120 Bildern pro Sekunde.',
+  'virtualScroll.log.httpOk': 'HTTP-Anfrage erfolgreich verarbeitet',
+  'virtualScroll.log.cacheHit': 'Cache-Treffer auf Redis-Cluster',
+  'virtualScroll.log.slaExceeded': 'Antwortzeit überschreitet SLA (p99)',
+  'virtualScroll.log.tokenRenewed': 'JWT-Token automatisch erneuert',
+  'virtualScroll.log.dbDown': 'Verbindungsfehler zum sekundären Datenbankknoten',
+  'virtualScroll.log.websocketSync': 'Dauerhafte WebSocket-Synchronisation aktiv',
+  'virtualScroll.log.poolCleanup': 'Speicherbereinigung des Objektpools abgeschlossen',
+  'virtualScroll.log.workerDone': 'Ausführung des asynchronen Workers abgeschlossen',
+  'virtualScroll.snack.generated':
+    '{size} Logs in {duration} ms im Web Worker generiert (Blockade: {blocked} ms)',
+  'virtualScroll.snack.generateFailed': 'Datensatz konnte nicht erzeugt werden.',
+  'virtualScroll.snack.jumpedToIndex': 'Sofortige Navigation zu Index #{index}',
+  'virtualScroll.snack.invalidIndex': 'Bitte geben Sie einen Index zwischen 0 und {max} ein',
+  'virtualScroll.action.ok': 'OK',
+  'virtualScroll.action.close': 'Schließen',
+  'virtualScroll.worker.startFailed': 'Der Telemetrie-Worker konnte nicht gestartet werden.',
+} as const;
+
+export type NamespaceKey = keyof typeof de;
+
+export const en: Record<NamespaceKey, string> = {
+  'virtualScroll.header.title': 'Virtual Scroll & performance benchmark',
+  'virtualScroll.header.subtitle':
+    'Smooth, lag-free rendering of <strong>50,000+</strong> elements with <code>@angular/cdk/scrolling</code>. The viewport continuously recycles a fixed number of DOM nodes instead of overwhelming the browser.',
+  'virtualScroll.header.pillZoneless': 'Zoneless 60 FPS',
+  'virtualScroll.header.datasetSize': 'Dataset size:',
+  'virtualScroll.kpis.ariaLabel': 'Virtualization performance indicators',
+  'virtualScroll.kpi.elements.label': 'Elements in memory',
+  'virtualScroll.kpi.elements.hint': 'Full source array held in JS memory',
+  'virtualScroll.kpi.dom.label': 'Active DOM nodes',
+  'virtualScroll.kpi.dom.hint': 'Continuously recycled in the DOM',
+  'virtualScroll.kpi.reduction.label': 'DOM reduction',
+  'virtualScroll.kpi.reduction.hint': 'Memory saved in the browser',
+  'virtualScroll.kpi.latency.label': 'Average latency (p50)',
+  'virtualScroll.kpi.latency.errors': '{count} error entries detected',
+  'virtualScroll.kpi.generation.label': 'Generation (Web Worker)',
+  'virtualScroll.kpi.generation.hint': 'Main thread stays non-blocking throughout',
+  'virtualScroll.filters.searchLabel': 'Search (service, message, #ID)...',
+  'virtualScroll.filters.searchPlaceholder': 'e.g. auth-service, Redis, #4200...',
+  'virtualScroll.filters.searchClear': 'Clear',
+  'virtualScroll.filters.levelLabel': 'Log level',
+  'virtualScroll.filters.levelAll': 'All levels',
+  'virtualScroll.nav.top': 'Top',
+  'virtualScroll.nav.topTooltip': 'Jump to the top (index #1)',
+  'virtualScroll.nav.middle': 'Middle',
+  'virtualScroll.nav.middleTooltip': 'Jump to the middle',
+  'virtualScroll.nav.bottom': 'Bottom',
+  'virtualScroll.nav.bottomTooltip': 'Jump to the bottom',
+  'virtualScroll.nav.jump': 'Jump to index',
+  'virtualScroll.viewport.stats':
+    'Showing <strong>{count}</strong> telemetry entries (current offset: <strong>{offset}px</strong>)',
+  'virtualScroll.viewport.fpsTag': '60 FPS zoneless',
+  'virtualScroll.overlay.generating':
+    'Generating {count} telemetry entries in the <strong>Web Worker</strong> – the UI stays responsive.',
+  'virtualScroll.comparison.title': 'Why is virtualization essential?',
+  'virtualScroll.comparison.subtitle': 'Standard DOM vs. CDK Virtual Scroll',
+  'virtualScroll.comparison.paragraph1':
+    'If you rendered 50,000 elements with a plain classic <code>@for</code>, the browser would have to allocate and compute more than <strong>150,000 DOM nodes</strong> at the same time. That would freeze the UI completely (several seconds of blocking) and push memory consumption into the hundreds of megabytes.',
+  'virtualScroll.comparison.paragraph2':
+    'With <code>CdkVirtualScrollViewport</code>, Angular injects only the <strong>~14 visible elements</strong> on screen into the DOM. Combined with <code>provideZonelessChangeDetection()</code>, CPU utilization drops to an absolute minimum and scrolling stays ultra-smooth at 60/120 frames per second.',
+  'virtualScroll.log.httpOk': 'HTTP request processed successfully',
+  'virtualScroll.log.cacheHit': 'Cache hit on the Redis cluster',
+  'virtualScroll.log.slaExceeded': 'Response time exceeds SLA (p99)',
+  'virtualScroll.log.tokenRenewed': 'JWT renewed automatically',
+  'virtualScroll.log.dbDown': 'Connection error to the secondary database node',
+  'virtualScroll.log.websocketSync': 'Persistent WebSocket sync enabled',
+  'virtualScroll.log.poolCleanup': 'Object pool memory cleanup completed',
+  'virtualScroll.log.workerDone': 'Async worker execution completed',
+  'virtualScroll.snack.generated':
+    'Generated {size} logs in {duration} ms in the Web Worker (blocking: {blocked} ms)',
+  'virtualScroll.snack.generateFailed': 'Could not generate the dataset.',
+  'virtualScroll.snack.jumpedToIndex': 'Jumped instantly to index #{index}',
+  'virtualScroll.snack.invalidIndex': 'Please enter an index between 0 and {max}',
+  'virtualScroll.action.ok': 'OK',
+  'virtualScroll.action.close': 'Close',
+  'virtualScroll.worker.startFailed': 'The telemetry worker could not be started.',
+};
+
+export const fr: Record<NamespaceKey, string> = {
+  'virtualScroll.header.title': 'Défilement virtuel & benchmark de performance',
+  'virtualScroll.header.subtitle':
+    'Rendu fluide et sans latence de <strong>50 000+</strong> éléments avec <code>@angular/cdk/scrolling</code>. Le viewport recycle en continu un nombre fixe de nœuds du DOM au lieu de saturer le navigateur.',
+  'virtualScroll.header.pillZoneless': 'Zoneless 60 FPS',
+  'virtualScroll.header.datasetSize': 'Taille du jeu de données :',
+  'virtualScroll.kpis.ariaLabel': 'Indicateurs de performance de la virtualisation',
+  'virtualScroll.kpi.elements.label': 'Éléments en mémoire',
+  'virtualScroll.kpi.elements.hint': 'Tableau source complet en mémoire JS',
+  'virtualScroll.kpi.dom.label': 'Nœuds DOM actifs',
+  'virtualScroll.kpi.dom.hint': 'Recyclage continu dans le DOM',
+  'virtualScroll.kpi.reduction.label': 'Réduction du DOM',
+  'virtualScroll.kpi.reduction.hint': 'Mémoire économisée côté navigateur',
+  'virtualScroll.kpi.latency.label': 'Latence moyenne (p50)',
+  'virtualScroll.kpi.latency.errors': '{count} entrées d’erreur détectées',
+  'virtualScroll.kpi.generation.label': 'Génération (Web Worker)',
+  'virtualScroll.kpi.generation.hint': 'Le thread principal reste non bloquant',
+  'virtualScroll.filters.searchLabel': 'Rechercher (service, message, #ID)...',
+  'virtualScroll.filters.searchPlaceholder': 'Ex. : auth-service, Redis, #4200...',
+  'virtualScroll.filters.searchClear': 'Effacer',
+  'virtualScroll.filters.levelLabel': 'Niveau de log',
+  'virtualScroll.filters.levelAll': 'Tous les niveaux',
+  'virtualScroll.nav.top': 'Début',
+  'virtualScroll.nav.topTooltip': 'Aller au début (index #1)',
+  'virtualScroll.nav.middle': 'Milieu',
+  'virtualScroll.nav.middleTooltip': 'Aller au milieu',
+  'virtualScroll.nav.bottom': 'Fin',
+  'virtualScroll.nav.bottomTooltip': 'Aller à la fin',
+  'virtualScroll.nav.jump': 'Aller à l’index',
+  'virtualScroll.viewport.stats':
+    'Affichage de <strong>{count}</strong> entrées de télémétrie (offset actuel : <strong>{offset}px</strong>)',
+  'virtualScroll.viewport.fpsTag': '60 FPS zoneless',
+  'virtualScroll.overlay.generating':
+    '{count} entrées de télémétrie sont générées dans le <strong>Web Worker</strong> – l’UI reste réactive.',
+  'virtualScroll.comparison.title': 'Pourquoi la virtualisation est-elle essentielle ?',
+  'virtualScroll.comparison.subtitle': 'Comparaison DOM classique vs CDK Virtual Scroll',
+  'virtualScroll.comparison.paragraph1':
+    'Si vous rendiez 50 000 éléments avec un simple <code>@for</code> classique, le navigateur devrait allouer et calculer plus de <strong>150 000 nœuds du DOM</strong> en même temps. L’interface se figerait complètement (plusieurs secondes de blocage) et la consommation mémoire atteindrait plusieurs centaines de mégaoctets.',
+  'virtualScroll.comparison.paragraph2':
+    'Avec <code>CdkVirtualScrollViewport</code>, Angular n’injecte dans le DOM que les <strong>~14 éléments visibles</strong> à l’écran. Combiné à <code>provideZonelessChangeDetection()</code>, l’utilisation du CPU est réduite à son minimum et le défilement reste parfaitement fluide à 60/120 images par seconde.',
+  'virtualScroll.log.httpOk': 'Requête HTTP traitée avec succès',
+  'virtualScroll.log.cacheHit': 'Succès de cache sur le cluster Redis',
+  'virtualScroll.log.slaExceeded': 'Le temps de réponse dépasse le SLA (p99)',
+  'virtualScroll.log.tokenRenewed': 'JWT renouvelé automatiquement',
+  'virtualScroll.log.dbDown': 'Erreur de connexion vers le nœud de base de données secondaire',
+  'virtualScroll.log.websocketSync': 'Synchronisation WebSocket persistante active',
+  'virtualScroll.log.poolCleanup': 'Nettoyage mémoire du pool d’objets terminé',
+  'virtualScroll.log.workerDone': 'Exécution du worker asynchrone terminée',
+  'virtualScroll.snack.generated':
+    '{size} logs générés en {duration} ms dans le Web Worker (blocage : {blocked} ms)',
+  'virtualScroll.snack.generateFailed': 'Impossible de générer le jeu de données.',
+  'virtualScroll.snack.jumpedToIndex': 'Navigation immédiate vers l’index #{index}',
+  'virtualScroll.snack.invalidIndex': 'Veuillez saisir un index compris entre 0 et {max}',
+  'virtualScroll.action.ok': 'OK',
+  'virtualScroll.action.close': 'Fermer',
+  'virtualScroll.worker.startFailed': 'Le worker de télémétrie n’a pas pu démarrer.',
+};

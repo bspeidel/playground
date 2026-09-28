@@ -44,7 +44,9 @@ src/
 │   │   ├── theme.service.ts     # Reactive Material 3 Dark/Light mode manager
 │   │   └── github-api.service.ts # GitHub search: URL building, error mapping, abort bookkeeping
 │   ├── i18n/                # Runtime translation: service, t/tHtml pipes, locale-aware format pipes
-│   │   ├── translations.ts     # de (source of truth) + en + fr, all typed against each other
+│   │   ├── translations/      # One module per namespace (shell, nav, overview, signals, …)
+│   │   │   ├── index.ts       # Aggregates them; TranslationKey is the union of every key
+│   │   │   └── <namespace>.ts # de (source of truth) + en + fr for that namespace
 │   │   ├── locales.ts          # locale ids, Intl tags, display names
 │   │   ├── translate.service.ts
 │   │   ├── translate.pipe.ts
@@ -88,13 +90,24 @@ npm test               # unit tests (Jest)
 npm run test:watch     # unit tests in watch mode
 npm run test:coverage  # unit tests + coverage (enforces thresholds)
 npm run lint           # ESLint (@angular-eslint)
-npm run typecheck      # tsc --noEmit
+npm run typecheck      # tsc --noEmit on the app and spec projects
 npm run format         # Prettier write
 npm run format:check   # Prettier check
 ```
 
+`npm run typecheck` must target `tsconfig.app.json` and `tsconfig.spec.json`
+explicitly. The root `tsconfig.json` is a solution-style config with
+`files: []` and only project references, and `tsc --noEmit` on such a config
+compiles nothing at all.
+
 `npm run test:coverage` fails the build if global coverage drops below the
 thresholds declared in `jest.config.js`.
+
+### Adding a translation
+
+Keys live in `src/app/i18n/translations/<namespace>.ts`, one module per
+namespace. Add the key to `de` (the source of truth) and to `en` and `fr`;
+forgetting one is a compile error, reported as `TS2741` naming the missing key.
 
 ---
 
